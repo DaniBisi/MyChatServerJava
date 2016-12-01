@@ -26,7 +26,7 @@ public class MyChatTest {
 	 *            name of the test case
 	 */
 	public MyChatTest() {
-		this.port = 80;
+		this.port = 1025;
 		this.address = "127.0.0.1";
 		this.Dictionary =  new HashMap<String, String>(200);
 			this.Dictionary.put("dani", "bisi");
