@@ -1,5 +1,6 @@
 package MyChatServer.MyChatServer;
 
 public interface visitable {
-public void acceptVisit(factoryHttpCommand visitor);
+	//public String acceptVisit(HttpProtocol user);	
+	public String acceptVisit(HttpMessage msg);	
 }

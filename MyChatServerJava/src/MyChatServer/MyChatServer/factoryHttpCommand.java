@@ -10,11 +10,23 @@ abstract public class factoryHttpCommand {
 		}catch (IndexOutOfBoundsException e){
 			params = null;
 		}
-		if(command.equalsIgnoreCase("GET")){
+		if(command.equalsIgnoreCase("USER")&& (loginStatus == 0 || loginStatus ==2)){
+			return new HttpUser(params);
+		}
+		else if(command.equalsIgnoreCase("GET") && loginStatus == 2){
 			return new HttpGet(params);
 		}
-		if(command.equalsIgnoreCase("USER")){
-			return new HttpUser(params);
+		else if(command.equalsIgnoreCase("PASS") && loginStatus == 1){
+			return new HttpPass(params);
+		}
+		else if(command.equalsIgnoreCase("NEW") && loginStatus == 2){
+			return new HttpNew(params);
+		}
+		else if(command.equalsIgnoreCase("MESSAGE") && loginStatus == 2){
+			return new HttpMessage(params);
+		}
+		else if(command.equalsIgnoreCase("LIST") && loginStatus == 2){
+			return new HttpList(params);
 		}
 		
 		else {
