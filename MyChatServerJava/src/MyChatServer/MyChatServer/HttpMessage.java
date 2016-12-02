@@ -7,11 +7,12 @@ import java.util.ArrayList;
 public class HttpMessage implements HttpProtocol {
 
 	private String[] params;
-	Boolean errorFound;
-
+	private Boolean errorFound;
+	protected int msgId;
 	public HttpMessage(String[] params) {
 		this.params = params;
 		this.errorFound = false;
+		msgId = -1;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,7 +29,7 @@ public class HttpMessage implements HttpProtocol {
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}
-			int msgId = MyChatServer.addMessage(new Message(msg, topicList, clientHandler.getUserName()));
+			msgId = MyChatServer.addMessage(new Message(msg, topicList, clientHandler.getUserName()));
 			response = "OK " + msgId + "\r\n";
 		} else {
 			response = "KO\r\n";

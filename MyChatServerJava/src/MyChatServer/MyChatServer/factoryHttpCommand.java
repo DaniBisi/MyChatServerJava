@@ -28,7 +28,10 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("LIST") && loginStatus == 2){
 			return new HttpList(params);
 		}
-		
+
+		else if(command.equalsIgnoreCase("REPLY") && loginStatus == 2){
+			return new HttpReply(params);
+		}
 		else {
 			throw new IllegalArgumentException();
 		}

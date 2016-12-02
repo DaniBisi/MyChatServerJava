@@ -7,12 +7,24 @@ public class Message {
 	private String Text;
 	private ArrayList<Integer> TopicList;
 	private String UserName;
+	private int Father;
+	private ArrayList<Integer> Child;
 	
+
 	public Message(String text, ArrayList<Integer> topicList,String userName) {
 		super();
 		Text = text;
 		TopicList = topicList;
 		UserName = userName;
+		Child = new ArrayList<Integer>();
+	}
+	public Message(String text, ArrayList<Integer> topicList,String userName,int father) {
+		super();
+		Text = text;
+		TopicList = topicList;
+		UserName = userName;
+		setFather(father);
+		Child = new ArrayList<Integer>();
 	}
 
 	public boolean hasTopic(String[] params) {
@@ -53,5 +65,8 @@ public class Message {
 	    }
 	    result = result.substring(1, result.length());
 	    return result;
+	}
+	public void setFather(int father) {
+		Father = father;
 	}
 }
