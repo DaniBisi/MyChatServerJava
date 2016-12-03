@@ -54,9 +54,9 @@ public class ChatClient {
 		
 	}
 
-	public String receiveMsg() {
+	public String receiveMsg(){
 		// TODO Auto-generated method stub
-		String msg = "";
+		/*String msg = "";
 		byte streamIn[] = new byte[2048];
 		try {
 			
@@ -73,7 +73,34 @@ public class ChatClient {
 		}
 		
 		System.out.println(msg);
-		return msg;
+		return msg;*/
+		String msg="";
+		try {
+			int prov2;
+			while ((prov2 = this.in.read()) != -1) {
+
+				char ch = (char) prov2;
+				msg = msg + String.valueOf(ch); 
+				String prov = "";
+				if (msg.length() > 2)
+					prov = msg.substring(msg.length() - 2, msg.length());
+				if (prov.compareTo("\r\n") == 0) {
+					System.out.println("sto eseguendo un comando");
+					System.out.println(msg);
+					// ESEGUO LA SPLIT PER TROVARE I COMANDI.
+					String Response = "";
+					String command = msg.split("\r\n")[0];
+					// for (String command : msg.split("\r\n")) {
+					
+
+					return msg;
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return "";
 	}
 
 	public void closeSocket() {

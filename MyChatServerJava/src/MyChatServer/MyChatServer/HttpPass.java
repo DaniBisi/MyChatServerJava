@@ -18,7 +18,8 @@ public class HttpPass implements HttpProtocol {
 			try {
 				String pass = MyChatServer.Dictionary.get(clientHandler.getUserName());
 				if(pass != null){
-					clientHandler.setLoginStatus(2);
+					
+					clientHandler.acceptVisit(this);
 					response = "OK\r\n";
 				}
 			}catch (Exception e) {
@@ -33,7 +34,7 @@ public class HttpPass implements HttpProtocol {
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
-		clientHandler.setLoginStatus(2);
+		//clientHandler.setLoginStatus(2);
 		return "";
 	}
 

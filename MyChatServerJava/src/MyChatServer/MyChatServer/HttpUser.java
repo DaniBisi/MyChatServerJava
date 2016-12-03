@@ -20,7 +20,7 @@ public class HttpUser implements HttpProtocol{
 			}catch (Exception e) {
 				// TODO: handle exception
 			}
-			clientHandler.setLoginStatus(1);
+			clientHandler.acceptVisit(this);
 			clientHandler.setUser(params[0]);
 		}
 		

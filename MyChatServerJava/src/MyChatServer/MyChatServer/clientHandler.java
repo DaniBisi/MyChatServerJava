@@ -16,7 +16,7 @@ public class clientHandler extends Thread implements visitable {
 	private int loginStatus;
 	private String userName;
 
-	public void setLoginStatus(int loginStatus) {
+	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
 		// System.out.println("Loginstatus:" + this.loginStatus);
 	}
@@ -53,8 +53,7 @@ public class clientHandler extends Thread implements visitable {
 			while ((prov2 = this.in.read()) != -1) {
 
 				char ch = (char) prov2;
-				msg = msg + String.valueOf(ch); // uscirà quando ci sarà un
-												// errore di stream
+				msg = msg + String.valueOf(ch); 
 				String prov = "";
 				if (msg.length() > 2)
 					prov = msg.substring(msg.length() - 2, msg.length());
@@ -93,7 +92,15 @@ public class clientHandler extends Thread implements visitable {
 		cmd.visit(this);
 		return "";
 	}
+	public String acceptVisit(HttpPass cmd) {
+		this.setLoginStatus(2);
+		return "";
+	}
 
+	public String acceptVisit(HttpUser cmd) {
+		this.setLoginStatus(1);
+		return "";
+	}
 	public String acceptVisit(HttpMessage msg) {
 		// TODO Auto-generated method stub
 		String msgProv = "";
@@ -119,7 +126,10 @@ public class clientHandler extends Thread implements visitable {
 		}
 		return msgProv;
 	}
-
+	public String acceptVisit(HttpRegister reg){
+		this.setLoginStatus(3);
+		return null;
+	}
 	public void setUser(String userName) {
 		// TODO Auto-generated method stub
 		this.userName = userName;
