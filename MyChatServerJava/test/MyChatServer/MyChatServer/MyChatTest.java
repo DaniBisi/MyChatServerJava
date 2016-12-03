@@ -231,6 +231,17 @@ public class MyChatTest {
 		msg = msg+ client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nKO\r\n", msg);
 	}
+
+	@Test
+	public void testRegister() {
+		this.client1.connectServer();
+		String msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
+	}
 	@Test // (expected=IllegalArgumentException.class)
 	public void testGetMessage() {
 		this.client1.connectServer();
@@ -248,6 +259,20 @@ public class MyChatTest {
 		msg = client1.receiveMsg();
 		msg = msg + client1.receiveMsg();
 		assertEquals("OK 1\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testListReply() {
+		this.client1.connectServer();
+		String msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nREPLY 0\r\nRISPOSTA\r\n.\r\n\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		msg = msg+ client1.receiveMsg();
+		System.out.println(msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\n", msg);
 	}
 
 	@After

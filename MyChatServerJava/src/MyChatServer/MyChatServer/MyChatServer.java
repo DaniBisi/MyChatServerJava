@@ -7,7 +7,9 @@ import java.lang.Thread;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Hello world!
@@ -23,6 +25,7 @@ public class MyChatServer extends Thread {
 	public static ArrayList<String> TopicList;
 	public static ArrayList<Message> MessageList;
 	public static Map<String, String> Dictionary;
+	public static Map<String, Pair> Register;
 
 	public MyChatServer(String address, int port,Map<String, String> Dictionary) {
 		this.address = address;
@@ -30,6 +33,7 @@ public class MyChatServer extends Thread {
 		MyChatServer.Dictionary = Dictionary;
 		MyChatServer.TopicList = new ArrayList<String>();
 		MessageList = new ArrayList<Message>(); 
+		Register = new HashMap<String, Pair>(200);
 		
 		try {
 			this.server = new ServerSocket(this.port);
@@ -50,6 +54,19 @@ public class MyChatServer extends Thread {
 			String topicName = "";
 			try{
 			topicName = MyChatServer.TopicList.get(Integer.parseInt(string)); //essendo memorizzati in ordine provo a vedere se esiste
+			}catch (Exception e) {
+				errorFound  = true;
+				break;
+			}
+		}
+		return errorFound;
+	}
+	public static boolean checkMessageError(String params[]){
+		boolean errorFound = false;
+		for (String string : params) {
+			Message message = null;
+			try{
+				message = MyChatServer.MessageList.get(Integer.parseInt(string)); //essendo memorizzati in ordine provo a vedere se esiste
 			}catch (Exception e) {
 				errorFound  = true;
 				break;
@@ -80,4 +97,14 @@ public class MyChatServer extends Thread {
 		MyChatServer.MessageList.add(message);
 		return MyChatServer.MessageList.size()-1;
 	}
+	public static synchronized boolean addRecord(String host, int port, String user){
+		try{
+			MyChatServer.Register.put(user, new Pair<String, Integer>(host, port));
+		}catch(Exception e){
+			return false;
+		}
+		return true;
+		
+	}
+	
 }

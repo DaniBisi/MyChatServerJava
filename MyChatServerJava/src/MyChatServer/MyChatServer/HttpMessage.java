@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class HttpMessage implements HttpProtocol {
 
-	private String[] params;
-	private Boolean errorFound;
+	protected String[] params;
+	protected Boolean errorFound;
 	protected int msgId;
 	public HttpMessage(String[] params) {
 		this.params = params;

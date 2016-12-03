@@ -1,4 +1,6 @@
 package MyChatServer.MyChatServer;
+import java.util.Set;
+
 import MyChatServer.MyChatServer.HttpProtocol;
 abstract public class factoryHttpCommand {
 	
@@ -32,6 +34,15 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("REPLY") && loginStatus == 2){
 			return new HttpReply(params);
 		}
+
+		else if(command.equalsIgnoreCase("CONV") && loginStatus == 2){
+			return new HttpConv(params);
+		}
+		else if(command.equalsIgnoreCase("REGISTER") && loginStatus == 2){
+			return new HttpRegister(params);
+		}
+		
+		
 		else {
 			throw new IllegalArgumentException();
 		}

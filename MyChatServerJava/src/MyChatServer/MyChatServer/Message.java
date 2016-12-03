@@ -17,6 +17,7 @@ public class Message {
 		TopicList = topicList;
 		UserName = userName;
 		Child = new ArrayList<Integer>();
+		Father = -1;
 	}
 	public Message(String text, ArrayList<Integer> topicList,String userName,int father) {
 		super();
@@ -25,6 +26,11 @@ public class Message {
 		UserName = userName;
 		setFather(father);
 		Child = new ArrayList<Integer>();
+	}
+	
+	public synchronized boolean addChild(int idChild){
+		Child.add(idChild);
+		return true;
 	}
 
 	public boolean hasTopic(String[] params) {
@@ -68,5 +74,9 @@ public class Message {
 	}
 	public void setFather(int father) {
 		Father = father;
+	}
+	public int getFather() {
+		// TODO Auto-generated method stub
+		return Father;
 	}
 }
