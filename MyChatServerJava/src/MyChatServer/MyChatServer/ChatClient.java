@@ -56,7 +56,7 @@ public class ChatClient {
 
 	public String receiveMsg(){
 		// TODO Auto-generated method stub
-		/*String msg = "";
+		String msg = "";
 		byte streamIn[] = new byte[2048];
 		try {
 			
@@ -73,8 +73,8 @@ public class ChatClient {
 		}
 		
 		System.out.println(msg);
-		return msg;*/
-		String msg="";
+		return msg;
+		/*String msg="";
 		try {
 			int prov2;
 			while ((prov2 = this.in.read()) != -1) {
@@ -100,7 +100,7 @@ public class ChatClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		return "";
+		return "";*/
 	}
 
 	public void closeSocket() {

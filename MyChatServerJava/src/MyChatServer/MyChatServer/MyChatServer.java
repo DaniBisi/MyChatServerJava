@@ -27,19 +27,20 @@ public class MyChatServer extends Thread {
 	public static ArrayList<Message> MessageList;
 	public static Map<String, String> Dictionary;
 	public static Map<String, Pair<String,Integer>> Register;
-	private static Map<Integer, TreeSet<String>> subRegister;
+	public static Map<Integer, TreeSet<String>> subRegister;
 
 	public MyChatServer(Map<String, String> Dictionary,String address, int port) {
 		this.address = address;
 		this.port = port;
 		MyChatServer.Dictionary = Dictionary;
 		MyChatServer.TopicList = new ArrayList<String>();
-		MessageList = new ArrayList<Message>(); 
-		Register = new HashMap<String, Pair<String,Integer>>(200);
-		subRegister = new HashMap<Integer, TreeSet<String>>(200);
+		MyChatServer.MessageList = new ArrayList<Message>(); 
+		MyChatServer.Register = new HashMap<String, Pair<String,Integer>>(200);
+		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		
 		try {
 			this.server = new ServerSocket(this.port);
+			this.server.setReuseAddress(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,6 +150,16 @@ public class MyChatServer extends Thread {
 			//MyChatServer.subRegister.put(,);
 		}
 		return true;
+	}
+
+	public void closeSocket() {
+		// TODO Auto-generated method stub
+		try {
+			this.server.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
