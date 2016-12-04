@@ -15,7 +15,7 @@ public class HttpSubscribe implements HttpProtocol {
 		String response;
 		// TODO Auto-generated method stub
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){
-			boolean c = MyChatServer.addsubscription(params,clientHandler.getUserName());
+			boolean c = MyChatServer.addSubscription(params,clientHandler.getUserName());
 			response = "OK\r\n";
 		}
 		else response = "KO\r\n";

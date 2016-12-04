@@ -40,7 +40,7 @@ public class MyChatServer extends Thread {
 		
 		try {
 			this.server = new ServerSocket(this.port);
-			this.server.setReuseAddress(true);
+			//this.server.setReuseAddress(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,7 +84,7 @@ public class MyChatServer extends Thread {
 		while(true){
 			try {
 				Socket client = server.accept();
-				System.out.println("Accepted from " + client.getInetAddress());
+				//System.out.println("Accepted from " + client.getInetAddress());
 				new clientHandler(client).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -121,7 +121,6 @@ public class MyChatServer extends Thread {
 
 	public static synchronized boolean unRegister(String user){
 		try{
-			
 			if(MyChatServer.Register.remove(user) == null)return false;
 			return true;
 		}catch(Exception e){
@@ -131,13 +130,12 @@ public class MyChatServer extends Thread {
 
 	public static boolean checkRegisterError(String userName) {
 		// TODO Auto-generated method stub
-		
 		Object a = MyChatServer.Register.get(userName);
 		if (a==null)return false;
 		return true;
 	}
 
-	public static boolean addsubscription(String[] params, String userName) {
+	public static boolean addSubscription(String[] params, String userName) {
 		// TODO Auto-generated method stub
 		for (String topicSubscribed : params) {
 			int idTopic = Integer.parseInt(topicSubscribed);
@@ -151,7 +149,14 @@ public class MyChatServer extends Thread {
 		}
 		return true;
 	}
-
+	public static boolean rmSubScription(String[] params, String userName ){
+		for (String topicSubscribed : params) {
+			int idTopic = Integer.parseInt(topicSubscribed);
+			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
+			entry.remove(userName);	
+		}
+		return true;
+	}
 	public void closeSocket() {
 		// TODO Auto-generated method stub
 		try {

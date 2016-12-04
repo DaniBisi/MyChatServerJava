@@ -45,43 +45,32 @@ public class clientHandler extends Thread implements visitable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		System.out.println("im waiting for data...");
+		// System.out.println("im waiting for data...");
 		String msg = "";
 		// byte streamIn[] = new byte[2048];
 		try {
 			int prov2;
 			while ((prov2 = this.in.read()) != -1) {
-
 				char ch = (char) prov2;
-				msg = msg + String.valueOf(ch); 
+				msg = msg + String.valueOf(ch);
 				String prov = "";
 				if (msg.length() > 2)
 					prov = msg.substring(msg.length() - 2, msg.length());
 				if (prov.compareTo("\r\n") == 0) {
-					System.out.println("sto eseguendo un comando");
-					System.out.println(msg);
-					// ESEGUO LA SPLIT PER TROVARE I COMANDI.
 					String Response = "";
 					String command = msg.split("\r\n")[0];
-					// for (String command : msg.split("\r\n")) {
 					try {
 						HttpProtocol commandR;
-						Response = Response + (commandR = factoryHttpCommand.getHtmlProtocol(command, this.loginStatus)).execute(this);
-						//Response = Response + commandR.visit(this);
+						Response = Response + (commandR = factoryHttpCommand.getHtmlProtocol(command, this.loginStatus))
+								.execute(this);
 					} catch (IllegalArgumentException e) {
-						// TODO: handle exception
 						Response = Response + "KO\r\n";
 					}
-
 					this.out.write(Response.getBytes("latin1"));
-
 					msg = "";
 				}
 			}
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -92,6 +81,7 @@ public class clientHandler extends Thread implements visitable {
 		cmd.visit(this);
 		return "";
 	}
+
 	public String acceptVisit(HttpPass cmd) {
 		this.setLoginStatus(2);
 		return "";
@@ -101,6 +91,7 @@ public class clientHandler extends Thread implements visitable {
 		this.setLoginStatus(1);
 		return "";
 	}
+
 	public String acceptVisit(HttpMessage msg) {
 		// TODO Auto-generated method stub
 		String msgProv = "";
@@ -126,10 +117,12 @@ public class clientHandler extends Thread implements visitable {
 		}
 		return msgProv;
 	}
-	public String acceptVisit(HttpRegister reg){
+
+	public String acceptVisit(HttpRegister reg) {
 		this.setLoginStatus(3);
 		return null;
 	}
+
 	public void setUser(String userName) {
 		// TODO Auto-generated method stub
 		this.userName = userName;

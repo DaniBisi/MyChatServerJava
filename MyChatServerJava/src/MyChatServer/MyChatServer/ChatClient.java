@@ -72,7 +72,7 @@ public class ChatClient {
 			e.printStackTrace();
 		}
 		
-		System.out.println(msg);
+		//System.out.println(msg);
 		return msg;
 		/*String msg="";
 		try {

@@ -48,6 +48,9 @@ abstract public class factoryHttpCommand {
 			
 			return new HttpSubscribe(params,(loginStatus >2));
 		}
+		else if(command.equalsIgnoreCase("UNSUBSCRIBE") && loginStatus >1){
+			return new HttpUnSubscribe(params,(loginStatus >2));
+		}
 		
 		
 		else {
