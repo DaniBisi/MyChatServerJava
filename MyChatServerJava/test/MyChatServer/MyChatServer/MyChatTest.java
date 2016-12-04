@@ -129,6 +129,30 @@ public class MyChatTest {
 		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\n", msg);
 	}
+	@Test
+	public void testUserPasswordNewTopics() {
+		this.client1.connectServer();
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nTOPICS\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK 0\r\n", msg);
+	}
+	@Test
+	public void testUserPasswordNewTopicsSubscribed() {
+		this.client1.connectServer();
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nTOPICS\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nTOPIC_LIST\r\n*0 ciao\r\n", msg);
+	}
 
 	@Test
 	public void testUserPasswordNewTopicMessage() {
@@ -233,6 +257,19 @@ public class MyChatTest {
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
 	@Test
+	public void testSubscribeList() {//#########################à da rivedere non è list che cambia # #########################
+		this.client1.connectServer();
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nLIST\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
+	}
+	@Test
 	public void testUnSubscribe() {
 		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW ciao2\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0 1\r\nUNSUBSCRIBE 0 1\r\nSUBSCRIBE 1\r\nUNSUBSCRIBE 0\r\n";
@@ -323,6 +360,20 @@ public class MyChatTest {
 		msg = msg + client1.receiveMsg();
 		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK\r\nOK\r\nKO\r\n", msg);
+	}
+
+	@Test
+	public void testRegisterSUBSCRIBEUnregister() {
+		this.client1.connectServer();
+		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nUNREGISTER\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		msg = msg + client1.receiveMsg();
+		System.out.println(MyChatServer.subRegister);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
 
 	@Test

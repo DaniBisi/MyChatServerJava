@@ -24,6 +24,9 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("NEW") && loginStatus >1){
 			return new HttpNew(params);
 		}
+		else if(command.equalsIgnoreCase("TOPICS") && loginStatus >1){
+			return new HttpTopics(params);
+		}
 		else if(command.equalsIgnoreCase("MESSAGE") && loginStatus >1){
 			return new HttpMessage(params);
 		}

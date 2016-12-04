@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.IllegalFormatException;
 
 public class clientHandler extends Thread implements visitable {
@@ -15,6 +16,8 @@ public class clientHandler extends Thread implements visitable {
 	private OutputStream out;
 	private int loginStatus;
 	private String userName;
+	private int digest;
+	private ArrayList<String> messageQueue;//#probabilmente anche questo andrà nel server.
 
 	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;

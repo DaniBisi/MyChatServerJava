@@ -14,7 +14,7 @@ public class HttpUnregister implements HttpProtocol {
 		// TODO Auto-generated method stub
 		if(params != null)throw new IllegalArgumentException();
 		String response;
-		if(MyChatServer.unRegister(clientHandler.getUserName())) response = "OK\r\n";
+		if(MyChatServer.unRegister(clientHandler.getUserName())&& MyChatServer.unSubscribe(clientHandler.getUserName()) ) response = "OK\r\n";
 		else response = "KO\r\n";
 		return response;
 	}

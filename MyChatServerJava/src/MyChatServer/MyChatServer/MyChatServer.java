@@ -157,6 +157,16 @@ public class MyChatServer extends Thread {
 		}
 		return true;
 	}
+	public static boolean checkTopicSubscription(String userName, int idTopic){
+		try{
+		TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
+		if(entry.contains(userName)) return true;
+		}catch (Exception e) {
+			return false;
+		}
+		return false;
+	}
+	
 	public void closeSocket() {
 		// TODO Auto-generated method stub
 		try {
@@ -165,6 +175,19 @@ public class MyChatServer extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public static boolean unSubscribe(String userName) {
+		for (int i=0;i< MyChatServer.TopicList.size();i++) {
+			try{
+			TreeSet<String> entry = MyChatServer.subRegister.get(i);
+			entry.remove(userName);
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		// TODO Auto-generated method stub
+		return true;
 	}
 	
 }
