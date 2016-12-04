@@ -19,15 +19,17 @@ import org.junit.rules.TestName;
  */
 
 public class MyChatTest {
-	@Rule public TestName name = new TestName();
+	@Rule
+	public TestName name = new TestName();
 
 	private static boolean setUpIsDone = false;
 	private MyChatServer myServer;
 	private ChatClient client1;
 	private String address;
-	private static int port;
+	private int port;
 	private Map<String, String> Dictionary;
 	private String msg;
+
 	/**
 	 * Create the test case
 	 *
@@ -35,7 +37,7 @@ public class MyChatTest {
 	 *            name of the test case
 	 */
 	public MyChatTest() {
-		this.port = 1033;
+		this.port = 1035;
 		this.address = "127.0.0.1";
 		this.Dictionary = new HashMap<String, String>(200);
 		this.Dictionary.put("dani", "bisi");
@@ -43,21 +45,23 @@ public class MyChatTest {
 		this.Dictionary.put("marco", "bura");
 		this.Dictionary.put("lore", "mari");
 	}
-
+	
 	@Before
 	public void setUp() {
 		System.out.println(name.getMethodName());
-		if(!setUpIsDone){
-		this.myServer = new MyChatServer( this.Dictionary,this.address, this.port);
-		this.myServer.start();
-		setUpIsDone = true;
+		if (!setUpIsDone) {
+			this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
+			this.myServer.start();
+			setUpIsDone = true;
 		}
+		this.msg ="";
 		this.client1 = new ChatClient("127.0.0.1", this.port);
+		this.client1.connectServer();
 	}
 
 	@Ignore
 	public void testServerConstructor() throws InterruptedException {
-		myServer = new MyChatServer(this.Dictionary,this.address, this.port) ;
+		myServer = new MyChatServer(this.Dictionary, this.address, this.port);
 		assertEquals(false, myServer == null);
 	}
 
@@ -74,8 +78,7 @@ public class MyChatTest {
 	}
 
 	@Test
-	public void testMessageIllegalArgument() {
-		this.client1.connectServer();
+	public void testMessageIllegalArgument() {	
 		msg = "GET 1 2\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
@@ -83,8 +86,7 @@ public class MyChatTest {
 	}
 
 	@Test
-	public void testIllegalMessage() {
-		this.client1.connectServer();
+	public void testIllegalMessage() {		
 		msg = "UNKNOWNMESSAGE\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
@@ -92,126 +94,148 @@ public class MyChatTest {
 	}
 
 	@Test
-	public void testUserCorrect() {
-		this.client1.connectServer();
+	public void testUserCorrect() {		
 		msg = "USER dani\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\n", msg);
 	}
-
 	@Test
-	public void testUserPassword() {
-		this.client1.connectServer();
-		msg = "USER dani\r\nPASS bisi\r\n";
-		client1.sendMsg(msg);
-		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		assertEquals("OK\r\nOK\r\n", msg);
-	}
-
-	@Test
-	public void testUserUncorrect() {
-		this.client1.connectServer();
-		msg = "USER danielino\r\n";
+	public void testEmptyUser() {		
+		msg = "USER miao bao\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("KO\r\n", msg);
 	}
 
+	@Test
+	public void testUserPassword() {	
+		msg = "USER dani\r\nPASS bisi\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\n", msg);
+	}
+
+	@Test
+	public void testUserWrongPassword() {	
+		msg = "USER dani\r\nPASS CIAO\r\nPASS bisi\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nKO\r\nKO\r\n", msg);
+	}
+
+	@Test
+	public void testUserEmptyPassword() {
+		msg = "USER dani\r\nPASS \r\n\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testUserWrongArgomentNumberPassword() {
+		msg = "USER dani\r\nPASS 2 3\r\n\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testWrongUserWrongArgomentNumberPassword() {
+		msg = "USER pippo\r\nPASS 2 3\r\n\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testUserUncorrect() {
+		msg = "USER danielino\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\n", msg);
+	}
+
 	@Ignore
-	public void testUserPasswordNew() {
-		this.client1.connectServer();
+	public void testUserPasswordNew() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\n", msg);
 	}
+
 	@Test
-	public void testUserPasswordNewTopics() {
-		this.client1.connectServer();
+	public void testUserPasswordNewTopics() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nTOPICS\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		assertEquals("OK\r\nOK\r\nOK 0\r\n", msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nTOPIC_LIST\r\n0 ciao\r\n", msg);
 	}
+
 	@Test
 	public void testUserPasswordNewTopicsSubscribed() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nTOPICS\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
+		// System.out.println(MyChatServer.subRegister);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nTOPIC_LIST\r\n*0 ciao\r\n", msg);
+	}
+	@Test
+	public void testUserPasswordNewTopicsSubscribedNotRegister() {
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nSUBSCRIBE 0\r\nTOPICS\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		// System.out.println(MyChatServer.subRegister);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nKO\r\nTOPIC_LIST\r\n0 ciao\r\n", msg);
+	}
+	@Test
+	public void testUserPasswordNewTopicsNotRegisterUNSubscribed() {
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nUNSUBSCRIBE 0\r\nTOPICS\r\n";
+		client1.sendMsg(msg);
+//		try {
+//			Thread.sleep(150000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		msg = client1.receiveMsg();
+		// System.out.println(MyChatServer.subRegister);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nKO\r\nTOPIC_LIST\r\n0 ciao\r\n", msg);
 	}
 
 	@Test
 	public void testUserPasswordNewTopicMessage() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nMESSAGE 0\r\nciao messaggio di prova\r\n.\r\n\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 0\r\n", msg);
 	}
 
 	@Test
-	public void testMoreTopicMessageGet() {
-		this.client1.connectServer();
+	public void testMoreTopicMessageGet() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW Miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nGET 0\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals(
 				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nMESSAGE 0\r\nUSER dani\r\nTOPICS 0 1\r\nciao messaggio di prova\r\n.\r\n\r\n",
 				msg);
 	}
 
 	@Test
-	public void testMoreTopicMessageWrongGet() {
-		this.client1.connectServer();
+	public void testMoreTopicMessageWrongGet() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW Miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nGET 7\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nKO\r\n", msg);
 	}
 
 	@Test
-	public void testMoreTopicMessage() {
-		this.client1.connectServer();
+	public void testMoreTopicMessage() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW Miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\n", msg);
 	}
 
 	@Ignore
 	public void testMoreTopicGetMessageTwoUser() {
-		this.client1.connectServer();
 		ChatClient client2;
 		client2 = new ChatClient(this.address, this.port);
 		client2.connectServer();
@@ -220,165 +244,137 @@ public class MyChatTest {
 		client1.sendMsg(msgS);
 		client2.sendMsg(msg2);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		msg = msg + client2.receiveMsg();
 		msg = msg + client2.receiveMsg();
 		msg = msg + client2.receiveMsg();
 		client1.sendMsg("NEW Miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\n");
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 2\r\nOK 0\r\n", msg);
 	}
 
 	@Test
 	public void testUserPasswordNewTopicMessageWrongMessage() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nMESSAGE 0\r\nciao messaggio di prova\r\n.\r\n\r\nMESSAGE 2\r\nciao messaggio di prova\r\n.\r\n\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 0\r\nKO\r\n", msg);
 	}
+
 	@Test
 	public void testSubscribe() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nSUBSCRIBE 0\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
-	@Test
-	public void testSubscribeList() {//#########################à da rivedere non è list che cambia # #########################
-		this.client1.connectServer();
-		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nLIST\r\n";
-		client1.sendMsg(msg);
-		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
-	}
+
+
 	@Test
 	public void testUnSubscribe() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW ciao2\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0 1\r\nUNSUBSCRIBE 0 1\r\nSUBSCRIBE 1\r\nUNSUBSCRIBE 0\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		System.out.println(MyChatServer.subRegister);
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK\r\nOK\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
+
 	@Test
-	public void testListOneMessageTopic() {
-		this.client1.connectServer();
+	public void testListOneMessageTopic() {		
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 0 0\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		//System.out.println(msg);
+		// System.out.println(msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nMESSAGES\r\n0 dani 0 1\r\n", msg);
+	}
+	@Test
+	public void testListOnTopicOneMessageTopic() {	
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 1\r\n";
+		client1.sendMsg(msg);
+//		try {
+//			Thread.sleep(150000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+		msg = client1.receiveMsg();
+		// System.out.println(msg);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nMESSAGES\r\n0 dani 0 1\r\n", msg);
 	}
 
 	@Test
-	public void testListOneMessageWrongtopic() {
-		this.client1.connectServer();
+	public void testListOneMessageWrongtopic() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 2\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nKO\r\n", msg);
 	}
 
 	@Test
 	public void testUserPasswordWrongNew() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao 2\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nKO\r\n", msg);
 	}
 
 	@Test
-	public void testRegister() {
-		this.client1.connectServer();
+	public void testRegister() {	
 		msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
+	}
+	@Test
+	public void testRegisterNull() {	
+		msg = "USER dani\r\nPASS bisi\r\nREGISTER\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testRegisterWrong() {	
+		msg = "USER dani\r\nPASS bisi\r\nREGISTER 1 \r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nKO\r\n", msg);
 	}
 
 	@Test
 	public void testRegisterSameAddress() {
-		this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\nREGISTER 127.0.0.1 8245\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK\r\nKO\r\n", msg);
 	}
 
 	@Test
-	public void testRegisterUnregister() {
-		this.client1.connectServer();
+	public void testRegisterUnregister() {	
 		msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\nUNREGISTER\r\nUNREGISTER\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK\r\nOK\r\nKO\r\n", msg);
+	}
+	@Test
+	public void testRegisterWrongUnregister() {	
+		msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\nUNREGISTER 2\r\nUNREGISTER\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK\r\nKO\r\nOK\r\n", msg);
 	}
 
 	@Test
 	public void testRegisterSUBSCRIBEUnregister() {
-		this.client1.connectServer();
+		if (!this.client1.connectServer())
+			assertFalse(true);
 		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0\r\nUNREGISTER\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
 		System.out.println(MyChatServer.subRegister);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
 
 	@Test
 	public void testRegisterNotLoggedIn() {
-		this.client1.connectServer();
 		msg = "REGISTER 127.0.0.1 8245\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
@@ -387,38 +383,115 @@ public class MyChatTest {
 
 	@Test // (expected=IllegalArgumentException.class)
 	public void testGetMessage() {
-		this.client1.connectServer();
 		msg = "GET 1\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("KO\r\n", msg);
 	}
 
-	@Test // (expected=IllegalArgumentException.class)
-	public void testGetMessageBatch() {
-		this.client1.connectServer();
-		msg = "GET 1\r\nGET 1 2\r\n";
+
+	@Test
+	public void testReply() throws InterruptedException {
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nREPLY 0\r\nRISPOSTA\r\n.\r\n\r\n";
 		client1.sendMsg(msg);
+		//Thread.sleep(45000);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		assertEquals("KO\r\nKO\r\n", msg);
+		// System.out.println(msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\n", msg);
+	}
+	@Test
+	public void testWrongReply() throws InterruptedException {
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nREPLY 32\r\nRISPOSTA\r\n.\r\n\r\n";
+		client1.sendMsg(msg);
+		//Thread.sleep(45000);
+		msg = client1.receiveMsg();
+		// System.out.println(msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nKO\r\n", msg);
+	}
+	
+	//#################################### TEST STATIC FUNCTION ###########################
+	@Test
+	public void testunRegister(){
+		MyChatServer.Register=null;
+		boolean c = MyChatServer.unRegister("lollo");
+		assertEquals(false, c);
+	}
+	@Test
+	public void testcheckTopicSubscription(){
+		TreeSet<String> entry = new TreeSet<String>();
+		MyChatServer.subRegister.put(0, entry);
+		entry.add("ciao");	
+		boolean c = MyChatServer.checkTopicSubscription("lollo",0);
+		assertEquals(false, c);
 	}
 
 	@Test
-	public void testListReply() {
-		this.client1.connectServer();
-		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nREPLY 0\r\nRISPOSTA\r\n.\r\n\r\n";
+	public void testcheckMessageError(){
+		String param[] = {"ciao"};
+		boolean c = MyChatServer.checkMessageError(param);
+		assertEquals(true, c);
+	}
+	
+	@Test
+	public void testMessageAfterSubscribe(){
+		MyChatServer.addTopic("ciao");
+		MyChatServer.addTopic("ciao1");
+		MyChatServer.addTopic("ciao2");
+		MyChatServer.addRecord("127.0.0.1", 4127, "danielito");
+		String params[] = {"1","0"};
+		MyChatServer.addSubscription(params, "danielito");
+		ArrayList<Integer> a = new ArrayList<Integer>();
+		a.add(1);
+		a.add(0);
+		Message m = new Message("ciao message", a, "daniele");
+		MyChatServer.addMessage(m);
+		
+	}
+	
+	//############################# fine test variabili statiche ##################
+	
+	//########################## TEST COMANDI NON LOGGATI #######################
+
+	@Test // (expected=IllegalArgumentException.class)
+	public void testGetMessageBatch() {
+		msg = "GET 1\r\nGET 1 2\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		msg = msg + client1.receiveMsg();
-		//System.out.println(msg);
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\n", msg);
+		assertEquals("KO\r\nKO\r\n", msg);
 	}
 
+	
+	
+	//############################# INIZIO TEST COMPONENT ######################
+	@Test
+	public void testMessageHasTopic(){
+		ArrayList<Integer> topicListP = new ArrayList<Integer>();
+		topicListP.add(1);
+		topicListP.add(2);
+		Message a = new Message("lol non so", topicListP, "Dani");
+		String param[] = {"0"};
+		assertEquals(false,a.hasTopic(param));
+	}
+	@Test
+	public void testPairNotEquals(){
+		Pair<Integer, Integer> a = new Pair<Integer, Integer>(2, 3);
+		assertEquals(false,a.equals("ciao"));
+	}
+	@Test
+	public void testPairEquals(){
+		Pair<Integer, Integer> a = new Pair<Integer, Integer>(2, 3);
+		assertEquals(true,a.equals(new Pair<Integer, Integer>(2, 3)));
+	}
+	@Test
+	public void testPairEqualsAnotB(){
+		Pair<Integer, Integer> a = new Pair<Integer, Integer>(2, 3);
+		assertEquals(false,a.equals(new Pair<Integer, String>(2, "ciao")));
+	}
+	@Test
+	public void testPairEqualsBnotA(){
+		Pair<Integer, Integer> a = new Pair<Integer, Integer>(2, 3);
+		assertEquals(false,a.equals(new Pair<String, Integer>("ciao", 2)));
+	}
 	@After
 	public void tearDown() {
 		msg = msg.replaceAll("\r\n", " ");
@@ -426,10 +499,12 @@ public class MyChatTest {
 		this.client1.closeSocket();
 		MyChatServer.Dictionary = Dictionary;
 		MyChatServer.TopicList = new ArrayList<String>();
-		MyChatServer.MessageList = new ArrayList<Message>(); 
-		MyChatServer.Register = new HashMap<String, Pair<String,Integer>>(200);
+		MyChatServer.MessageList = new ArrayList<Message>();
+		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
-		//this.myServer.stop();
+		// this.myServer.stop();
+		
 	}
+	
 
 }

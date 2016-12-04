@@ -12,7 +12,7 @@ public class HttpSubscribe implements HttpProtocol {
 
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		String response;
+		String response ="";
 		// TODO Auto-generated method stub
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){
 			boolean c = MyChatServer.addSubscription(params,clientHandler.getUserName());
@@ -22,11 +22,11 @@ public class HttpSubscribe implements HttpProtocol {
 		
 		return response;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		
 		return null;
-	}
+	}*/
 
 }

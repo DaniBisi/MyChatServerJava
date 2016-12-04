@@ -6,6 +6,7 @@ public class HttpUser implements HttpProtocol{
 	private String userName;
 	public HttpUser(String[] params) {
 		this.params = params;
+		this.userName = params[0];
 		// TODO Auto-generated constructor stub
 	}
 
@@ -13,24 +14,22 @@ public class HttpUser implements HttpProtocol{
 		// TODO Auto-generated method stub
 		String response = "KO\r\n";
 		if(this.params.length == 1){
-			try {
-				if(MyChatServer.Dictionary.get(params[0]) != null){
-					response = "OK\r\n";
-				}
-			}catch (Exception e) {
-				// TODO: handle exception
-			}
+			response = "OK\r\n";
 			clientHandler.acceptVisit(this);
-			clientHandler.setUser(params[0]);
 		}
 		
 		return response;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
 		return "";
+	}*/
+
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return this.userName;
 	}
 
 

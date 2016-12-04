@@ -56,6 +56,13 @@ public class ChatClient {
 
 	public String receiveMsg(){
 		// TODO Auto-generated method stub
+
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String msg = "";
 		byte streamIn[] = new byte[2048];
 		try {

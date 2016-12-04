@@ -21,11 +21,11 @@ public class HttpNew implements HttpProtocol {
 		return response;
 		
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
 		return "";
 	}
-
+*/
 }

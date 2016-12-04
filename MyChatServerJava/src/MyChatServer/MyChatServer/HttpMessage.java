@@ -36,11 +36,11 @@ public class HttpMessage implements HttpProtocol {
 		}
 		return response;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
-		/*String msg = clientHandler.acceptVisit(this);
+		String msg = clientHandler.acceptVisit(this);
 		String response;
 		if (!this.errorFound) {
 			ArrayList<Integer> topicList = new ArrayList<Integer>();
@@ -53,8 +53,8 @@ public class HttpMessage implements HttpProtocol {
 			response = "OK\r\n";
 		}
 		return response;
-	}*/
-	return "";
 	}
+	return "";
+	}*/
 
 }

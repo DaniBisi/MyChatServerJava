@@ -24,7 +24,7 @@ public class clientHandler extends Thread implements visitable {
 		// System.out.println("Loginstatus:" + this.loginStatus);
 	}
 
-	public int getLoginStatus(int loginStatus) {
+	public int getLoginStatus() {
 		return this.loginStatus;
 	}
 
@@ -79,19 +79,16 @@ public class clientHandler extends Thread implements visitable {
 		}
 	}
 
-	public String acceptVisit(HttpProtocol cmd) {
-		// TODO Auto-generated method stub
-		cmd.visit(this);
-		return "";
-	}
+	
 
 	public String acceptVisit(HttpPass cmd) {
-		this.setLoginStatus(2);
+		this.setLoginStatus(cmd.getLoginResult());
 		return "";
 	}
 
 	public String acceptVisit(HttpUser cmd) {
 		this.setLoginStatus(1);
+		this.setUser(cmd.getUserName());
 		return "";
 	}
 

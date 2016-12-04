@@ -14,7 +14,7 @@ public class HttpRegister implements HttpProtocol {
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response = "";
-		if(params == null || params.length > 2) throw new IllegalArgumentException();
+		if(params == null || params.length != 2) throw new IllegalArgumentException();
 		else{
 			String host = params[0];
 			int port = Integer.parseInt(params[1]);
@@ -27,12 +27,12 @@ public class HttpRegister implements HttpProtocol {
 
 		return response;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
 		clientHandler.acceptVisit(this);
 		return null;
 	}
-
+*/
 }

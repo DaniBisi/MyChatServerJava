@@ -28,11 +28,11 @@ public class HttpConv implements HttpProtocol {
 		}
 		return null;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+*/
 }

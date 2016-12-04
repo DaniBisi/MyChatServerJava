@@ -18,11 +18,11 @@ public class HttpUnregister implements HttpProtocol {
 		else response = "KO\r\n";
 		return response;
 	}
-
+/*
 	@Override
 	public String visit(clientHandler clientHandler) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 }
