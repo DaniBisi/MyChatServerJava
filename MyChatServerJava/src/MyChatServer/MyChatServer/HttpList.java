@@ -13,7 +13,8 @@ public class HttpList implements HttpProtocol {
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		String response;
-		if(!MyChatServer.checkTopicError(params)){
+		System.out.println(params);
+		if(params!= null && params.length>0 && !MyChatServer.checkTopicError(params)){
 			//int start = Integer.parseInt(params[0]);
 			//params = Arrays.copyOfRange(params, 1, params.length);
 			response = "MESSAGES\r\n";

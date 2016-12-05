@@ -28,7 +28,8 @@ public class ChatClient {
 			 this.out = socket.getOutputStream ();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("unlucky");
 			connectionStatus = false;
 		}
 		

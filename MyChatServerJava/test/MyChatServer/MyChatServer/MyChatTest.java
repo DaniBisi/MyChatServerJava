@@ -272,6 +272,12 @@ public class MyChatTest {
 	public void testUnSubscribe() {
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW ciao2\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0 1\r\nUNSUBSCRIBE 0 1\r\nSUBSCRIBE 1\r\nUNSUBSCRIBE 0\r\n";
 		client1.sendMsg(msg);
+		try {
+			Thread.sleep(150000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		msg = client1.receiveMsg();
 		System.out.println(MyChatServer.subRegister);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK\r\nOK\r\nOK\r\nOK\r\nOK\r\n", msg);
@@ -373,6 +379,21 @@ public class MyChatTest {
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
 
+	@Test
+	public void testDigest() {
+		this.client1.connectServer();
+		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0\r\nDIGEST 2\r\nMESSAGE 0\r\nprimo messaggio\r\n.\r\n\r\nMESSAGE 0\r\nsecondo messaggio\r\n.\r\n\r\n";
+		client1.sendMsg(msg);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		msg = client1.receiveMsg();
+		System.out.println(MyChatServer.subRegister);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", msg);
+	}
 	@Test
 	public void testRegisterNotLoggedIn() {
 		msg = "REGISTER 127.0.0.1 8245\r\n";

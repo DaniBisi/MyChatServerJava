@@ -14,6 +14,7 @@ import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ public class MyChatServer extends Thread {
 	public static Map<String, String> Dictionary;
 	public static Map<String, Pair<String, Integer>> Register;
 	public static Map<Integer, TreeSet<String>> subRegister;
+	public static Map<String, Digest> digestReg;
 
 	public MyChatServer(Map<String, String> Dictionary, String address, int port) {
 		this.address = address;
@@ -40,6 +42,7 @@ public class MyChatServer extends Thread {
 		MyChatServer.MessageList = new ArrayList<Message>();
 		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
+		MyChatServer.digestReg = new HashMap<String, Digest>(200);
 
 		try {
 			// this.server= new ServerSocket();
@@ -63,7 +66,7 @@ public class MyChatServer extends Thread {
 		for (String string : params) {
 			String topicName = "";
 			try {
-				topicName = MyChatServer.TopicList.get(Integer.parseInt(string)); 
+				topicName = MyChatServer.TopicList.get(Integer.parseInt(string));
 			} catch (Exception e) {
 				errorFound = true;
 				break;
@@ -77,7 +80,7 @@ public class MyChatServer extends Thread {
 		for (String string : params) {
 			Message message = null;
 			try {
-				message = MyChatServer.MessageList.get(Integer.parseInt(string)); 
+				message = MyChatServer.MessageList.get(Integer.parseInt(string));
 
 			} catch (Exception e) {
 				errorFound = true;
@@ -95,7 +98,9 @@ public class MyChatServer extends Thread {
 				Socket client = server.accept();
 				// System.out.println("Accepted from " +
 				// client.getInetAddress());
+				System.out.print(client.getInetAddress() + " " + client.getLocalPort());
 				new clientHandler(client).start();
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -112,21 +117,47 @@ public class MyChatServer extends Thread {
 		TreeSet<String> userSubscribed = new TreeSet<String>();
 		try {
 			for (int a : message.getTopicList()) {
-				userSubscribed.addAll(MyChatServer.subRegister.get(a)); // lista di tutti gli utenti da allertare
+				// lista di tutti gli utenti da allertare
+				userSubscribed.addAll(MyChatServer.subRegister.get(a));
 				// Map<Integer, TreeSet<String>>
 			}
-			for (String userName : userSubscribed) {
-				Pair<String, Integer> entry = MyChatServer.Register.get(userName);
-				ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
-				sender.connectServer();
-				sender.sendMsg("MESSAGE "+idMessage+"\r\n"+"TOPICS "+ message.listToString()+"\r\n"+message.getText()+"\r\n.\r\n\r\n");
-				sender.closeSocket();
-			}
+			MyChatServer.sendMessageToSubscribed(message, userSubscribed, idMessage);
 		} catch (Exception e) {
 			// non faccio niente. semplicemente non ci sono cose da fare
 		}
 
 		return idMessage;
+	}
+
+	public static void sendMessageToSubscribed(Message message, TreeSet<String> userSubscribed, int idMessage) {
+
+		String messages = "";
+		for (String userName : userSubscribed) {
+			Pair<String, Integer> entry = MyChatServer.Register.get(userName);
+			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
+			if (MyChatServer.digestReg.containsKey(userName)) {
+				Digest userDigest = MyChatServer.digestReg.get(userName);
+				userDigest.addMessage(idMessage);
+				if (userDigest.timeToSend()) {
+					for (int idMessageP : userDigest.getList()) {
+						Message msgP = MyChatServer.MessageList.get(idMessageP);
+						messages = messages + "MESSAGE " + idMessageP + "\r\n" + "TOPICS " + msgP.listToString()
+								+ "\r\n" + msgP.getText() + "\r\n.\r\n\r\n";
+					}
+				}
+			} else {
+				messages = "MESSAGE " + idMessage + "\r\n" + "TOPICS " + message.listToString() + "\r\n"
+						+ message.getText() + "\r\n.\r\n\r\n";
+			}
+			try {
+				sender.connectServer();
+				sender.sendMsg(messages);
+				sender.closeSocket();
+			} catch (Exception e) {
+				System.out.println("unlucky");
+			}
+		}
+
 	}
 
 	public static synchronized boolean addRecord(String host, int port, String user) {
@@ -222,6 +253,18 @@ public class MyChatServer extends Thread {
 		}
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public static void setDigest(String userName, int k) {
+		// TODO Auto-generated method stub
+		// digestReg.replace(key, value)
+		if (!MyChatServer.digestReg.containsKey(userName)) {
+			MyChatServer.digestReg.put(userName, new Digest(k));
+		} else {
+			Digest entry = MyChatServer.digestReg.get(userName);
+			entry.setK(k); // si può fare perchè è un campo statico
+		}
+		// for (Map.Entry<String, String> entry : map.entrySet())
 	}
 
 }
