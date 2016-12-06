@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.util.Arrays;
 
@@ -10,7 +10,7 @@ public class HttpList implements HttpProtocol {
 		this.params = params;
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		String response;
 		System.out.println(params);

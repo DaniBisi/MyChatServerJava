@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class cmdDigest implements HttpProtocol {
 
@@ -11,7 +11,7 @@ public class cmdDigest implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		if (params.length!=1)return "KO\r\n";
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){

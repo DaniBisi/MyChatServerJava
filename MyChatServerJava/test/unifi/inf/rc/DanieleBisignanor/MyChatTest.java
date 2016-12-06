@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignanor;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+
+import unifi.inf.rc.DanieleBisignano.ChatClient;
+import unifi.inf.rc.DanieleBisignano.Message;
+import unifi.inf.rc.DanieleBisignano.MyChatServer;
+import unifi.inf.rc.DanieleBisignano.Pair;
 
 /**
  * Unit test for simple App.
@@ -92,13 +97,34 @@ public class MyChatTest {
 		msg = client1.receiveMsg();
 		assertEquals("KO\r\n", msg);
 	}
+	@Test
+	public void testNullMessage() {		
+		msg = "\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("KO\r\n", msg);
+	}
 
 	@Test
-	public void testUserCorrect() {		
+	public void testUser() {		
 		msg = "USER dani\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\n", msg);
+	}
+	@Test
+	public void testUserUnCorrect() {		
+		msg = "USER lolo\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\n", msg);
+	}
+	@Test
+	public void testUserUnCorrectPassword() {		
+		msg = "USER lolo\r\nPASS MIAO\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nKO\r\n", msg);
 	}
 	@Test
 	public void testEmptyUser() {		
@@ -129,11 +155,11 @@ public class MyChatTest {
 		msg = "USER dani\r\nPASS \r\n\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		assertEquals("OK\r\nKO\r\n", msg);
+		assertEquals("OK\r\nKO\r\nKO\r\n", msg);
 	}
 	@Test
 	public void testUserWrongArgomentNumberPassword() {
-		msg = "USER dani\r\nPASS 2 3\r\n\r\n";
+		msg = "USER dani\r\nPASS 2 3\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\nKO\r\n", msg);
@@ -143,7 +169,7 @@ public class MyChatTest {
 		msg = "USER pippo\r\nPASS 2 3\r\n\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		assertEquals("OK\r\nKO\r\n", msg);
+		assertEquals("OK\r\nKO\r\nKO\r\n", msg);
 	}
 	@Test
 	public void testUserUncorrect() {
@@ -273,7 +299,7 @@ public class MyChatTest {
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW ciao2\r\nREGISTER 127.0.0.1 8245\r\nSUBSCRIBE 0 1\r\nUNSUBSCRIBE 0 1\r\nSUBSCRIBE 1\r\nUNSUBSCRIBE 0\r\n";
 		client1.sendMsg(msg);
 		try {
-			Thread.sleep(150000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -385,7 +411,7 @@ public class MyChatTest {
 		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0\r\nDIGEST 2\r\nMESSAGE 0\r\nprimo messaggio\r\n.\r\n\r\nMESSAGE 0\r\nsecondo messaggio\r\n.\r\n\r\n";
 		client1.sendMsg(msg);
 		try {
-			Thread.sleep(500);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

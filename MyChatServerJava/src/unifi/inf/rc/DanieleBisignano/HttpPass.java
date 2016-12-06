@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class HttpPass implements HttpProtocol {
 
@@ -11,17 +11,19 @@ public class HttpPass implements HttpProtocol {
 	}
 
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		String response = "KO\r\n";
 		if(this.params.length == 1){
+				//if(MyChatServer.Dictionary.containsKey(clientHandler.getUserName())){
 			    String pass = MyChatServer.Dictionary.get(clientHandler.getUserName());
-				if(pass.equals(params[0])){
+				if(pass!= null && pass.equals(params[0])){
 					loginResult = 2;
 					clientHandler.acceptVisit(this);
 					response = "OK\r\n";
 				}
-				else {
+				//}
+				else{
 					loginResult = 0;
 					clientHandler.acceptVisit(this);
 					response = "KO\r\n";

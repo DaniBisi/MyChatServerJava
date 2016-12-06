@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class HttpRegister implements HttpProtocol {
 	
@@ -10,7 +10,7 @@ public class HttpRegister implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response = "";

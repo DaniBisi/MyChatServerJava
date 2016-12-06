@@ -1,7 +1,7 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 import java.util.Set;
 
-import MyChatServer.MyChatServer.HttpProtocol;
+import unifi.inf.rc.DanieleBisignano.HttpProtocol;
 abstract public class factoryHttpCommand {
 	
 	public static HttpProtocol getHtmlProtocol(String param, int loginStatus){
