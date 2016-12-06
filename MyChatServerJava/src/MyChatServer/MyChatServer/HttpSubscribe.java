@@ -2,6 +2,7 @@ package MyChatServer.MyChatServer;
 
 public class HttpSubscribe implements HttpProtocol {
 
+	private int loginResult;
 	private String[] params;
 	private boolean alreadySubscribed;
 	public HttpSubscribe(String[] params, boolean b) {
@@ -16,6 +17,8 @@ public class HttpSubscribe implements HttpProtocol {
 		// TODO Auto-generated method stub
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){
 			boolean c = MyChatServer.addSubscription(params,clientHandler.getUserName());
+			this.loginResult = 4;
+			clientHandler.acceptVisit(this);
 			response = "OK\r\n";
 		}
 		else response = "KO\r\n";
@@ -28,5 +31,10 @@ public class HttpSubscribe implements HttpProtocol {
 		
 		return null;
 	}*/
+
+	public int getLoginResult() {
+		// TODO Auto-generated method stub
+		return this.loginResult;
+	}
 
 }

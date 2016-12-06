@@ -2,7 +2,7 @@ package MyChatServer.MyChatServer;
 
 public class HttpRegister implements HttpProtocol {
 	
-	
+	private int loginResult;
 	private String[] params;
 
 	public HttpRegister(String[] params) {
@@ -20,12 +20,18 @@ public class HttpRegister implements HttpProtocol {
 			int port = Integer.parseInt(params[1]);
 			String user = clientHandler.getUserName();
 			if(MyChatServer.addRecord(host, port, user)){
+				this.loginResult = 3;
+				clientHandler.acceptVisit(this);
 				response = "OK\r\n";
 			}
 			else response = "KO\r\n";
 		}
-
+		
 		return response;
+	}
+	public int getLoginResult() {
+		// TODO Auto-generated method stub
+		return this.loginResult;
 	}
 /*
 	@Override

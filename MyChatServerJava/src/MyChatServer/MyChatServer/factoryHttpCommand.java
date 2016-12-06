@@ -47,15 +47,15 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("UNREGISTER") && loginStatus >1){
 			return new HttpUnregister(params);
 		}
-		else if(command.equalsIgnoreCase("SUBSCRIBE") && loginStatus >1){
+		else if(command.equalsIgnoreCase("SUBSCRIBE") && loginStatus >2){
 			
-			return new HttpSubscribe(params,(loginStatus >2));
+			return new HttpSubscribe(params,(loginStatus >3));
 		}
-		else if(command.equalsIgnoreCase("UNSUBSCRIBE") && loginStatus >1){
-			return new HttpUnSubscribe(params,(loginStatus >2));
+		else if(command.equalsIgnoreCase("UNSUBSCRIBE") && loginStatus >2){
+			return new HttpUnSubscribe(params,(loginStatus >3));
 		}
-		else if(command.equalsIgnoreCase("DIGEST") && loginStatus >1){
-			return new cmdDigest(params,(loginStatus >2));
+		else if(command.equalsIgnoreCase("DIGEST") && loginStatus >3){
+			return new cmdDigest(params,(loginStatus >4));
 		}
 		
 		

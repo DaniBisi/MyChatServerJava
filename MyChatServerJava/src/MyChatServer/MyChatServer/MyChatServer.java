@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.swing.SortingFocusTraversalPolicy;
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -130,15 +134,17 @@ public class MyChatServer extends Thread {
 	}
 
 	public static void sendMessageToSubscribed(Message message, TreeSet<String> userSubscribed, int idMessage) {
-
+		boolean timeToSend = false;
 		String messages = "";
 		for (String userName : userSubscribed) {
 			Pair<String, Integer> entry = MyChatServer.Register.get(userName);
+			System.out.println("provo a connettere a: " + entry.getLeft() + entry.getRight());
 			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
 			if (MyChatServer.digestReg.containsKey(userName)) {
 				Digest userDigest = MyChatServer.digestReg.get(userName);
 				userDigest.addMessage(idMessage);
 				if (userDigest.timeToSend()) {
+					timeToSend = true;
 					for (int idMessageP : userDigest.getList()) {
 						Message msgP = MyChatServer.MessageList.get(idMessageP);
 						messages = messages + "MESSAGE " + idMessageP + "\r\n" + "TOPICS " + msgP.listToString()
@@ -146,15 +152,19 @@ public class MyChatServer extends Thread {
 					}
 				}
 			} else {
+				timeToSend = true;
 				messages = "MESSAGE " + idMessage + "\r\n" + "TOPICS " + message.listToString() + "\r\n"
 						+ message.getText() + "\r\n.\r\n\r\n";
 			}
-			try {
-				sender.connectServer();
-				sender.sendMsg(messages);
-				sender.closeSocket();
-			} catch (Exception e) {
-				System.out.println("unlucky");
+			if (timeToSend) {
+				try {
+					sender.connectServer();
+					System.out.println(messages);
+					sender.sendMsg(messages);
+					sender.closeSocket();
+				} catch (Exception e) {
+					System.out.println("unlucky");
+				}
 			}
 		}
 
