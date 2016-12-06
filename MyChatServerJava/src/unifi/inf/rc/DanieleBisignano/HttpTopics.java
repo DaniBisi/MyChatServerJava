@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class HttpTopics implements HttpProtocol {
 
@@ -9,7 +9,7 @@ public class HttpTopics implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response="TOPIC_LIST\r\n";

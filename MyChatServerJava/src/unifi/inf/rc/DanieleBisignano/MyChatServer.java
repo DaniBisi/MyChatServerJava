@@ -1,6 +1,4 @@
-package MyChatServer.MyChatServer;
-
-import MyChatServer.MyChatServer.clientHandler;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.awt.List;
 import java.io.IOException;
@@ -18,6 +16,8 @@ import java.util.Map.Entry;
 
 import javax.swing.SortingFocusTraversalPolicy;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
+
+import unifi.inf.rc.DanieleBisignano.clientHandler;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -144,12 +144,14 @@ public class MyChatServer extends Thread {
 				Digest userDigest = MyChatServer.digestReg.get(userName);
 				userDigest.addMessage(idMessage);
 				if (userDigest.timeToSend()) {
+					
 					timeToSend = true;
 					for (int idMessageP : userDigest.getList()) {
 						Message msgP = MyChatServer.MessageList.get(idMessageP);
 						messages = messages + "MESSAGE " + idMessageP + "\r\n" + "TOPICS " + msgP.listToString()
 								+ "\r\n" + msgP.getText() + "\r\n.\r\n\r\n";
 					}
+					userDigest.clearList();
 				}
 			} else {
 				timeToSend = true;

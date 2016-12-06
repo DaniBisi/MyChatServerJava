@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -16,7 +16,7 @@ public class HttpMessage implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		// controllo che ci siano tutti gli id dei topi ai quali bisogna

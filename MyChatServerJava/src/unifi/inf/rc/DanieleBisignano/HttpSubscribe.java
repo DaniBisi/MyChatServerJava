@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class HttpSubscribe implements HttpProtocol {
 
@@ -11,7 +11,7 @@ public class HttpSubscribe implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		String response ="";
 		// TODO Auto-generated method stub

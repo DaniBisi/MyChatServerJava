@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -14,7 +14,7 @@ public class HttpConv implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		if (params.length == 1 && !MyChatServer.checkMessageError(params)) {

@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 public class HttpUnSubscribe implements HttpProtocol {
 
@@ -11,11 +11,11 @@ public class HttpUnSubscribe implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response;
-		if (this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())) {
+		if (this.params.length>0 && (this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName()))) {
 			boolean c = MyChatServer.rmSubScription(params, clientHandler.getUserName());
 			response = "OK\r\n";
 		} else

@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.util.ArrayList;
 
@@ -32,6 +32,11 @@ public class Digest {
 
 	public ArrayList<Integer> getList() {
 		return messageQueque;
+	}
+
+	public void clearList() {
+		// TODO Auto-generated method stub
+		this.messageQueque.clear();
 	}
 
 }

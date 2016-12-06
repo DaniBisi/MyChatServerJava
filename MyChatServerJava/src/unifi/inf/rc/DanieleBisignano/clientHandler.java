@@ -1,4 +1,4 @@
-package MyChatServer.MyChatServer;
+package unifi.inf.rc.DanieleBisignano;
 
 import java.awt.print.Printable;
 import java.io.IOException;
@@ -57,16 +57,18 @@ public class clientHandler extends Thread implements visitable {
 				char ch = (char) prov2;
 				msg = msg + String.valueOf(ch);
 				String prov = "";
-				if (msg.length() > 2)
+				if (msg.length() > 1)
 					prov = msg.substring(msg.length() - 2, msg.length());
 				if (prov.compareTo("\r\n") == 0) {
 					String Response = "";
-					String command = msg.split("\r\n")[0];
+//					String commandS[] = msg.split("\r\n");
+//					String command = msg.split("\r\n")[0];
+					String command = msg.replace("\r\n", "");
 					try {
 						HttpProtocol commandR;
 						Response = Response + (commandR = factoryHttpCommand.getHtmlProtocol(command, this.loginStatus))
 								.execute(this);
-					} catch (IllegalArgumentException e) {
+					} catch (Exception e) {
 						Response = Response + "KO\r\n";
 					}
 					this.out.write(Response.getBytes("latin1"));
