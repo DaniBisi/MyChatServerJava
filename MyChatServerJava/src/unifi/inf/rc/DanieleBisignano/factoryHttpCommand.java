@@ -5,9 +5,16 @@ import unifi.inf.rc.DanieleBisignano.HttpProtocol;
 abstract public class factoryHttpCommand {
 	
 	public static HttpProtocol getHtmlProtocol(String param, int loginStatus){
+		param = param.trim();
 		String params[] = param.split(" ",2);
 		String command = params[0];
+//		for(int i=1;i<params.length;i++){
+//			if(params[i].equals("")){
+//				params[i] = null;
+//			}
+//		}
 		try{
+		//params[params.length-1] = params[params.length-1].trim();
 		params = params[1].split(" ");
 		}catch (IndexOutOfBoundsException e){
 			params = null;

@@ -57,8 +57,9 @@ public class clientHandler extends Thread implements visitable {
 				char ch = (char) prov2;
 				msg = msg + String.valueOf(ch);
 				String prov = "";
-				if (msg.length() > 1)
+				if (msg.length() > 1){
 					prov = msg.substring(msg.length() - 2, msg.length());
+				}
 				if (prov.compareTo("\r\n") == 0) {
 					String Response = "";
 //					String commandS[] = msg.split("\r\n");

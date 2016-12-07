@@ -2,6 +2,7 @@ package unifi.inf.rc.DanieleBisignano;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 public class Message {
 	private String Text;
@@ -78,5 +79,9 @@ public class Message {
 	public int getFather() {
 		// TODO Auto-generated method stub
 		return Father;
+	}
+	public ArrayList<Integer> getChildList() {
+		// TODO Auto-generated method stub
+		return this.Child;
 	}
 }

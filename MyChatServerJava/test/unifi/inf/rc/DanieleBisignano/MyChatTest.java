@@ -1,4 +1,4 @@
-package unifi.inf.rc.DanieleBisignanor;
+package unifi.inf.rc.DanieleBisignano;
 
 import static org.junit.Assert.*;
 
@@ -243,7 +243,20 @@ public class MyChatTest {
 				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nMESSAGE 0\r\nUSER dani\r\nTOPICS 0 1\r\nciao messaggio di prova\r\n.\r\n\r\n",
 				msg);
 	}
-
+	@Test
+	public void testCONV() {	
+		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nNEW ciao11\r\nMESSAGE 0 1\r\nhello first msg\r\n.\r\n\r\nMESSAGE 0\r\nhello second msg\r\n.\r\n\r\nLIST 0 1 6\r\nREPLY 0\r\nhello second msg\r\n.\r\n\r\nREPLY 2\r\nhello second msg\r\n.\r\n\r\nCONV 2\r\n";
+		client1.sendMsg(msg);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 dani 0 1\r\n2 dani 0 1\r\n3 dani 0 1\r\n\r\n",msg);
+	}
+	
 	@Test
 	public void testMoreTopicMessageWrongGet() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW Miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nGET 7\r\n";

@@ -102,7 +102,7 @@ public class MyChatServer extends Thread {
 				Socket client = server.accept();
 				// System.out.println("Accepted from " +
 				// client.getInetAddress());
-				System.out.print(client.getInetAddress() + " " + client.getLocalPort());
+				//System.out.print(client.getInetAddress() + " " + client.getLocalPort());
 				new clientHandler(client).start();
 
 			} catch (IOException e) {
