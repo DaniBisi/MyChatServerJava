@@ -121,6 +121,31 @@ public class clientHandler extends Thread implements visitable {
 		return msgProv;
 	}
 
+	public String acceptVisit(factoryHttpCommand fact) {
+		// TODO Auto-generated method stub
+		String msgProv = "";
+		try {
+			int prov2;
+			while ((prov2 = this.in.read()) != -1) {
+				char ch = (char) prov2;
+				msgProv = msgProv + String.valueOf(ch);
+				String prov = "";
+				if (msgProv.length() > 7)
+					prov = msgProv.substring(msgProv.length() - 7, msgProv.length());
+				if (prov.compareTo("\r\n.\r\n\r\n") == 0) {
+					msgProv = msgProv.substring(0, msgProv.length() - 7);
+					break;
+				}
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msgProv;
+	}
 	public String acceptVisit(HttpRegister reg) {
 		//this.setLoginStatus(3);
 		this.setLoginStatus(reg.getLoginResult());

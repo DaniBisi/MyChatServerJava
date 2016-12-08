@@ -20,6 +20,7 @@ public class HttpTopics implements HttpProtocol {
 			response = response +i+ " "+ topicName +"\r\n" ;
 			i+=1;
 		}
+		response = response +"\r\n";
 		return response;
 	}
 /*

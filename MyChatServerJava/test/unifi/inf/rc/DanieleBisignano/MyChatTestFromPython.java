@@ -114,7 +114,7 @@ public class MyChatTestFromPython {
 		assertEquals("OK\r\nOK\r\n", data);
 	}
 
-	@Test
+	@Ignore
 	public void testBatch() {
 
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
@@ -309,7 +309,7 @@ public class MyChatTestFromPython {
 		
 		
 
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 0 1\r\n\r\n", data);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 Dani 0 1\r\n\r\n", data);
 	}
 
 	@Test
@@ -325,14 +325,8 @@ public class MyChatTestFromPython {
 				+ "LIST 0 1 0" + '\r' + '\n';
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 Dani 0 1\r\n1 Dani 0\r\n\r\n", data);
 		
-		
-		
-		
-		
-		
-
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 0 1\r\n1 0\r\n\r\n", data);
 	}
 
 	@Test
@@ -422,19 +416,8 @@ public class MyChatTestFromPython {
 				+ '\n' + '\r' + '\n' + "REPLY 2" + '\r' + '\n' + "hello second msg" + '\r' + '\n' + "." + '\r' + '\n'
 				+ '\r' + '\n' + "CONV 2\r\n";
 		this.client1.sendMsg(msg);
-		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
-		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 0 1\r\n2 0 1\r\n3 0 1\r\n",
+		data = this.client1.receiveMsg(1024);assertEquals(
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 Dani 0 1\r\n2 Dani 0 1\r\n3 Dani 0 1\r\n\r\n",
 				data);
 	}
 
@@ -453,18 +436,8 @@ public class MyChatTestFromPython {
 				+ '\r' + '\n' + "CONV 0\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 0 1\r\n2 0 1\r\n3 0 1\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 Dani 0 1\r\n2 Dani 0 1\r\n3 Dani 0 1\r\n\r\n",
 				data);
 	}
 
@@ -483,18 +456,8 @@ public class MyChatTestFromPython {
 				+ '\r' + '\n' + "CONV 3\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 0 1\r\n2 0 1\r\n3 0 1\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 Dani 0 1\r\n2 Dani 0 1\r\n3 Dani 0 1\r\n\r\n",
 				data);
 	}
 
@@ -533,24 +496,19 @@ public class MyChatTestFromPython {
 
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+19);
-
+		
 		// this.client1.connect((this.address , this.port+19));
-		msg = "USER user1\r\n} }1\r\nNEW Titolo0\r\nNEW Titolo1\r\nNEW Titolo2\r\nNEW Titolo3\r\nMESSAGE 0 1 2 3\r\nCiao! Come stai?\r\n.\r\n\r\nMESSAGE 0 1 3\r\nBau!\r\n.\r\n\r\nMESSAGE 0 2 3\r\nMiao!\r\n.\r\n\r\nLIST 0 2\r\nGET 2\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nNEW Titolo0\r\nNEW Titolo1\r\nNEW Titolo2\r\nNEW Titolo3\r\nMESSAGE 0 1 2 3\r\nCiao! Come stai?\r\n.\r\n\r\nMESSAGE 0 1 3\r\nBau!\r\n.\r\n\r\nMESSAGE 0 2 3\r\nMiao!\r\n.\r\n\r\nLIST 0 2\r\nGET 2\r\n";
 		this.client1.sendMsg(msg);
+//		try {
+//			Thread.sleep(160000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nOK 2\r\nMESSAGES\r\n0 0 1 2 3\r\n2 0 2 3\r\n\r\nMESSAGE 2\r\nTOPICS 0 2 3\r\nMiao!\r\n.\r\n\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nOK 2\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n2 Dani 0 2 3\r\n\r\nMESSAGE 2\r\nUSER Dani\r\nTOPICS 0 2 3\r\nMiao!\r\n.\r\n\r\n",
 				data);
 	}
 
@@ -561,7 +519,7 @@ public class MyChatTestFromPython {
 		// this.port+20);
 
 		// this.client1.connect((this.address , this.port+20));
-		msg = "USER user1\r\n} }1\r\nREGISTER 127.0.0.1 89\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 89\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
@@ -578,7 +536,7 @@ public class MyChatTestFromPython {
 
 		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+21));
-		msg = "USER user1\r\n} }1\r\nREGISTER 127.0.0.1 89\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 89\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
@@ -605,9 +563,9 @@ public class MyChatTestFromPython {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+22);
 
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.Register.put("Dani", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+22));
-		msg = "USER user1\r\n} }1\r\nREGISTER 127.0.0.1 89\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 130\r\n"; /////////controlla che crei un altra pair
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
@@ -634,15 +592,16 @@ public class MyChatTestFromPython {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+23);
 
-		// MyChatServer.registerHost["user1"] = ("127.0.0.1" , 89);
+
+		//MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+23));
-		msg = "USER user1\r\n} }1\r\nUNREGISTER\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 89\r\nUNREGISTER\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
 		
 
-		assertEquals("OK\r\nOK\r\nOK\r\n", data);
+		assertEquals("OK\r\nOK\r\nOK\r\nOK\r\n", data);
 		// msg = "USER Dani"+'\r'+'\n'+"PASS ciao"+'\r'+'\n'+"NEW
 		// CIAO"+'\r'+'\n'+"NEW ciao11"+'\r'+'\n'+"MESSAGE 0
 		// 1"+'\r'+'\n'+"MESSAGGIO 1"+'\r'+'\n'+"."+'\r'+'\n'+'\r'+'\n'+"MESSAGE
@@ -665,7 +624,7 @@ public class MyChatTestFromPython {
 
 		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+24));
-		msg = "USER user1\r\n} }1\r\nUNREGISTER\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nUNREGISTER\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
@@ -694,7 +653,7 @@ public class MyChatTestFromPython {
 
 		// MyChatServer.registerHost["user1"] = ("127.0.0.1" , 89);
 		// this.client1.connect((this.address , this.port+25));
-		msg = "USER user1\r\n} }1\r\nUNREGISTER 3 4\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nUNREGISTER 3 4\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 		
@@ -733,24 +692,10 @@ public class MyChatTestFromPython {
 				+ "CONV 0\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nMESSAGES\r\n0 0 1\r\n2 0 1\r\n3 0 1\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nOK 1\r\nKO\r\nOK 2\r\nOK 3\r\nOK 4\r\nOK 5\r\nOK 6\r\nMESSAGES\r\n0 Dani 0 1\r\n2 Dani 0 1\r\n3 Dani 0 1\r\n4 Dani 0 1\r\n5 Dani 0 1\r\n6 Dani 0 1\r\n\r\n",
 				data);
-	}
-
+	}			
 //	@Test
 //	public void testMultiUser(){
 
@@ -885,14 +830,6 @@ public class MyChatTestFromPython {
 				+ '\n' + "REGISTER 127.0.0.1 95\r\n" + "SUBSCRIBE 0\r\nTOPICS\r\nUNSUBSCRIBE 0\r\n";
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK\r\nOK\r\nTOPIC_LIST\r\n*0 CIAO\r\n1 ciao11\r\n\r\nOK\r\n", data);
 	}
 
@@ -1030,35 +967,15 @@ public class MyChatTestFromPython {
 		// this.client1.connect((this.address , this.port+39));
 		// MyChatServer.Register.put("user1",new
 		// Pair<String,Integer>("127.0.0.1", 89));
-		msg = "USER user1\r\n} }1\r\nNEW Titolo0\r\nNEW Titolo1\r\nNEW Titolo2\r\nNEW Titolo3\r\nMESSAGE 0 1 2 3\r\nCiao! Come stai?\r\n.\r\n\r\nMESSAGE 0 1 3\r\nBau!\r\n.\r\n\r\nLIST 0 2\r\nGET 1\r\nREPLY 0\r\nMiao!\r\n.\r\n\r\nREPLY 0\r\nBene!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 5\r\nBenone!\r\n.\r\n\r\nCONV 2\r\nREGISTER localhost 1982\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nNEW Titolo0\r\nNEW Titolo1\r\nNEW Titolo2\r\nNEW Titolo3\r\nMESSAGE 0 1 2 3\r\nCiao! Come stai?\r\n.\r\n\r\nMESSAGE 0 1 3\r\nBau!\r\n.\r\n\r\nLIST 0 2\r\nGET 1\r\nREPLY 0\r\nMiao!\r\n.\r\n\r\nREPLY 0\r\nBene!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 5\r\nBenone!\r\n.\r\n\r\nCONV 2\r\nREGISTER localhost 1982\r\n";
 		// msg= msg +"SUBSCRIBE 0 1 2 3\r\nUNSUBSCRIBE 0 3 5\r\nUNSUBSCRIBE 0
 		// 3\r\nMESSAGE 0 1 3\r\nArriva la notifica?\r\n.\r\n\r\nREPLY
 		// 0\r\nSperiamo!\r\n.\r\n\r\n"
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// data =data + this.client1.receiveMsg(1024);
-		// data =data + this.client1.receiveMsg(1024);
-		// data =data + this.client1.receiveMsg(1024);
-		// data =data + this.client1.receiveMsg(1024);
-
+	
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 0 1 2 3\r\n\r\nMESSAGE 1\r\nTOPICS 0 1 3\r\nBau!\r\n.\r\n\r\nOK 2\r\nOK 3\r\nOK 4\r\nOK 5\r\nOK 6\r\nMESSAGES\r\n0 0 1 2 3\r\n2 0 1 2 3\r\n4 0 1 2 3\r\n5 0 1 2 3\r\n6 0 1 2 3\r\n\r\nOK\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n\r\nMESSAGE 1\r\nUSER Dani\r\nTOPICS 0 1 3\r\nBau!\r\n.\r\n\r\nOK 2\r\nOK 3\r\nOK 4\r\nOK 5\r\nOK 6\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n2 Dani 0 1 2 3\r\n4 Dani 0 1 2 3\r\n5 Dani 0 1 2 3\r\n6 Dani 0 1 2 3\r\n\r\nOK\r\n",
 				data);
 	}
 }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class HttpReply extends HttpMessage  implements HttpProtocol{
 
-	public HttpReply(String[] params) {
+	public HttpReply(String[] params, boolean b) {
 		//i parametri qua sono diversi devo prima modificarli poi creare il messaggio
-		super(params);
+		super(params,b);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -15,7 +15,7 @@ public class HttpReply extends HttpMessage  implements HttpProtocol{
 		this.errorFound = MyChatServer.checkMessageError(this.params);
 		String msg = clientHandler.acceptVisit(this);
 		String response;
-		if (!this.errorFound) {
+		if (!this.errorFound && this.logged) {
 			ArrayList<Integer> topicList = new ArrayList<Integer>();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));

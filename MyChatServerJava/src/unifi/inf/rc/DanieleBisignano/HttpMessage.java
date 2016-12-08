@@ -9,9 +9,11 @@ public class HttpMessage implements HttpProtocol {
 	protected String[] params;
 	protected Boolean errorFound;
 	protected int msgId;
-	public HttpMessage(String[] params) {
+	protected boolean logged;
+	public HttpMessage(String[] params, boolean b) {
 		this.params = params;
 		this.errorFound = false;
+		this.logged = b;
 		msgId = -1;
 		// TODO Auto-generated constructor stub
 	}
@@ -24,7 +26,7 @@ public class HttpMessage implements HttpProtocol {
 		this.errorFound = MyChatServer.checkTopicError(params);
 		String msg = clientHandler.acceptVisit(this);
 		String response;
-		if (!this.errorFound) {
+		if (!this.errorFound && this.logged) {
 			ArrayList<Integer> topicList = new ArrayList<Integer>();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));

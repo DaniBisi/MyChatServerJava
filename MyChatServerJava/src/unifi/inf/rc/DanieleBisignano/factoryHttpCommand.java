@@ -34,15 +34,17 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("TOPICS") && loginStatus >1){
 			return new HttpTopics(params);
 		}
-		else if(command.equalsIgnoreCase("MESSAGE") && loginStatus >1){
-			return new HttpMessage(params);
+		else if(command.equalsIgnoreCase("MESSAGE")){
+			return new HttpMessage(params,loginStatus>1);
+			
+				
 		}
 		else if(command.equalsIgnoreCase("LIST") && loginStatus >1){
 			return new HttpList(params);
 		}
 
-		else if(command.equalsIgnoreCase("REPLY") && loginStatus >1){
-			return new HttpReply(params);
+		else if(command.equalsIgnoreCase("REPLY")){
+			return new HttpReply(params, loginStatus >1);
 		}
 
 		else if(command.equalsIgnoreCase("CONV") && loginStatus >1){
