@@ -18,13 +18,13 @@ public class HttpList implements HttpProtocol {
 		String response;
 		
 		System.out.println(params);
-		if(params!= null && params.length>0 && !MyChatServer.checkTopicError(params)){
+		if(/*params!= null && params.length>0 && */params== null || !MyChatServer.checkTopicError(params)){
 			//int start = Integer.parseInt(params[0]);
 			//params = Arrays.copyOfRange(params, 1, params.length);
 			response = "MESSAGES\r\n";
 			for(int i = idMid; i < MyChatServer.MessageList.size();i++){
 				Message msgP = MyChatServer.MessageList.get(i); 
-				if(params.length == 0 || msgP.hasTopic(params)){
+				if(params == null || msgP.hasTopic(params)){
 					response = response +i+" "+ msgP.getUserName() +" " + msgP.listToString() + "\r\n";
 				}
 			}
