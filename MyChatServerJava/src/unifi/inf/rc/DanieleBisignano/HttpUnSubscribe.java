@@ -1,6 +1,6 @@
 package unifi.inf.rc.DanieleBisignano;
 
-public class HttpUnSubscribe implements HttpProtocol {
+public class HttpUnSubscribe implements HttpProtocol,statusChanger {
 
 	private String[] params;
 	private boolean alreadySubscribed;
@@ -29,5 +29,10 @@ public class HttpUnSubscribe implements HttpProtocol {
 		// TODO Auto-generated method stub
 		return null;
 	}*/
+
+	public int getLoginResult() {
+		// TODO Auto-generated method stub
+		return 3;
+	}
 
 }

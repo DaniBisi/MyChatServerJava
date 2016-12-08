@@ -1,11 +1,11 @@
 package unifi.inf.rc.DanieleBisignano;
 
-public class HttpUnregister implements HttpProtocol {
+public class HttpUnregister implements HttpProtocol,statusChanger {
 
 	private String[] params;
 
 	public HttpUnregister(String[] params) {
-		this.params = params;
+		//this.params = params;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -14,7 +14,10 @@ public class HttpUnregister implements HttpProtocol {
 		// TODO Auto-generated method stub
 		if(params != null)throw new IllegalArgumentException();
 		String response;
-		if(MyChatServer.unRegister(clientHandler.getUserName())&& MyChatServer.unSubscribe(clientHandler.getUserName()) ) response = "OK\r\n";
+		if(MyChatServer.unRegister(clientHandler.getUserName())&& MyChatServer.unSubscribe(clientHandler.getUserName()) ){
+			response = "OK\r\n";
+			clientHandler.acceptVisit(this);
+		}
 		else response = "KO\r\n";
 		return response;
 	}
@@ -24,5 +27,10 @@ public class HttpUnregister implements HttpProtocol {
 		// TODO Auto-generated method stub
 		return null;
 	}*/
+
+	public int getLoginResult() {
+		// TODO Auto-generated method stub
+		return 2;
+	}
 
 }

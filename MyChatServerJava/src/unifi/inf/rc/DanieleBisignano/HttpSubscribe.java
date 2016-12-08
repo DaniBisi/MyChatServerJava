@@ -1,6 +1,6 @@
 package unifi.inf.rc.DanieleBisignano;
 
-public class HttpSubscribe implements HttpProtocol {
+public class HttpSubscribe implements HttpProtocol,statusChanger{
 
 	private int loginResult;
 	private String[] params;

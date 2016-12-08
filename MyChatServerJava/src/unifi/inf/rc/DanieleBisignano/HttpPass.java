@@ -1,6 +1,6 @@
 package unifi.inf.rc.DanieleBisignano;
 
-public class HttpPass implements HttpProtocol {
+public class HttpPass implements HttpProtocol,statusChanger{
 
 	private String[] params;
 	private int loginResult;

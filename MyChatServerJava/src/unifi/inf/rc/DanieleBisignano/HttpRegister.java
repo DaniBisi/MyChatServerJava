@@ -1,9 +1,9 @@
 package unifi.inf.rc.DanieleBisignano;
 
-public class HttpRegister implements HttpProtocol {
+public class HttpRegister implements HttpProtocol,statusChanger {
 	
-	private int loginResult;
-	private String[] params;
+	protected int loginResult;
+	protected String[] params;
 
 	public HttpRegister(String[] params) {
 		this.params = params;

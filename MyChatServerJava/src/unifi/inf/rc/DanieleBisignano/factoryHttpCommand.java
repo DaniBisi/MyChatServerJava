@@ -19,7 +19,7 @@ abstract public class factoryHttpCommand {
 		}catch (IndexOutOfBoundsException e){
 			params = null;
 		}
-		if(command.equalsIgnoreCase("USER")&& (loginStatus == 0 || loginStatus >1)){
+		if(command.equalsIgnoreCase("USER")&& loginStatus == 0 /*|| loginStatus >1)*/){ // se si vuole permettere un altro login (cambio sessione.)
 			return new HttpUser(params);
 		}
 		else if(command.equalsIgnoreCase("GET") && loginStatus >1){

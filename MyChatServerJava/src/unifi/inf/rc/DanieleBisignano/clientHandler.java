@@ -82,12 +82,28 @@ public class clientHandler extends Thread implements visitable {
 		}
 	}
 
-	
-
-	public String acceptVisit(HttpPass cmd) {
+	public String acceptVisit(statusChanger cmd){
 		this.setLoginStatus(cmd.getLoginResult());
 		return "";
+		
 	}
+//
+//	public String acceptVisit(HttpPass cmd) {
+//		this.setLoginStatus(cmd.getLoginResult());
+//		return "";
+//	}
+//
+//	public String acceptVisit(HttpRegister reg) {
+//		//this.setLoginStatus(3);
+//		this.setLoginStatus(reg.getLoginResult());
+//		return null;
+//	}
+//	public void acceptVisit(HttpSubscribe Sub) {
+//		this.setLoginStatus(Sub.getLoginResult());
+//		// TODO Auto-generated method stub
+//		
+//	}
+	
 	
 	public String acceptVisit(HttpUser cmd) {
 		this.setLoginStatus(1);
@@ -146,11 +162,6 @@ public class clientHandler extends Thread implements visitable {
 		}
 		return msgProv;
 	}
-	public String acceptVisit(HttpRegister reg) {
-		//this.setLoginStatus(3);
-		this.setLoginStatus(reg.getLoginResult());
-		return null;
-	}
 
 	public void setUser(String userName) {
 		// TODO Auto-generated method stub
@@ -163,10 +174,5 @@ public class clientHandler extends Thread implements visitable {
 		return this.userName;
 	}
 
-	public void acceptVisit(HttpSubscribe Sub) {
-		this.setLoginStatus(Sub.getLoginResult());
-		// TODO Auto-generated method stub
-		
-	}
 
 }
