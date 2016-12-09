@@ -17,8 +17,9 @@ public class HttpConv implements HttpProtocol {
 	// @Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		String response = "MESSAGES\r\n";
-		if (params.length == 1 && !MyChatServer.checkMessageError(params)) {
+		String response = "KO\r\n";
+		if (params.length == 1 && !MyChatServer.checkMessageError(params) && (Integer.parseInt(params[0]))!=-1) {
+			response = "MESSAGES\r\n";
 			int startId = Integer.parseInt(params[0]);
 			int startIdB = startId;
 			while (startId != -1) {// id di tutti i padri salvato.

@@ -94,7 +94,7 @@ public class MyChatServer implements Runnable {
 		return errorFound;
 	}
 
-	//@Override
+	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		while (true) {
@@ -182,9 +182,16 @@ public class MyChatServer implements Runnable {
 					break;
 				}
 			}
-			if (!found)
+			if (!found){
+				MyChatServer.Register.remove(user);
 				MyChatServer.Register.put(user, a);
-
+			}
+			else{ // controllo se è il suo.
+				Pair<String, Integer> b = MyChatServer.Register.get(user);
+				if(b.equals(a)){// l'ho trovato ed era il suo. quindi aggiorno
+					found = false;
+				}
+			}
 		} catch (Exception e) {
 			return false;
 		}

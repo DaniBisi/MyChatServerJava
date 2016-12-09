@@ -343,7 +343,7 @@ public class MyChatTest {
 	}
 	@Test
 	public void testListOnTopicOneMessageTopic() {	
-		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 1\r\n";
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 0 1\r\n";
 		client1.sendMsg(msg);
 //		try {
 //			Thread.sleep(150000);
@@ -358,7 +358,7 @@ public class MyChatTest {
 	}
 
 	@Test
-	public void testListOneMessageWrongtopic() {	
+	public void testListOneMessageListExceedNotopic() {	
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 2\r\n";
 		client1.sendMsg(msg);
 //		try {
@@ -368,7 +368,7 @@ public class MyChatTest {
 //			e.printStackTrace();
 //		}
 		msg = client1.receiveMsg();
-		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nKO\r\n", msg);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 0\r\nMESSAGES\r\n\r\n", msg);
 	}
 
 	@Test
@@ -406,7 +406,7 @@ public class MyChatTest {
 		msg = "USER dani\r\nPASS bisi\r\nREGISTER 127.0.0.1 8245\r\nREGISTER 127.0.0.1 8245\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		assertEquals("OK\r\nOK\r\nOK\r\nKO\r\n", msg);
+		assertEquals("OK\r\nOK\r\nOK\r\nOK\r\n", msg);
 	}
 
 	@Test

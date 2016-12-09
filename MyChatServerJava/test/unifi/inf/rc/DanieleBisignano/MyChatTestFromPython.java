@@ -919,22 +919,25 @@ public class MyChatTestFromPython {
 
 		// this.client1.connect((this.address , this.port+39));
 		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
-		msg = "USER Dani" + '\r' + '\n' + "PASS ciao" + '\r' + '\n' + "NEW CIAO" + '\r' + '\n' + "NEW ciao11" + '\r'
-				+ '\n' + "NEW ciao22" + '\r' + '\n' + "REGISTER 127.0.0.1 4127\r\n" + "SUBSCRIBE 0 2\r\n"
-				+ "MESSAGE 0 1" + '\r' + '\n' + "MESSAGGIO 2" + '\r' + '\n' + "." + '\r' + '\n' + '\r' + '\n'
-				+ "UNREGISTER \r\n" + "REGISTER 127.0.0.1 4127\r\n" + "SUBSCRIBE 0 2\r\n";
+		msg = "USER Dani\r\nPASS ciao\r\nNEW CIAO\r\nNEW ciao11\r\nNEW ciao22\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\nMESSAGE 0 1\r\nMESSAGGIO 2\r\n.\r\n\r\nUNREGISTER\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\n";
 		this.client1.sendMsg(msg);
 		
-//		try {
-//			Thread.sleep(16000000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		data = this.client1.receiveMsg(1024);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\n", data);
 	}
+	@Test
+	public void testUnSubscribeRegisterMessageWrongUregisterAllRegisterAgainSuscribeAgain() {
+		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
+		// this.port+39);
 
+		// this.client1.connect((this.address , this.port+39));
+		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		msg = "USER Dani\r\nPASS ciao\r\nNEW CIAO\r\nNEW ciao11\r\nNEW ciao22\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\nMESSAGE 0 1\r\nMESSAGGIO 2\r\n.\r\n\r\nUNREGISTER \r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\n";
+		this.client1.sendMsg(msg);
+		
+		data = this.client1.receiveMsg(1024);
+		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK\r\nOK\r\nOK 0\r\nKO\r\nOK\r\nOK\r\n", data);
+	}
 	@Test
 	public void testAllCommandNotLogin() {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
@@ -964,21 +967,12 @@ public class MyChatTestFromPython {
 
 	@Test
 	public void testGiulio() {
-		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
-		// this.port+39);
-
-		// this.client1.connect((this.address , this.port+39));
-		// MyChatServer.Register.put("user1",new
-		// Pair<String,Integer>("127.0.0.1", 89));
 		msg = "USER Dani\r\nPASS ciao\r\nNEW Titolo0\r\nNEW Titolo1\r\nNEW Titolo2\r\nNEW Titolo3\r\nMESSAGE 0 1 2 3\r\nCiao! Come stai?\r\n.\r\n\r\nMESSAGE 0 1 3\r\nBau!\r\n.\r\n\r\nLIST 0 2\r\nGET 1\r\nREPLY 0\r\nMiao!\r\n.\r\n\r\nREPLY 0\r\nBene!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 2\r\nBenone!\r\n.\r\n\r\nREPLY 5\r\nBenone!\r\n.\r\n\r\nCONV 2\r\nREGISTER localhost 1982\r\n";
-		// msg= msg +"SUBSCRIBE 0 1 2 3\r\nUNSUBSCRIBE 0 3 5\r\nUNSUBSCRIBE 0
-		// 3\r\nMESSAGE 0 1 3\r\nArriva la notifica?\r\n.\r\n\r\nREPLY
-		// 0\r\nSperiamo!\r\n.\r\n\r\n"
 		this.client1.sendMsg(msg);
 		data = this.client1.receiveMsg(1024);
 	
 		assertEquals(
-				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n\r\nMESSAGE 1\r\nUSER Dani\r\nTOPICS 0 1 3\r\nBau!\r\n.\r\n\r\nOK 2\r\nOK 3\r\nOK 4\r\nOK 5\r\nOK 6\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n2 Dani 0 1 2 3\r\n4 Dani 0 1 2 3\r\n5 Dani 0 1 2 3\r\n6 Dani 0 1 2 3\r\n\r\nOK\r\n",
+				"OK\r\nOK\r\nOK 0\r\nOK 1\r\nOK 2\r\nOK 3\r\nOK 0\r\nOK 1\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n\r\nMESSAGE 1\r\nUSER Dani\r\nTOPICS 0 1 3\r\nBau!\r\n.\r\n\r\nOK 2\r\nOK 3\r\nOK 4\r\nOK 5\r\nOK 6\r\nMESSAGES\r\n0 Dani 0 1 2 3\r\n2 Dani 0 1 2 3\r\n4 Dani 0 1 2 3\r\n5 Dani 0 1 2 3\r\n6 Dani 0 1 2 3\r\n\r\nKO\r\n",
 				data);
 	}
 }

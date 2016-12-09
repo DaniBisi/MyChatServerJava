@@ -12,15 +12,15 @@ public class HttpReply extends HttpMessage  implements HttpProtocol{
 	
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		this.errorFound = MyChatServer.checkMessageError(this.params);
 		String msg = clientHandler.acceptVisit(this);
 		String msg1 = msg.replaceAll("\r\n", " ");
+		System.out.println("messaggio:" + msg1);
+		this.errorFound = MyChatServer.checkMessageError(this.params);
+		
 		if (params == null || params[0].equals("")||msg1.equals("")) {
 			this.errorFound = true;
-		} else {
-			this.errorFound = MyChatServer.checkTopicError(params);
-		}
-		System.out.println("messaggio:" + msg1);
+		} 
+		
 
 		String response;
 		if (!this.errorFound && this.logged) {

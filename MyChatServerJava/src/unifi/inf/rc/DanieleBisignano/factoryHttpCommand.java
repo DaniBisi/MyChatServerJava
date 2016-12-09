@@ -19,51 +19,51 @@ abstract public class factoryHttpCommand {
 		}catch (IndexOutOfBoundsException e){
 			params = null;
 		}
-		if(command.equalsIgnoreCase("USER")&& loginStatus == 0 /*|| loginStatus >1)*/ && !params[0].equals("")){ // se si vuole permettere un altro login (cambio sessione.)
+		if(command.equals("USER")&& loginStatus == 0 /*|| loginStatus >1)*/ && !params[0].equals("")){ // se si vuole permettere un altro login (cambio sessione.)
 			return new HttpUser(params);
 		}
-		else if(command.equalsIgnoreCase("GET") && loginStatus >1 && params.length == 1){
+		else if(command.equals("GET") && loginStatus >1 && params.length == 1){
 			return new HttpGet(params);
 		}
-		else if(command.equalsIgnoreCase("PASS") && loginStatus == 1){
+		else if(command.equals("PASS") && loginStatus == 1){
 			return new HttpPass(params);
 		}
-		else if(command.equalsIgnoreCase("NEW") && loginStatus >1){
+		else if(command.equals("NEW") && loginStatus >1){
 			return new HttpNew(params);
 		}
-		else if(command.equalsIgnoreCase("TOPICS") && loginStatus >1 && params == null){
+		else if(command.equals("TOPICS") && loginStatus >1 && params == null){
 			return new HttpTopics(params);
 		}
-		else if(command.equalsIgnoreCase("MESSAGE")){
+		else if(command.equals("MESSAGE")){
 			return new HttpMessage(params,loginStatus>1);
 			
 				
 		}
-		else if(command.equalsIgnoreCase("LIST") && loginStatus >1){
+		else if(command.equals("LIST") && loginStatus >1){
 			return new HttpList(params);
 		}
 
-		else if(command.equalsIgnoreCase("REPLY")){
+		else if(command.equals("REPLY") && loginStatus >1){
 			return new HttpReply(params, loginStatus >1);
 		}
 
-		else if(command.equalsIgnoreCase("CONV") && loginStatus >1){
+		else if(command.equals("CONV") && loginStatus >1){
 			return new HttpConv(params);
 		}
-		else if(command.equalsIgnoreCase("REGISTER") && loginStatus >1){
+		else if(command.equals("REGISTER") && loginStatus >1){
 			return new HttpRegister(params);
 		}
-		else if(command.equalsIgnoreCase("UNREGISTER") && loginStatus >1){
+		else if(command.equals("UNREGISTER") && loginStatus >1){
 			return new HttpUnregister(params);
 		}
-		else if(command.equalsIgnoreCase("SUBSCRIBE") && loginStatus >2){
+		else if(command.equals("SUBSCRIBE") && loginStatus >2){
 			
 			return new HttpSubscribe(params,(loginStatus >3));
 		}
-		else if(command.equalsIgnoreCase("UNSUBSCRIBE") && loginStatus >2){
+		else if(command.equals("UNSUBSCRIBE") && loginStatus >2){
 			return new HttpUnSubscribe(params,(loginStatus >3));
 		}
-		else if(command.equalsIgnoreCase("DIGEST") && loginStatus >3){
+		else if(command.equals("DIGEST") && loginStatus >3){
 			return new cmdDigest(params,(loginStatus >4));
 		}
 		

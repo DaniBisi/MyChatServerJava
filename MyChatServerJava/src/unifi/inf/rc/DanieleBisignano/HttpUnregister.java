@@ -5,7 +5,10 @@ public class HttpUnregister implements HttpProtocol,statusChanger {
 	private String[] params;
 
 	public HttpUnregister(String[] params) {
-		//this.params = params;
+		this.params = params;
+//		if(this.params != null && (this.params.length == 0 || this.params[0].equals(null) || this.params[0].equals("")) ){
+//			this.params =null;
+//		}
 		// TODO Auto-generated constructor stub
 	}
 
