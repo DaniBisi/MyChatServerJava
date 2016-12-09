@@ -37,6 +37,9 @@ public class Message {
 	public boolean hasTopic(String[] params) {
 		// TODO Auto-generated method stub
 		boolean hasTopic = false;
+//		if(params[0].equals("")){ //istruzione per gestire il carattere nullo dopo un comando
+//			return true;
+//		}
 		for (String string : params) {
 			int i = Integer.parseInt(string);
 			Iterator<Integer> itr = TopicList.iterator();

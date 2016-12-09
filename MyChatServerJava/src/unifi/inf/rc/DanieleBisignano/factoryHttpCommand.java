@@ -5,7 +5,7 @@ import unifi.inf.rc.DanieleBisignano.HttpProtocol;
 abstract public class factoryHttpCommand {
 	
 	public static HttpProtocol getHtmlProtocol(String param, int loginStatus){
-		param = param.trim();
+		//param = param.trim();
 		String params[] = param.split(" ",2);
 		String command = params[0];
 //		for(int i=1;i<params.length;i++){
@@ -19,7 +19,7 @@ abstract public class factoryHttpCommand {
 		}catch (IndexOutOfBoundsException e){
 			params = null;
 		}
-		if(command.equalsIgnoreCase("USER")&& loginStatus == 0 /*|| loginStatus >1)*/){ // se si vuole permettere un altro login (cambio sessione.)
+		if(command.equalsIgnoreCase("USER")&& loginStatus == 0 /*|| loginStatus >1)*/ && !params[0].equals("")){ // se si vuole permettere un altro login (cambio sessione.)
 			return new HttpUser(params);
 		}
 		else if(command.equalsIgnoreCase("GET") && loginStatus >1){
@@ -31,7 +31,7 @@ abstract public class factoryHttpCommand {
 		else if(command.equalsIgnoreCase("NEW") && loginStatus >1){
 			return new HttpNew(params);
 		}
-		else if(command.equalsIgnoreCase("TOPICS") && loginStatus >1){
+		else if(command.equalsIgnoreCase("TOPICS") && loginStatus >1 && params == null){
 			return new HttpTopics(params);
 		}
 		else if(command.equalsIgnoreCase("MESSAGE")){

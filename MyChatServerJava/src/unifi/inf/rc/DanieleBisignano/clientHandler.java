@@ -120,7 +120,7 @@ public class clientHandler extends Thread implements visitable {
 				char ch = (char) prov2;
 				msgProv = msgProv + String.valueOf(ch);
 				String prov = "";
-				if (msgProv.length() > 7)
+				if (msgProv.length() > 6)
 					prov = msgProv.substring(msgProv.length() - 7, msgProv.length());
 				if (prov.compareTo("\r\n.\r\n\r\n") == 0) {
 					msgProv = msgProv.substring(0, msgProv.length() - 7);

@@ -10,6 +10,7 @@ public class HttpMessage implements HttpProtocol {
 	protected Boolean errorFound;
 	protected int msgId;
 	protected boolean logged;
+
 	public HttpMessage(String[] params, boolean b) {
 		this.params = params;
 		this.errorFound = false;
@@ -18,13 +19,21 @@ public class HttpMessage implements HttpProtocol {
 		// TODO Auto-generated constructor stub
 	}
 
-	//@Override
+	// @Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		// controllo che ci siano tutti gli id dei topi ai quali bisogna
 		// rispondere
-		this.errorFound = MyChatServer.checkTopicError(params);
+		
 		String msg = clientHandler.acceptVisit(this);
+		String msg1 = msg.replaceAll("\r\n", " ");
+		if (params == null || params[0].equals("")||msg1.equals("")) {
+			this.errorFound = true;
+		} else {
+			this.errorFound = MyChatServer.checkTopicError(params);
+		}
+		System.out.println("messaggio:" + msg1);
+
 		String response;
 		if (!this.errorFound && this.logged) {
 			ArrayList<Integer> topicList = new ArrayList<Integer>();
@@ -38,25 +47,15 @@ public class HttpMessage implements HttpProtocol {
 		}
 		return response;
 	}
-/*
-	@Override
-	public String visit(clientHandler clientHandler) {
-		// TODO Auto-generated method stub
-		String msg = clientHandler.acceptVisit(this);
-		String response;
-		if (!this.errorFound) {
-			ArrayList<Integer> topicList = new ArrayList<Integer>();
-			for (String s : this.params) {
-				topicList.add(Integer.parseInt(s));
-			}
-			int msgId = MyChatServer.addMessage(new Message(msg, topicList));
-			response = "OK " + msgId + "\r\n";
-		} else {
-			response = "OK\r\n";
-		}
-		return response;
-	}
-	return "";
-	}*/
+	/*
+	 * @Override public String visit(clientHandler clientHandler) { // TODO
+	 * Auto-generated method stub String msg = clientHandler.acceptVisit(this);
+	 * String response; if (!this.errorFound) { ArrayList<Integer> topicList =
+	 * new ArrayList<Integer>(); for (String s : this.params) {
+	 * topicList.add(Integer.parseInt(s)); } int msgId =
+	 * MyChatServer.addMessage(new Message(msg, topicList)); response = "OK " +
+	 * msgId + "\r\n"; } else { response = "OK\r\n"; } return response; } return
+	 * ""; }
+	 */
 
 }

@@ -36,6 +36,7 @@ public class MyChatServerTestGiulio {
 	private ChatClient carmen;
 	private Thread thread;
 	private String expected;
+	private String actual;
 	private static boolean serverIsUp = false;
 
 
@@ -52,8 +53,9 @@ public class MyChatServerTestGiulio {
 			thread.start();
 			serverIsUp = true;
 		}
-		
+
 		expected="";
+		actual="";
 		bisi = new ChatClient("127.0.0.1", 9182);
 		marco = new ChatClient("127.0.0.1", 9182);
 		carmen = new ChatClient("127.0.0.1", 9182);
@@ -65,7 +67,9 @@ public class MyChatServerTestGiulio {
 	@After
 	public void tearDown() throws Exception {
 		expected = expected.replaceAll("\r\n", " ");
-		System.out.println(expected);
+		actual = actual.replaceAll("\r\n", " ");
+		System.out.println("Expected:"+expected);
+		System.out.println("Actual:"+actual);
 		bisi.closeSocket();
 		marco.closeSocket();
 		carmen.closeSocket();
@@ -81,7 +85,7 @@ public class MyChatServerTestGiulio {
 	
 	@Test
 	public void a_test_USER_PASS_Single_Client() throws UnknownHostException, IOException {
-		String actual = "";
+		actual = "";
 		String stream = "";
 		
 		stream = "ci sto pensando troppo\r\nUSER\r\nUSER \r\nUSER bisi\r\nca";
@@ -132,7 +136,14 @@ public class MyChatServerTestGiulio {
 		expected = "KO\r\nKO\r\nTOPIC_LIST\r\n\r\nOK 0\r\nTOPIC_LIST\r\n0 topic0\r\n\r\n";;
 	
 		bisi.sendMsg(stream);
-		assertEquals(expected,bisi.receiveMsg());
+//		try {
+//			thread.sleep(100000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		actual = bisi.receiveMsg();
+		assertEquals(expected,actual);
 
 	}
 	
@@ -165,7 +176,14 @@ public class MyChatServerTestGiulio {
 		String stream = "MESSAGE\r\nmessaggio non valido\r\n.\r\n\r\nMESSAGE \r\nmessaggio non valido\r\n.\r\n\r\nMESSAGE 0 1 2 3\r\nmessaggio non valido\r\n.\r\n\r\nMESSAGE 0 1 2\r\n\r\n.\r\n\r\nMESSAGE\r\n\r\n.\r\n\r\nMESSAGE 0 1 2\r\nMessaggio 0\r\n.\r\n\r\n";
 		expected = "KO\r\nKO\r\nKO\r\nKO\r\nKO\r\nOK 0\r\n";
 		bisi.sendMsg(stream);
-		assertEquals(expected,bisi.receiveMsg());
+//		try {
+//			thread.sleep(100000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		actual = bisi.receiveMsg();
+		assertEquals(expected,actual);
 
 	}
 	
@@ -173,7 +191,7 @@ public class MyChatServerTestGiulio {
 	public void f_test_MESSAGE_Multi_Client() throws UnknownHostException, IOException {
 		bisiLogin();
 		bisi.sendMsg("MESSAGE 0 1\r\nMessaggio 1\r\n.\r\n\r\n");
-		String actual = bisi.receiveMsg();
+		actual = bisi.receiveMsg();
 		marcoLogin();
 		marco.sendMsg("MESSAGE 1 2\r\nMessaggio 2\r\n.\r\n\r\nMESSAGE 0 2\r\nMessaggio 3\r\n.\r\n\r\n");
 		actual += marco.receiveMsg();
@@ -183,14 +201,26 @@ public class MyChatServerTestGiulio {
 	}
 	
 	@Test
-	public void g_test_LIST_GET_Single_Client() throws UnknownHostException, IOException {
+	public void g_test_LIST_GET_Single_ClientP1() throws UnknownHostException, IOException {
 		bisiLogin();
 		bisi.sendMsg("LIST\r\nLIST \r\nLIST 0 0 1 2 3\r\nLIST 0 5\r\nLIST 0 0\r\nLIST 1 2\r\nLIST 0\r\nLIST 2\r\nLIST 99\r\nLIST 99 99\r\n");
 		expected = "KO\r\nKO\r\nKO\r\nKO\r\nMESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n\r\nKO\r\n";
-		assertEquals(expected,bisi.receiveMsg());
+//		try {
+//			thread.sleep(100000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		actual = bisi.receiveMsg();
+		assertEquals(expected, actual);
+	}
+	@Test
+	public void g_test_LIST_GET_Single_ClientP2() throws UnknownHostException, IOException {
+		bisiLogin();
 		bisi.sendMsg("GET\r\nGET \r\nGET sei\r\nGET 100\r\nGET 0 1\r\nGET 0 a\r\nGET 0\r\n");
 		expected = ("KO\r\nKO\r\nKO\r\nKO\r\nKO\r\nKO\r\nMESSAGE 0\r\nUSER bisi\r\nTOPICS 0 1 2\r\nMessaggio 0\r\n.\r\n\r\n");
-		assertEquals(expected, bisi.receiveMsg());
+		actual = bisi.receiveMsg();
+		assertEquals(expected, actual);
 	}
 	
 	@Test
@@ -326,12 +356,12 @@ public class MyChatServerTestGiulio {
 	public void bisiLogin() throws IOException {
 		bisi.sendMsg("USER bisi\r\nPASS easy\r\n");
 		String risp = bisi.receiveMsg();
-		System.out.println(risp);
+		//System.out.println(risp);
 	}
 	public void marcoLogin() throws IOException {
 		marco.sendMsg("USER marco\r\nPASS lord\r\n");
 		String risp = marco.receiveMsg();
-		System.out.println(risp);
+		//System.out.println(risp);
 	}
 
 }
