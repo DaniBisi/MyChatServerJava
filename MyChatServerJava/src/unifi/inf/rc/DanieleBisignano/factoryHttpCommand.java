@@ -22,7 +22,7 @@ abstract public class factoryHttpCommand {
 		if(command.equalsIgnoreCase("USER")&& loginStatus == 0 /*|| loginStatus >1)*/ && !params[0].equals("")){ // se si vuole permettere un altro login (cambio sessione.)
 			return new HttpUser(params);
 		}
-		else if(command.equalsIgnoreCase("GET") && loginStatus >1){
+		else if(command.equalsIgnoreCase("GET") && loginStatus >1 && params.length == 1){
 			return new HttpGet(params);
 		}
 		else if(command.equalsIgnoreCase("PASS") && loginStatus == 1){

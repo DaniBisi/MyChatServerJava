@@ -10,6 +10,8 @@ public class HttpList implements HttpProtocol {
 		idMid = Integer.parseInt(params[0]);
 		
 		this.params = Arrays.copyOfRange(params, 1, params.length);
+		if(this.params.length == 0)
+			this.params =null;
 		
 	}
 
@@ -17,7 +19,7 @@ public class HttpList implements HttpProtocol {
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		String response;
 		
-		System.out.println(params);
+		//System.out.println(params);
 		if(/*params!= null && params.length>0 && */params== null || !MyChatServer.checkTopicError(params)){
 			//int start = Integer.parseInt(params[0]);
 			//params = Arrays.copyOfRange(params, 1, params.length);

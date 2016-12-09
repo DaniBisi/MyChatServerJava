@@ -199,14 +199,27 @@ public class MyChatServerTestGiulio {
 		assertEquals(expected,actual);
 
 	}
-	
+	@Test
+	public void g_test_LIST_GET_Single_ClientP0() throws UnknownHostException, IOException {
+		bisiLogin();
+		bisi.sendMsg("LIST\r\nLIST \r\nLIST 0 0 1 2 3\r\nLIST 0 5\r\nLIST 0 0\r\nLIST 1 2\r\n");
+		expected = "KO\r\nKO\r\nKO\r\nKO\r\nMESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\n";
+//		try {
+//			thread.sleep(100000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		actual = bisi.receiveMsg();
+		assertEquals(expected, actual);
+	}
 	@Test
 	public void g_test_LIST_GET_Single_ClientP1() throws UnknownHostException, IOException {
 		bisiLogin();
-		bisi.sendMsg("LIST\r\nLIST \r\nLIST 0 0 1 2 3\r\nLIST 0 5\r\nLIST 0 0\r\nLIST 1 2\r\nLIST 0\r\nLIST 2\r\nLIST 99\r\nLIST 99 99\r\n");
-		expected = "KO\r\nKO\r\nKO\r\nKO\r\nMESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n\r\nKO\r\n";
+		bisi.sendMsg("LIST 0\r\nLIST 2\r\nLIST 99\r\nLIST 99 99\r\n");
+		expected = "MESSAGES\r\n0 bisi 0 1 2\r\n1 bisi 0 1\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n2 marco 1 2\r\n3 marco 0 2\r\n\r\nMESSAGES\r\n\r\nKO\r\n";
 //		try {
-//			thread.sleep(100000);
+//			thread.sleep(10000000);
 //		} catch (InterruptedException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
