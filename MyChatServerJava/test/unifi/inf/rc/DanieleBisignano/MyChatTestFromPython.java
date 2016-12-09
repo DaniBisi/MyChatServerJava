@@ -39,6 +39,8 @@ public class MyChatTestFromPython {
 	private Map<String, String> Dictionary;
 	private String msg;
 	private String data;
+	private Thread thread;
+
 
 	/**
 	 * Create the test case
@@ -63,7 +65,8 @@ public class MyChatTestFromPython {
 		System.out.println(name.getMethodName());
 		if (!setUpIsDone) {
 			this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
-			this.myServer.start();
+			thread = new Thread(myServer);
+			thread.start();
 			setUpIsDone = true;
 		}
 		this.msg = "";

@@ -34,6 +34,7 @@ public class MyChatTest {
 	private int port;
 	private Map<String, String> Dictionary;
 	private String msg;
+	private Thread thread;
 
 	/**
 	 * Create the test case
@@ -56,7 +57,8 @@ public class MyChatTest {
 		System.out.println(name.getMethodName());
 		if (!setUpIsDone) {
 			this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
-			this.myServer.start();
+			thread = new Thread(myServer);
+			thread.start();
 			setUpIsDone = true;
 		}
 		this.msg ="";
@@ -131,7 +133,7 @@ public class MyChatTest {
 		msg = "USER miao bao\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
-		assertEquals("KO\r\n", msg);
+		assertEquals("OK\r\n", msg);
 	}
 
 	@Test

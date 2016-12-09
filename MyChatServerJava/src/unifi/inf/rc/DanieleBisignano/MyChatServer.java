@@ -27,7 +27,7 @@ import java.util.TreeSet;
  *
  */
 
-public class MyChatServer extends Thread {
+public class MyChatServer implements Runnable {
 	private ServerSocket server;
 	private String address;
 	private int port, backlog;
@@ -94,7 +94,7 @@ public class MyChatServer extends Thread {
 		return errorFound;
 	}
 
-	@Override
+	//@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		while (true) {
@@ -274,7 +274,7 @@ public class MyChatServer extends Thread {
 			MyChatServer.digestReg.put(userName, new Digest(k));
 		} else {
 			Digest entry = MyChatServer.digestReg.get(userName);
-			entry.setK(k); // si può fare perchè è un campo statico
+			entry.setK(k); // si puï¿½ fare perchï¿½ ï¿½ un campo statico
 		}
 		// for (Map.Entry<String, String> entry : map.entrySet())
 	}
