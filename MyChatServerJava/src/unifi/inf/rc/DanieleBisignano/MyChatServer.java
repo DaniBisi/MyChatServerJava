@@ -30,23 +30,24 @@ import java.util.TreeSet;
 public class MyChatServer implements Runnable {
 	private ServerSocket server;
 	private String address;
-	private int port, backlog;
-	public static ArrayList<String> TopicList;
-	public static ArrayList<Message> MessageList;
-	public static Map<String, String> Dictionary;
-	public static Map<String, Pair<String, Integer>> Register;
-	public static Map<Integer, TreeSet<String>> subRegister;
-	public static Map<String, Digest> digestReg;
+	private int port; 
+	private int backlog;
+	public protected ArrayList<String> TopicList;
+	public protected ArrayList<Message> MessageList;
+	public protected Map<String, String> Dictionary;
+	public protected Map<String, Pair<String, Integer>> Register;
+	public protected Map<Integer, TreeSet<String>> subRegister;
+	public protected Map<String, Digest> digestReg;
 
 	public MyChatServer(Map<String, String> Dictionary, String address, int port) {
 		this.address = address;
 		this.port = port;
-		MyChatServer.Dictionary = Dictionary;
-		MyChatServer.TopicList = new ArrayList<String>();
-		MyChatServer.MessageList = new ArrayList<Message>();
-		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
-		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
-		MyChatServer.digestReg = new HashMap<String, Digest>(200);
+		this.Dictionary = Dictionary;
+		this.TopicList = new ArrayList<String>();
+		this.MessageList = new ArrayList<Message>();
+		this.Register = new HashMap<String, Pair<String, Integer>>(200);
+		this.subRegister = new HashMap<Integer, TreeSet<String>>(200);
+		this.digestReg = new HashMap<String, Digest>(200);
 
 		try {
 			// this.server= new ServerSocket();
@@ -60,17 +61,17 @@ public class MyChatServer implements Runnable {
 		}
 	}
 
-	public static synchronized int addTopic(String name) {
-		MyChatServer.TopicList.add(name);
-		return MyChatServer.TopicList.size() - 1;
+	public synchronized int addTopic(String name) {
+		this.TopicList.add(name);
+		return this.TopicList.size() - 1;
 	}
 
-	public static boolean checkTopicError(String params[]) {
+	public boolean checkTopicError(String params[]) {
 		boolean errorFound = false;
 		for (String string : params) {
 			String topicName = "";
 			try {
-				topicName = MyChatServer.TopicList.get(Integer.parseInt(string));
+				topicName = this.TopicList.get(Integer.parseInt(string));
 			} catch (Exception e) {
 				errorFound = true;
 				break;
@@ -79,12 +80,12 @@ public class MyChatServer implements Runnable {
 		return errorFound;
 	}
 
-	public static boolean checkMessageError(String params[]) {
+	public boolean checkMessageError(String params[]) {
 		boolean errorFound = false;
 		for (String string : params) {
 			Message message = null;
 			try {
-				message = MyChatServer.MessageList.get(Integer.parseInt(string));
+				message = this.MessageList.get(Integer.parseInt(string));
 
 			} catch (Exception e) {
 				errorFound = true;
@@ -114,18 +115,18 @@ public class MyChatServer implements Runnable {
 
 	}
 
-	public static synchronized int addMessage(Message message) {
+	public synchronized int addMessage(Message message) {
 		// TODO Auto-generated method stub
-		MyChatServer.MessageList.add(message);
-		int idMessage = MyChatServer.MessageList.size() - 1;
+		this.MessageList.add(message);
+		int idMessage = this.MessageList.size() - 1;
 		TreeSet<String> userSubscribed = new TreeSet<String>();
 		try {
 			for (int a : message.getTopicList()) {
 				// lista di tutti gli utenti da allertare
-				userSubscribed.addAll(MyChatServer.subRegister.get(a));
+				userSubscribed.addAll(this.subRegister.get(a));
 				// Map<Integer, TreeSet<String>>
 			}
-			MyChatServer.sendMessageToSubscribed(message, userSubscribed, idMessage);
+			this.sendMessageToSubscribed(message, userSubscribed, idMessage);
 		} catch (Exception e) {
 			// non faccio niente. semplicemente non ci sono cose da fare
 		}
@@ -133,21 +134,21 @@ public class MyChatServer implements Runnable {
 		return idMessage;
 	}
 
-	public static void sendMessageToSubscribed(Message message, TreeSet<String> userSubscribed, int idMessage) {
+	public void sendMessageToSubscribed(Message message, TreeSet<String> userSubscribed, int idMessage) {
 		boolean timeToSend = false;
 		String messages = "";
 		for (String userName : userSubscribed) {
-			Pair<String, Integer> entry = MyChatServer.Register.get(userName);
+			Pair<String, Integer> entry = this.Register.get(userName);
 			System.out.println("provo a connettere a: " + entry.getLeft() + entry.getRight());
 			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
-			if (MyChatServer.digestReg.containsKey(userName)) {
-				Digest userDigest = MyChatServer.digestReg.get(userName);
+			if (this.digestReg.containsKey(userName)) {
+				Digest userDigest = this.digestReg.get(userName);
 				userDigest.addMessage(idMessage);
 				if (userDigest.timeToSend()) {
 					
 					timeToSend = true;
 					for (int idMessageP : userDigest.getList()) {
-						Message msgP = MyChatServer.MessageList.get(idMessageP);
+						Message msgP = this.MessageList.get(idMessageP);
 						messages = messages + "MESSAGE " + idMessageP + "\r\n" + "TOPICS " + msgP.listToString()
 								+ "\r\n" + msgP.getText() + "\r\n.\r\n\r\n";
 					}
@@ -172,22 +173,22 @@ public class MyChatServer implements Runnable {
 
 	}
 
-	public static synchronized boolean addRecord(String host, int port, String user) {
+	public synchronized boolean addRecord(String host, int port, String user) {
 		boolean found = false;
 		try {
 			Pair<String, Integer> a = new Pair<String, Integer>(host, port);
-			for (Map.Entry<String, Pair<String, Integer>> entry : MyChatServer.Register.entrySet()) {
+			for (Map.Entry<String, Pair<String, Integer>> entry : this.Register.entrySet()) {
 				if (entry.getValue().equals(a)) {
 					found = true;
 					break;
 				}
 			}
 			if (!found){
-				MyChatServer.Register.remove(user);
-				MyChatServer.Register.put(user, a);
+				this.Register.remove(user);
+				this.Register.put(user, a);
 			}
-			else{ // controllo se è il suo.
-				Pair<String, Integer> b = MyChatServer.Register.get(user);
+			else{ // controllo se ï¿½ il suo.
+				Pair<String, Integer> b = this.Register.get(user);
 				if(b.equals(a)){// l'ho trovato ed era il suo. quindi aggiorno
 					found = false;
 				}
@@ -198,9 +199,9 @@ public class MyChatServer implements Runnable {
 		return !found;
 	}
 
-	public static synchronized boolean unRegister(String user) {
+	public synchronized boolean unRegister(String user) {
 		try {
-			if (MyChatServer.Register.remove(user) == null)
+			if (this.Register.remove(user) == null)
 				return false;
 			return true;
 		} catch (Exception e) {
@@ -208,41 +209,41 @@ public class MyChatServer implements Runnable {
 		}
 	}
 
-	public static boolean checkRegisterError(String userName) {
+	public boolean checkRegisterError(String userName) {
 		// TODO Auto-generated method stub
-		Object a = MyChatServer.Register.get(userName);
+		Object a = this.Register.get(userName);
 		if (a == null)
 			return false;
 		return true;
 	}
 
-	public static boolean addSubscription(String[] params, String userName) {
+	public boolean addSubscription(String[] params, String userName) {
 		// TODO Auto-generated method stub
 		for (String topicSubscribed : params) {
 			int idTopic = Integer.parseInt(topicSubscribed);
-			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
+			TreeSet<String> entry = this.subRegister.get(idTopic);
 			if (entry == null) {
 				entry = new TreeSet<String>();
-				MyChatServer.subRegister.put(idTopic, entry);
+				this.subRegister.put(idTopic, entry);
 			}
 			entry.add(userName);
-			// MyChatServer.subRegister.put(,);
+			// this.subRegister.put(,);
 		}
 		return true;
 	}
 
-	public static boolean rmSubScription(String[] params, String userName) {
+	public boolean rmSubScription(String[] params, String userName) {
 		for (String topicSubscribed : params) {
 			int idTopic = Integer.parseInt(topicSubscribed);
-			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
+			TreeSet<String> entry = this.subRegister.get(idTopic);
 			entry.remove(userName);
 		}
 		return true;
 	}
 
-	public static boolean checkTopicSubscription(String userName, int idTopic) {
+	public boolean checkTopicSubscription(String userName, int idTopic) {
 		try {
-			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
+			TreeSet<String> entry = this.subRegister.get(idTopic);
 			if (entry.contains(userName))
 				return true;
 		} catch (Exception e) {
@@ -261,10 +262,10 @@ public class MyChatServer implements Runnable {
 		}
 	}
 
-	public static boolean unSubscribe(String userName) {
-		for (int i = 0; i < MyChatServer.TopicList.size(); i++) {
+	public boolean unSubscribe(String userName) {
+		for (int i = 0; i < this.TopicList.size(); i++) {
 			try {
-				TreeSet<String> entry = MyChatServer.subRegister.get(i);
+				TreeSet<String> entry = this.subRegister.get(i);
 				entry.remove(userName);
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -274,13 +275,13 @@ public class MyChatServer implements Runnable {
 		return true;
 	}
 
-	public static void setDigest(String userName, int k) {
+	public void setDigest(String userName, int k) {
 		// TODO Auto-generated method stub
 		// digestReg.replace(key, value)
-		if (!MyChatServer.digestReg.containsKey(userName)) {
-			MyChatServer.digestReg.put(userName, new Digest(k));
+		if (!this.digestReg.containsKey(userName)) {
+			this.digestReg.put(userName, new Digest(k));
 		} else {
-			Digest entry = MyChatServer.digestReg.get(userName);
+			Digest entry = this.digestReg.get(userName);
 			entry.setK(k); // si puï¿½ fare perchï¿½ ï¿½ un campo statico
 		}
 		// for (Map.Entry<String, String> entry : map.entrySet())
