@@ -1,10 +1,7 @@
 package unifi.inf.rc.DanieleBisignano;
-
-import java.util.ArrayList;
-
+@FunctionalInterface
 public interface HttpProtocol {
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException;
-	//public String visit(clientHandler clientHandler);
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException;
 }
 
 

@@ -2,7 +2,6 @@ package unifi.inf.rc.DanieleBisignano;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 public class Message {
 	private String Text;
@@ -17,7 +16,7 @@ public class Message {
 		Text = text;
 		TopicList = topicList;
 		UserName = userName;
-		Child = new ArrayList<Integer>();
+		Child = new ArrayList<>();
 		Father = -1;
 	}
 	public Message(String text, ArrayList<Integer> topicList,String userName,int father) {
@@ -26,7 +25,7 @@ public class Message {
 		TopicList = topicList;
 		UserName = userName;
 		setFather(father);
-		Child = new ArrayList<Integer>();
+		Child = new ArrayList<>();
 	}
 	
 	public synchronized boolean addChild(int idChild){
@@ -52,17 +51,14 @@ public class Message {
 	}
 
 	public String getText() {
-		// TODO Auto-generated method stub
 		return this.Text;
 	}
 
 	public ArrayList<Integer> getTopicList() {
-		// TODO Auto-generated method stub
 		return this.TopicList;
 	}
 
 	public String getUserName() {
-		// TODO Auto-generated method stub
 		return this.UserName;
 	}
 	public String listToString() {
@@ -77,11 +73,9 @@ public class Message {
 		Father = father;
 	}
 	public int getFather() {
-		// TODO Auto-generated method stub
 		return Father;
 	}
 	public ArrayList<Integer> getChildList() {
-		// TODO Auto-generated method stub
 		return this.Child;
 	}
 }

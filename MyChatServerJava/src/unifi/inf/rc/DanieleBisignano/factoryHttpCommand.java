@@ -1,20 +1,15 @@
 package unifi.inf.rc.DanieleBisignano;
-import java.util.Set;
 
 import unifi.inf.rc.DanieleBisignano.HttpProtocol;
 abstract public class factoryHttpCommand {
-	
+	private factoryHttpCommand(){
+		throw new IllegalAccessError();
+	};
 	public static HttpProtocol getHtmlProtocol(String param, int loginStatus){
-		param = param.trim();
-		String params[] = param.split(" ",2);
+		String paramT = param.trim();
+		String params[] = paramT.split(" ",2);
 		String command = params[0];
-//		for(int i=1;i<params.length;i++){
-//			if(params[i].equals("")){
-//				params[i] = null;
-//			}
-//		}
 		try{
-		//params[params.length-1] = params[params.length-1].trim();
 		params = params[1].split(" ");
 		}catch (IndexOutOfBoundsException e){
 			params = null;
@@ -47,7 +42,7 @@ abstract public class factoryHttpCommand {
 			return new HttpReply(params, loginStatus >1);
 		}
 
-		else if(command.equalsIgnoreCase("CONV") && loginStatus >1){
+		else if("CONV".equals(command) && loginStatus >1){
 			return new HttpConv(params);
 		}
 		else if(command.equalsIgnoreCase("REGISTER") && loginStatus >1){
@@ -58,7 +53,7 @@ abstract public class factoryHttpCommand {
 		}
 		else if(command.equalsIgnoreCase("SUBSCRIBE") && loginStatus >2){
 			
-			return new HttpSubscribe(params,(loginStatus >3));
+			return new HttpSubscribe(params,loginStatus >3);
 		}
 		else if(command.equalsIgnoreCase("UNSUBSCRIBE") && loginStatus >2){
 			return new HttpUnSubscribe(params,(loginStatus >3));

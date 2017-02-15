@@ -10,7 +10,7 @@ public class HttpUnregister implements HttpProtocol {
 	}
 
 	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		if(params != null)throw new IllegalArgumentException();
 		String response;

@@ -12,7 +12,7 @@ public class cmdDigest implements HttpProtocol {
 	}
 
 	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		if (params.length!=1)return "KO\r\n";
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){
 			MyChatServer.setDigest(clientHandler.getUserName(),Integer.parseInt(params[0]));

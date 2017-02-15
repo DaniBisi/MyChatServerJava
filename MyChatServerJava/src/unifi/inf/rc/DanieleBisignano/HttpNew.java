@@ -10,7 +10,7 @@ public class HttpNew implements HttpProtocol {
 	}
 
 	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response = "KO\r\n";
 		if(this.params.length == 1){

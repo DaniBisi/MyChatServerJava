@@ -341,14 +341,14 @@ public class MyChatTest {
 	}
 	@Test
 	public void testListOnTopicOneMessageTopic() {	
-		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 1\r\n";
+		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 0\r\n";
 		client1.sendMsg(msg);
-//		try {
-//			Thread.sleep(150000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		msg = client1.receiveMsg();
 		// System.out.println(msg);
@@ -360,7 +360,7 @@ public class MyChatTest {
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nNEW miao\r\nMESSAGE 0 1\r\nciao messaggio di prova\r\n.\r\n\r\nLIST 2\r\n";
 		client1.sendMsg(msg);
 		try {
-			Thread.sleep(100000);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -502,7 +502,7 @@ public class MyChatTest {
 	//#################################### TEST STATIC FUNCTION ###########################
 	@Test
 	public void testunRegister(){
-		MyChatServer.Register=null;
+		MyChatServer.register=null;
 		boolean c = MyChatServer.unRegister("lollo");
 		assertEquals(false, c);
 	}
@@ -587,10 +587,10 @@ public class MyChatTest {
 		msg = msg.replaceAll("\r\n", " ");
 		System.out.println(msg);
 		this.client1.closeSocket();
-		MyChatServer.Dictionary = Dictionary;
-		MyChatServer.TopicList = new ArrayList<String>();
-		MyChatServer.MessageList = new ArrayList<Message>();
-		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
+		//MyChatServer.Dictionary = Dictionary;
+		MyChatServer.topicList = new ArrayList<String>();
+		MyChatServer.messageList = new ArrayList<Message>();
+		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		// this.myServer.stop();
 		

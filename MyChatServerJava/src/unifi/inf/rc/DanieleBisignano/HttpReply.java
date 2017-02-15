@@ -11,7 +11,7 @@ public class HttpReply extends HttpMessage  implements HttpProtocol{
 	}
 	
 	@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		this.errorFound = MyChatServer.checkMessageError(this.params);
 		String msg = clientHandler.acceptVisit(this);
 		String response;
@@ -21,10 +21,10 @@ public class HttpReply extends HttpMessage  implements HttpProtocol{
 				topicList.add(Integer.parseInt(s));
 			}
 			int fatherId = Integer.parseInt(params[0]);
-			msgId = MyChatServer.addMessage(new Message(msg,  MyChatServer.MessageList.get(fatherId).getTopicList(), clientHandler.getUserName(),fatherId));
+			msgId = MyChatServer.addMessage(new Message(msg,  MyChatServer.messageList.get(fatherId).getTopicList(), clientHandler.getUserName(),fatherId));
 			while(fatherId!=-1){
-				MyChatServer.MessageList.get(fatherId).addChild(msgId);
-				fatherId = MyChatServer.MessageList.get(fatherId).getFather();
+				MyChatServer.messageList.get(fatherId).addChild(msgId);
+				fatherId = MyChatServer.messageList.get(fatherId).getFather();
 			}
 			response = "OK " + msgId + "\r\n";
 		} else {

@@ -11,7 +11,7 @@ public class HttpRegister implements HttpProtocol {
 	}
 
 	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response = "";
 		if(params == null || params.length != 2) throw new IllegalArgumentException();

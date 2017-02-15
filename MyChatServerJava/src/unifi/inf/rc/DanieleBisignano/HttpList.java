@@ -9,21 +9,18 @@ public class HttpList implements HttpProtocol {
 	public HttpList(String[] params) {
 		idMid = Integer.parseInt(params[0]);
 		
-		this.params = Arrays.copyOfRange(params, 1, params.length);
-		
+		if(params.length > 1)
+			this.params = Arrays.copyOfRange(params, 1, params.length);
+		else this.params = null;
 	}
 
-	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	@Override
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		String response;
-		
-		System.out.println(params);
-		if(/*params!= null && params.length>0 && */params== null || !MyChatServer.checkTopicError(params)){
-			//int start = Integer.parseInt(params[0]);
-			//params = Arrays.copyOfRange(params, 1, params.length);
+		if((params== null || !MyChatServer.checkTopicError(params)) && idMid < MyChatServer.messageList.size()){
 			response = "MESSAGES\r\n";
-			for(int i = idMid; i < MyChatServer.MessageList.size();i++){
-				Message msgP = MyChatServer.MessageList.get(i); 
+			for(int i = idMid; i < MyChatServer.messageList.size();i++){
+				Message msgP = MyChatServer.messageList.get(i); 
 				if(params == null || msgP.hasTopic(params)){
 					response = response +i+" "+ msgP.getUserName() +" " + msgP.listToString() + "\r\n";
 				}
@@ -35,11 +32,5 @@ public class HttpList implements HttpProtocol {
 		}
 		return response;
 	}
-/*
-	@Override
-	public String visit(clientHandler clientHandler) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 }

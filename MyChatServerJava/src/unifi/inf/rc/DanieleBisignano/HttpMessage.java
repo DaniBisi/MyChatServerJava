@@ -1,7 +1,5 @@
 package unifi.inf.rc.DanieleBisignano;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class HttpMessage implements HttpProtocol {
@@ -15,19 +13,18 @@ public class HttpMessage implements HttpProtocol {
 		this.errorFound = false;
 		this.logged = b;
 		msgId = -1;
-		// TODO Auto-generated constructor stub
 	}
 
-	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+	@Override
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+
 		// controllo che ci siano tutti gli id dei topi ai quali bisogna
 		// rispondere
 		this.errorFound = MyChatServer.checkTopicError(params);
 		String msg = clientHandler.acceptVisit(this);
 		String response;
 		if (!this.errorFound && this.logged) {
-			ArrayList<Integer> topicList = new ArrayList<Integer>();
+			ArrayList<Integer> topicList = new ArrayList<>();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}
@@ -38,25 +35,6 @@ public class HttpMessage implements HttpProtocol {
 		}
 		return response;
 	}
-/*
-	@Override
-	public String visit(clientHandler clientHandler) {
-		// TODO Auto-generated method stub
-		String msg = clientHandler.acceptVisit(this);
-		String response;
-		if (!this.errorFound) {
-			ArrayList<Integer> topicList = new ArrayList<Integer>();
-			for (String s : this.params) {
-				topicList.add(Integer.parseInt(s));
-			}
-			int msgId = MyChatServer.addMessage(new Message(msg, topicList));
-			response = "OK " + msgId + "\r\n";
-		} else {
-			response = "OK\r\n";
-		}
-		return response;
-	}
-	return "";
-	}*/
+
 
 }

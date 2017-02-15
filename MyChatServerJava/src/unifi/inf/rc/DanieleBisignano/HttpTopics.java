@@ -10,12 +10,12 @@ public class HttpTopics implements HttpProtocol {
 	}
 
 	//@Override
-	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		String response="TOPIC_LIST\r\n";
 
 		int i = 0;
-		for (String topicName : MyChatServer.TopicList) {
+		for (String topicName : MyChatServer.topicList) {
 			if(MyChatServer.checkTopicSubscription(clientHandler.getUserName(), i))response = response +"*";
 			response = response +i+ " "+ topicName +"\r\n" ;
 			i+=1;
