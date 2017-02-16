@@ -1,15 +1,18 @@
 package it.bisignano.mychatserver;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import it.bisignano.mychatserver.HttpProtocol;
+import it.bisignano.mychatserver.IHttpProtocol;
 public abstract class FactoryHttpCommand {
-	private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
+	private static final Logger LOGGER = LogManager.getLogger(FactoryHttpCommand.class);
 	private FactoryHttpCommand(){
 		throw new IllegalAccessError();
 	}
-	public static HttpProtocol getHtmlProtocol(String param, int loginStatus){
+	public static IHttpProtocol getHtmlProtocol(String param, int loginStatus){
+
+		BasicConfigurator.configure();
 		String paramT = param.trim();
 		String[] params = paramT.split(" ",2);
 		String command = params[0];
@@ -62,7 +65,7 @@ public abstract class FactoryHttpCommand {
 			return new HttpUnSubscribe(params,loginStatus >3);
 		}
 		else if("DIGEST".equalsIgnoreCase(command) && loginStatus >3){
-			return new cmdDigest(params,loginStatus >4);
+			return new CmdDigest(params,loginStatus >4);
 		}
 		else {
 			throw new IllegalArgumentException();

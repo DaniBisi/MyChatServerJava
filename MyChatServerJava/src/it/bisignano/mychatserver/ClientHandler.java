@@ -75,7 +75,7 @@ public class ClientHandler extends Thread implements visitable {
 		String response = "";
 		String command = msg.replace("\r\n", "");
 		try {
-			HttpProtocol commandR;
+			IHttpProtocol commandR;
 			commandR = FactoryHttpCommand.getHtmlProtocol(command, this.loginStatus);
 			response = response + commandR.execute(this);
 		} catch (Exception e) {

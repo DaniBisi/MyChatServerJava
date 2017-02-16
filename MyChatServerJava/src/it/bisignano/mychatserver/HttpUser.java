@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpUser implements HttpProtocol{
+public class HttpUser implements IHttpProtocol{
 
 	private String[] params;
 	private String userName;

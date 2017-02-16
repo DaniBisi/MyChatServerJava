@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-public class HttpConv implements HttpProtocol {
+public class HttpConv implements IHttpProtocol {
 
 	private Set<Integer> convList;
 	private String[] params;
@@ -17,8 +17,8 @@ public class HttpConv implements HttpProtocol {
 
 	@Override
 	public String execute(ClientHandler clientHandler) {
-		
-		String response = "MESSAGES\r\n";
+		StringBuilder sb = new StringBuilder();
+		sb.append("MESSAGES\r\n");
 		if (params.length == 1 && !MyChatServer.checkMessageError(params)) {
 			int startId = Integer.parseInt(params[0]);
 			int startIdB = startId;
@@ -29,12 +29,16 @@ public class HttpConv implements HttpProtocol {
 			convList.addAll(this.dig(startIdB));
 			for (Integer integer : convList) {
 				Message msg = MyChatServer.messageList.get(integer);
-				response =response+integer+ " " +msg.getUserName() +" " + msg.listToString()+"\r\n";
-			
+				sb.append(integer.toString());
+				sb.append(" ");
+				sb.append(msg.getUserName());
+				sb.append(" ");
+				sb.append(msg.listToString());
+				sb.append("\r\n");
 			}
-			response =response+"\r\n";
+			sb.append("\r\n");
 		}
-		return response;
+		return sb.toString();
 	}
 
 	private TreeSet<Integer> dig(int startId) {

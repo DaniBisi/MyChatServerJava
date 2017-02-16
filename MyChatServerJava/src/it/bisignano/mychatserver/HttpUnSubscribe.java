@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpUnSubscribe implements HttpProtocol {
+public class HttpUnSubscribe implements IHttpProtocol {
 
 	private String[] params;
 	private boolean alreadySubscribed;

@@ -1,7 +1,7 @@
 package it.bisignano.mychatserver;
 
 
-public class HttpGet implements HttpProtocol {
+public class HttpGet implements IHttpProtocol {
 
 	private String params[];
 	public HttpGet(String params[]) {

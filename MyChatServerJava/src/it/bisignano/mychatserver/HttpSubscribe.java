@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpSubscribe implements HttpProtocol {
+public class HttpSubscribe implements IHttpProtocol {
 
 	private int loginResult;
 	private String[] params;

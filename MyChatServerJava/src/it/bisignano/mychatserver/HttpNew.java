@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpNew implements HttpProtocol {
+public class HttpNew implements IHttpProtocol {
 
 	private String[] params;
 

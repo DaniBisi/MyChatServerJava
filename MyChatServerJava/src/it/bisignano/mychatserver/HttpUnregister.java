@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpUnregister implements HttpProtocol {
+public class HttpUnregister implements IHttpProtocol {
 
 	private String[] params;
 

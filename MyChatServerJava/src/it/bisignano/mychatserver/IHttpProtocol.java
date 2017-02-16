@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 @FunctionalInterface
-public interface HttpProtocol {
+public interface IHttpProtocol {
 	public String execute(ClientHandler clientHandler) throws IllegalArgumentException;
 }
 

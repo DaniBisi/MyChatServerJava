@@ -1,24 +1,24 @@
 package it.bisignano.mychatserver;
 
-public class cmdDigest implements HttpProtocol {
+public class CmdDigest implements IHttpProtocol {
 
 	private String[] params;
 	private boolean alreadySubscribed;
 
-	public cmdDigest(String[] params, boolean b) {
+	public CmdDigest(String[] params, boolean b) {
 		this.params = params;
 		this.alreadySubscribed = b;
-		// TODO Auto-generated constructor stub
 	}
 
-	//@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
-		if (params.length!=1)return "KO\r\n";
+	@Override
+	public String execute(ClientHandler clientHandler){
+		if (params.length!=1){
+			return "KO\r\n";
+		}
 		if(this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName())){
 			MyChatServer.setDigest(clientHandler.getUserName(),Integer.parseInt(params[0]));
 			
 		}
-		// TODO Auto-generated method stub
 		return "OK\r\n";
 	}
 

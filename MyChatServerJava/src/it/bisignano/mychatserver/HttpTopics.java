@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-public class HttpTopics implements HttpProtocol {
+public class HttpTopics implements IHttpProtocol {
 	
 	@Override
 	public String execute(ClientHandler clientHandler) {

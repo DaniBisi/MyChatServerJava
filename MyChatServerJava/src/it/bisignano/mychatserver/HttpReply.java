@@ -2,7 +2,7 @@ package it.bisignano.mychatserver;
 
 import java.util.ArrayList;
 
-public class HttpReply extends HttpMessage  implements HttpProtocol{
+public class HttpReply extends HttpMessage  implements IHttpProtocol{
 
 	public HttpReply(String[] params, boolean b) {
 		//i parametri qua sono diversi devo prima modificarli poi creare il messaggio

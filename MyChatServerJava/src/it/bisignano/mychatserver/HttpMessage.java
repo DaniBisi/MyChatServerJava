@@ -2,7 +2,7 @@ package it.bisignano.mychatserver;
 
 import java.util.ArrayList;
 
-public class HttpMessage implements HttpProtocol {
+public class HttpMessage implements IHttpProtocol {
 
 	protected String[] params;
 	protected Boolean errorFound;

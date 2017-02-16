@@ -2,7 +2,7 @@ package it.bisignano.mychatserver;
 
 import java.util.Arrays;
 
-public class HttpList implements HttpProtocol {
+public class HttpList implements IHttpProtocol {
 
 	private String[] params;
 	private int idMid; 
