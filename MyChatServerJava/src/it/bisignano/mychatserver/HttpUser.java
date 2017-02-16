@@ -7,11 +7,11 @@ public class HttpUser implements IHttpProtocol{
 	public HttpUser(String[] params) {
 		this.params = params;
 		this.userName = params[0];
-		// TODO Auto-generated constructor stub
-	}
 
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
+	}
+	@Override
+	public String execute(ClientHandler clientHandler) {
+
 		String response = "KO\r\n";
 		if(this.params.length == 1){
 			response = "OK\r\n";
@@ -20,15 +20,8 @@ public class HttpUser implements IHttpProtocol{
 		
 		return response;
 	}
-/*
-	@Override
-	public String visit(clientHandler clientHandler) {
-		// TODO Auto-generated method stub
-		return "";
-	}*/
 
 	public String getUserName() {
-		// TODO Auto-generated method stub
 		return this.userName;
 	}
 

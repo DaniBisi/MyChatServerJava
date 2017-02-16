@@ -11,7 +11,7 @@ public class HttpUnSubscribe implements IHttpProtocol {
 	}
 
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) {
 		
 		String response;
 		if (this.params.length>0 && (this.alreadySubscribed || MyChatServer.checkRegisterError(clientHandler.getUserName()))) {

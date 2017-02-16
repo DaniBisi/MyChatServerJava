@@ -10,13 +10,13 @@ public class ServerMain {
 		int port;
 		Map<String, String> dictionary;
 		port = 1039;
-		dictionary = new HashMap<String, String>(200);
+		dictionary = new HashMap<>(200);
 		dictionary.put("dani", "ciao");
 		dictionary.put("giulio", "grima");
 		dictionary.put("marco", "bura");
 		dictionary.put("lore", "mari");
 		MyChatServer server = new MyChatServer(dictionary, "127.0.0.1", port);
-		server.run();
+		server.start();
 	}
 
 }

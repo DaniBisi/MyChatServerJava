@@ -12,7 +12,7 @@ public class HttpPass implements IHttpProtocol {
 
 
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) {
 		String response = "KO\r\n";
 		if(this.params.length == 1){
 			    String pass = MyChatServer.getUserPass(clientHandler.getUserName());

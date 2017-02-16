@@ -10,7 +10,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-public class ClientHandler extends Thread implements visitable {
+public class ClientHandler extends Thread implements Visitable {
 
 	private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
 	private Socket client;

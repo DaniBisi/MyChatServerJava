@@ -1,6 +1,6 @@
 package it.bisignano.mychatserver;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -44,7 +44,7 @@ public class HttpConv implements IHttpProtocol {
 	private TreeSet<Integer> dig(int startId) {
 
 		TreeSet<Integer> childList = new TreeSet<>();
-		ArrayList<Integer> childListP;
+		List<Integer> childListP;
 		childListP = MyChatServer.messageList.get(startId).getChildList();
 		if (childListP != null) {
 			childList.addAll(childListP);

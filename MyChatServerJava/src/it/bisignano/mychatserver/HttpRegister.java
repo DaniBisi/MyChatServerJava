@@ -7,14 +7,16 @@ public class HttpRegister implements IHttpProtocol {
 
 	public HttpRegister(String[] params) {
 		this.params = params;
-		// TODO Auto-generated constructor stub
+
 	}
 
-	//@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		String response = "";
-		if(params == null || params.length != 2) throw new IllegalArgumentException();
+	@Override
+	public String execute(ClientHandler clientHandler) {
+
+		String response;
+		if(params == null || params.length != 2) {
+			throw new IllegalArgumentException();
+		}
 		else{
 			String host = params[0];
 			int port = Integer.parseInt(params[1]);
@@ -30,15 +32,7 @@ public class HttpRegister implements IHttpProtocol {
 		return response;
 	}
 	public int getLoginResult() {
-		// TODO Auto-generated method stub
+
 		return this.loginResult;
 	}
-/*
-	@Override
-	public String visit(clientHandler clientHandler) {
-		// TODO Auto-generated method stub
-		clientHandler.acceptVisit(this);
-		return null;
-	}
-*/
 }

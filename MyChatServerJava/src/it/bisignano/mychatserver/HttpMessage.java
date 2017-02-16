@@ -16,24 +16,26 @@ public class HttpMessage implements IHttpProtocol {
 	}
 
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler){
 
 		// controllo che ci siano tutti gli id dei topi ai quali bisogna
 		// rispondere
 		this.errorFound = MyChatServer.checkTopicError(params);
 		String msg = clientHandler.acceptVisit(this);
-		String response;
+		StringBuilder response = new StringBuilder();
 		if (!this.errorFound && this.logged) {
 			ArrayList<Integer> topicList = new ArrayList<>();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}
 			msgId = MyChatServer.addMessage(new Message(msg, topicList, clientHandler.getUserName()));
-			response = "OK " + msgId + "\r\n";
+			response.append("OK ");
+			response.append(msgId); 
+			response.append("\r\n");
 		} else {
-			response = "KO\r\n";
+			response.append("KO\r\n");
 		}
-		return response;
+		return response.toString();
 	}
 
 

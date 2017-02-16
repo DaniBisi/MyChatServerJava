@@ -1,14 +1,16 @@
 package it.bisignano.mychatserver;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class HttpGet implements IHttpProtocol {
-
-	private String params[];
-	public HttpGet(String params[]) {
+	private static final Logger LOGGER = LogManager.getLogger(HttpGet.class);
+	private String[] params;
+	public HttpGet(String[] params) {
 		this.params = params;
 	}
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) {
 
 		String response ="";
 		if(this.params.length == 1){
@@ -18,6 +20,7 @@ public class HttpGet implements IHttpProtocol {
 				response = "MESSAGE "+msgId+"\r\n"+"USER "+ msgP.getUserName() +"\r\n" +"TOPICS "+ msgP.listToString() + "\r\n"+msgP.getText()+"\r\n.\r\n\r\n";
 				
 			}catch (Exception e) {
+				LOGGER.info(e);
 				response = "KO\r\n";
 			}
 		}

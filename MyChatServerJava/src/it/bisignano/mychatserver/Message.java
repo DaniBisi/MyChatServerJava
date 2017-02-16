@@ -2,80 +2,107 @@ package it.bisignano.mychatserver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Message {
-	private String Text;
-	private ArrayList<Integer> TopicList;
-	private String UserName;
-	private int Father;
-	private ArrayList<Integer> Child;
-	
+	private String text;
 
-	public Message(String text, ArrayList<Integer> topicList,String userName) {
+	private List<Integer> topicList;
+	private String userName;
+	private int father;
+	private List<Integer> child;
+
+	public Message(String text, List<Integer> topicList, String userName) {
 		super();
-		Text = text;
-		TopicList = topicList;
-		UserName = userName;
-		Child = new ArrayList<>();
-		Father = -1;
+		setText(text);
+		setTopicList(topicList);
+		setUserName(userName);
+		setChild(new ArrayList<>());
+		setFather(-1);
 	}
-	public Message(String text, ArrayList<Integer> topicList,String userName,int father) {
+
+	public Message(String text, List<Integer> topicList, String userName, int father) {
 		super();
-		Text = text;
-		TopicList = topicList;
-		UserName = userName;
+		setText(text);
+		setTopicList(topicList);
+		setUserName(userName);
+		setChild(new ArrayList<>());
 		setFather(father);
-		Child = new ArrayList<>();
 	}
-	
-	public synchronized boolean addChild(int idChild){
-		Child.add(idChild);
+
+	public synchronized boolean addChild(int idChild) {
+		child.add(idChild);
 		return true;
 	}
 
+	public List<Integer> getChild() {
+		return child;
+	}
+
+	public void setChild(List<Integer> child) {
+		this.child = child;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public void setTopicList(List<Integer> topicList) {
+		this.topicList = topicList;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public boolean hasTopic(String[] params) {
-		// TODO Auto-generated method stub
 		boolean hasTopic = false;
 		for (String string : params) {
 			int i = Integer.parseInt(string);
-			Iterator<Integer> itr = TopicList.iterator();
+			Iterator<Integer> itr = topicList.iterator();
 			while (itr.hasNext()) {
-				if(i == itr.next()){
+				if (i == itr.next()) {
 					hasTopic = true;
 					break;
 				}
 			}
-			if(hasTopic)break;
+			if (hasTopic) {
+				break;
+			}
 		}
 		return hasTopic;
 	}
 
 	public String getText() {
-		return this.Text;
+		return this.text;
 	}
 
-	public ArrayList<Integer> getTopicList() {
-		return this.TopicList;
+	public List<Integer> getTopicList() {
+		return this.topicList;
 	}
 
 	public String getUserName() {
-		return this.UserName;
+		return this.userName;
 	}
+
 	public String listToString() {
-	    String result = "";
-	    for (int i = 0; i < this.TopicList.size(); i++) {
-	        result += " " + this.TopicList.get(i);
-	    }
-	    result = result.substring(1, result.length());
-	    return result;
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < this.topicList.size(); i++) {
+			result.append(" ");
+			result.append(this.topicList.get(i));
+		}
+		return result.substring(1, result.length());
 	}
+
 	public void setFather(int father) {
-		Father = father;
+		this.father = father;
 	}
+
 	public int getFather() {
-		return Father;
+		return father;
 	}
-	public ArrayList<Integer> getChildList() {
-		return this.Child;
+
+	public List<Integer> getChildList() {
+		return this.child;
 	}
 }

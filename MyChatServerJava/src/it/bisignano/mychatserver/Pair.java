@@ -19,7 +19,7 @@ public class Pair<L,R> {
 	    	return false;
 	    }
 	    Pair pairo = (Pair) o;
-	    return (this.left.equals(pairo.getLeft()) && this.right.equals(pairo.getRight()));
+	    return this.left.equals(pairo.getLeft()) && this.right.equals(pairo.getRight());
 	  }
 	  
 

@@ -15,22 +15,27 @@ public class HttpList implements IHttpProtocol {
 	}
 
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
-		String response;
+	public String execute(ClientHandler clientHandler) {
+		StringBuilder sb = new StringBuilder();
 		if((params== null || !MyChatServer.checkTopicError(params)) && idMid < MyChatServer.messageList.size()){
-			response = "MESSAGES\r\n";
+			sb.append("MESSAGES\r\n");
 			for(int i = idMid; i < MyChatServer.messageList.size();i++){
 				Message msgP = MyChatServer.messageList.get(i); 
 				if(params == null || msgP.hasTopic(params)){
-					response = response +i+" "+ msgP.getUserName() +" " + msgP.listToString() + "\r\n";
+					sb.append(i);
+					sb.append(" ");
+					sb.append(msgP.getUserName());
+					sb.append(" ");
+					sb.append(msgP.listToString());
+					sb.append("\r\n");
 				}
 			}
-			response = response +"\r\n";
+			sb.append("\r\n");
 		}
 		else {
-			response = "KO\r\n";
+			sb.append("KO\r\n");
 		}
-		return response;
+		return sb.toString();
 	}
 
 }

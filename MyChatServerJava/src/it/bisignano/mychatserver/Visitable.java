@@ -1,5 +1,5 @@
 package it.bisignano.mychatserver;
 @FunctionalInterface
-public interface visitable {
+public interface Visitable {
 	public String acceptVisit(HttpMessage msg);	
 }

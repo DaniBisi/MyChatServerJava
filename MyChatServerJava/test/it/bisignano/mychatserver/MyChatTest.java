@@ -482,12 +482,10 @@ public class MyChatTest {
 		msg = msg.replaceAll("\r\n", " ");
 		LOGGER.info(msg);
 		this.client1.closeSocket();
-		// MyChatServer.Dictionary = Dictionary;
 		MyChatServer.topicList = new ArrayList<String>();
 		MyChatServer.messageList = new ArrayList<Message>();
 		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
-		// this.myServer.stop();
 
 	}
 

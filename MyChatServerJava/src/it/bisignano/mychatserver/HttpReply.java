@@ -7,16 +7,16 @@ public class HttpReply extends HttpMessage  implements IHttpProtocol{
 	public HttpReply(String[] params, boolean b) {
 		//i parametri qua sono diversi devo prima modificarli poi creare il messaggio
 		super(params,b);
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	@Override
-	public String execute(ClientHandler clientHandler) throws IllegalArgumentException {
+	public String execute(ClientHandler clientHandler) {
 		this.errorFound = MyChatServer.checkMessageError(this.params);
 		String msg = clientHandler.acceptVisit(this);
 		String response;
 		if (!this.errorFound && this.logged) {
-			ArrayList<Integer> topicList = new ArrayList<Integer>();
+			ArrayList<Integer> topicList = new ArrayList<>();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}
