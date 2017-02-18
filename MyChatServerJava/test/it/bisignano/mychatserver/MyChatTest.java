@@ -61,11 +61,10 @@ public class MyChatTest {
 	@Before
 	public void setUp() {
 		LOGGER.info(name.getMethodName());
-		if (!setUpIsDone) {
+		
 			this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
 			this.myServer.start();
 			setUpIsDone = true;
-		}
 		this.msg = "";
 		this.client1 = new ChatClient("127.0.0.1", this.port);
 		this.client1.connectServer();
@@ -345,7 +344,7 @@ public class MyChatTest {
 
 	@Test
 	public void testDigest() {
-		this.client1.connectServer();
+		//this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0\r\nDIGEST 2\r\nMESSAGE 0\r\nprimo messaggio\r\n.\r\n\r\nMESSAGE 0\r\nsecondo messaggio\r\n.\r\n\r\n";
 		getAnswareFromServer(msg);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nOK\r\nOK\r\nOK 0\r\nOK 1\r\n", answare.toString());
@@ -353,7 +352,7 @@ public class MyChatTest {
 
 	@Test
 	public void testDigestWithoutSubscribe() {
-		this.client1.connectServer();
+		//this.client1.connectServer();
 		msg = "USER dani\r\nPASS bisi\r\nNEW CIAO\r\nREGISTER 127.0.0.1 4127\r\nDIGEST 2\r\nMESSAGE 0\r\nprimo messaggio\r\n.\r\n\r\nMESSAGE 0\r\nsecondo messaggio\r\n.\r\n\r\n";
 		getAnswareFromServer(msg);
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK\r\nKO\r\nOK 0\r\nOK 1\r\n", answare.toString());

@@ -26,6 +26,46 @@ public class MyChatServer extends Thread {
 	private static final Logger LOGGER = LogManager.getLogger(MyChatServer.class);
 	private ServerSocket server;
 	private String address;
+	public static Logger getLogger() {
+		return LOGGER;
+	}
+
+	public ServerSocket getServer() {
+		return server;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public static ArrayList<String> getTopicList() {
+		return topicList;
+	}
+
+	public static ArrayList<Message> getMessageList() {
+		return messageList;
+	}
+
+	public static Map<String, String> getDictionary() {
+		return dictionary;
+	}
+
+	public static Map<String, Pair<String, Integer>> getRegister() {
+		return register;
+	}
+
+	public static Map<Integer, TreeSet<String>> getSubRegister() {
+		return subRegister;
+	}
+
+	public static Map<String, Digest> getDigestReg() {
+		return digestReg;
+	}
+
 	private int port;
 	protected static ArrayList<String> topicList;
 	protected static ArrayList<Message> messageList;
@@ -99,6 +139,9 @@ public class MyChatServer extends Thread {
 			} catch (IOException e) {
 				LOGGER.error(e);
 				break;
+			}
+			finally{
+				this.closeSocket();
 			}
 		}
 
