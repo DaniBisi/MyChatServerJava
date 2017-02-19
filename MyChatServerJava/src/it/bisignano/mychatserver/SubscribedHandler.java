@@ -1,23 +1,32 @@
 package it.bisignano.mychatserver;
 
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class SubscribedHandler {
-	TreeSet<String> userSubscribed;
+	private TreeSet<String> userSubscribed;
 	private int idMessage;
 	private Message message;
+	private Map<String, Digest> digestReg;
 	private static final Logger LOGGER = LogManager.getLogger(SubscribedHandler.class);
 
-	public SubscribedHandler(Message message, int idMessage) {
+	public SubscribedHandler(Message message, int idMessage, Map<Integer, TreeSet<String>> subRegister,Map<String, Digest> digestReg) {
 		this.idMessage = idMessage;
 		this.message = message;
-		this.userSubscribed = new TreeSet<>();
-		for (int a : this.message.getTopicList()) {
-			this.userSubscribed.addAll(MyChatServer.subRegister.get(a));
+		this.digestReg =digestReg;
+		this.userSubscribed = new TreeSet<String>();
+		if (subRegister != null) {
+			for (int a : this.message.getTopicList()) {
+				this.userSubscribed.addAll(subRegister.get(a));
+			}
 		}
+	}
+
+	public SubscribedHandler() {
+
 	}
 
 	public void sendMessageToSubscribed() {
@@ -26,8 +35,8 @@ public class SubscribedHandler {
 		for (String userName : userSubscribed) {
 			Pair<String, Integer> entry = MyChatServer.register.get(userName);
 			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
-			if (MyChatServer.digestReg.containsKey(userName)) {
-				Digest userDigest = MyChatServer.digestReg.get(userName);
+			if (this.digestReg.containsKey(userName)) {
+				Digest userDigest = this.digestReg.get(userName);
 				userDigest.addMessage(idMessage);
 				if (userDigest.timeToSend()) {
 					timeToSend = true;
