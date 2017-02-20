@@ -12,10 +12,10 @@ public class HttpConv implements IHttpProtocol {
 
 	public HttpConv(String[] params) {
 		this.params = params;
-		convList = new TreeSet<>();
+		convList = new TreeSet();
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("MESSAGES\r\n");
@@ -43,13 +43,13 @@ public class HttpConv implements IHttpProtocol {
 
 	private TreeSet<Integer> dig(int startId) {
 
-		TreeSet<Integer> childList = new TreeSet<>();
+		TreeSet<Integer> childList = new TreeSet();
 		List<Integer> childListP;
 		childListP = MyChatServer.messageList.get(startId).getChildList();
 		if (childListP != null) {
 			childList.addAll(childListP);
 		} else {
-			return  new TreeSet<>();
+			return  new TreeSet();
 		}
 
 		for (Integer nextStartId : childListP) {

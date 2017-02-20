@@ -98,7 +98,7 @@ public class ClientHandler extends Thread implements Visitable {
 		return "";
 	}
 
-	@Override
+	//@Override
 	public String acceptVisit(HttpMessage msg) {
 		StringBuilder sb = new StringBuilder();
 		try {

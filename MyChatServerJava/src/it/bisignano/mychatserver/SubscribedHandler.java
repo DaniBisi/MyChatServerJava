@@ -17,7 +17,7 @@ public class SubscribedHandler {
 		this.idMessage = idMessage;
 		this.message = message;
 		this.digestReg =digestReg;
-		this.userSubscribed = new TreeSet<>();
+		this.userSubscribed = new TreeSet();
 		if (subRegister != null) {
 			for (int a : this.message.getTopicList()) {
 				this.userSubscribed.addAll(subRegister.get(a));

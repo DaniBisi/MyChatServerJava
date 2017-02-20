@@ -9,7 +9,7 @@ public class HttpGet implements IHttpProtocol {
 	public HttpGet(String[] params) {
 		this.params = params;
 	}
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 
 		String response ="";

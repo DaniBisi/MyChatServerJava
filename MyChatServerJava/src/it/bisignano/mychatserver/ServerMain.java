@@ -10,7 +10,7 @@ public class ServerMain {
 		int port;
 		Map<String, String> dictionary;
 		port = 1039;
-		dictionary = new HashMap<>(200);
+		dictionary = new HashMap(200);
 		dictionary.put("dani", "ciao");
 		dictionary.put("giulio", "grima");
 		dictionary.put("marco", "bura");

@@ -9,7 +9,7 @@ public class HttpUser implements IHttpProtocol{
 		this.userName = params[0];
 
 	}
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 
 		String response = "KO\r\n";

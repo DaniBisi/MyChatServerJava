@@ -1,4 +1,5 @@
 package it.bisignano.mychatserver;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -12,7 +13,6 @@ import java.util.TreeSet;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
 
 /**
  * Hello world!
@@ -35,11 +35,11 @@ public class MyChatServer extends Thread {
 		this.address = address;
 		this.port = port;
 		MyChatServer.dictionary = dictionary;
-		MyChatServer.topicList = new ArrayList<>();
-		MyChatServer.messageList = new ArrayList<>();
-		MyChatServer.register = new HashMap<>(200);
-		MyChatServer.subRegister = new HashMap<>(200);
-		MyChatServer.digestReg = new HashMap<>(200);
+		MyChatServer.topicList = new ArrayList();
+		MyChatServer.messageList = new ArrayList();
+		MyChatServer.register = new HashMap(200);
+		MyChatServer.subRegister = new HashMap(200);
+		MyChatServer.digestReg = new HashMap(200);
 
 		try {
 			this.server = new ServerSocket(this.port, 1000, InetAddress.getByName(this.address));
@@ -83,6 +83,7 @@ public class MyChatServer extends Thread {
 	public static Map<String, Digest> getDigestReg() {
 		return digestReg;
 	}
+
 	public static synchronized int addTopic(String name) {
 		MyChatServer.topicList.add(name);
 		return MyChatServer.topicList.size() - 1;
@@ -94,28 +95,37 @@ public class MyChatServer extends Thread {
 
 	public static boolean checkTopicError(String[] idTopics) {
 		boolean errorFound = false;
-		for (String string : idTopics) {
-			try {
-				MyChatServer.topicList.get(Integer.parseInt(string));
-			} catch (Exception e) {
-				errorFound = true;
-				LOGGER.error(e);
-				break;
+		if (idTopics == null) {
+			errorFound = true;
+		} else {
+
+			for (String string : idTopics) {
+				try {
+					MyChatServer.topicList.get(Integer.parseInt(string));
+				} catch (Exception e) {
+					errorFound = true;
+					LOGGER.error(e);
+					break;
+				}
 			}
 		}
 		return errorFound;
 	}
 
-	public static boolean checkMessageError(String[] params) {
+	public static boolean checkMessageError(String[] idMessage) {
 		boolean errorFound = false;
-		for (String string : params) {
-			try {
-				MyChatServer.messageList.get(Integer.parseInt(string));
+		if (idMessage == null) {
+			errorFound = true;
+		} else {
+			for (String string : idMessage) {
+				try {
+					MyChatServer.messageList.get(Integer.parseInt(string));
 
-			} catch (Exception e) {
-				LOGGER.error(e);
-				errorFound = true;
-				break;
+				} catch (Exception e) {
+					LOGGER.error(e);
+					errorFound = true;
+					break;
+				}
 			}
 		}
 		return errorFound;
@@ -131,8 +141,7 @@ public class MyChatServer extends Thread {
 			} catch (IOException e) {
 				LOGGER.error(e);
 				break;
-			}
-			finally{
+			} finally {
 				this.closeSocket();
 			}
 		}
@@ -143,22 +152,19 @@ public class MyChatServer extends Thread {
 		SubscribedHandler sHandler;
 		MyChatServer.messageList.add(message);
 		int idMessage = MyChatServer.messageList.size() - 1;
-		try{
-		sHandler = new SubscribedHandler(message,idMessage,MyChatServer.subRegister,MyChatServer.digestReg);
-		sHandler.sendMessageToSubscribed();
-		}
-		catch(Exception e){
+		try {
+			sHandler = new SubscribedHandler(message, idMessage, MyChatServer.subRegister, MyChatServer.digestReg);
+			sHandler.sendMessageToSubscribed();
+		} catch (Exception e) {
 			LOGGER.error(e);
 		}
 		return idMessage;
 	}
 
-	
-
 	public static synchronized boolean addRecord(String host, int port, String user) {
 		boolean found = false;
 		try {
-			Pair<String, Integer> a = new Pair<>(host, port);
+			Pair<String, Integer> a = new Pair(host,port);
 			for (Map.Entry<String, Pair<String, Integer>> entry : MyChatServer.register.entrySet()) {
 				if (entry.getValue().equals(a)) {
 					found = true;
@@ -174,9 +180,12 @@ public class MyChatServer extends Thread {
 		}
 		return !found;
 	}
-
+	
+//	public static Pair<String,Integer> pairConstructor(String host, Integer port){
+//		return new Pair<>(host,port);
+//	}
 	public static synchronized boolean unRegister(String user) {
-		if(MyChatServer.register.remove(user) == null) {
+		if (MyChatServer.register.remove(user) == null) {
 			return false;
 		}
 
@@ -195,7 +204,7 @@ public class MyChatServer extends Thread {
 			int idTopic = Integer.parseInt(topicSubscribed);
 			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
 			if (entry == null) {
-				entry = new TreeSet<>();
+				entry = new TreeSet();
 				MyChatServer.subRegister.put(idTopic, entry);
 			}
 			entry.add(userName);

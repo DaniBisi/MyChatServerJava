@@ -15,7 +15,7 @@ public class HttpMessage implements IHttpProtocol {
 		msgId = -1;
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler){
 
 		// controllo che ci siano tutti gli id dei topi ai quali bisogna
@@ -24,7 +24,7 @@ public class HttpMessage implements IHttpProtocol {
 		String msg = clientHandler.acceptVisit(this);
 		StringBuilder response = new StringBuilder();
 		if (!this.errorFound && this.logged) {
-			ArrayList<Integer> topicList = new ArrayList<>();
+			ArrayList<Integer> topicList = new ArrayList();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}

@@ -17,15 +17,33 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.experimental.theories.Theories.TheoryAnchor;
 import org.junit.rules.TestName;
 import org.junit.rules.Timeout;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import static org.junit.Assert.assertEquals;
+import static org.powermock.api.easymock.PowerMock.expectNew;
+import static org.powermock.api.easymock.PowerMock.replay;
+import static org.powermock.api.easymock.PowerMock.verify;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.easymock.annotation.*;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(UsesNewToInstantiateClass.class)
 public class MyChatServerTest {
 	@Rule
 	public TestName name = new TestName();
 	@Rule
-	public Timeout globalTimeout = Timeout.seconds(3);
+	public Timeout globalTimeout = Timeout.seconds(150);
 	private static boolean setUpIsDone = false;
+	@InjectMocks
 	private MyChatServer myServer;
 	private ChatClient client1;
 	private String address;
@@ -34,7 +52,9 @@ public class MyChatServerTest {
 	private String msg;
 	private StringBuilder answare;
 	private Logger LOGGER = LogManager.getLogger(MyChatTest.class);
-
+	@Mock
+	private Pair mockPair;
+	      
 	public MyChatServerTest() {
 		BasicConfigurator.configure();
 		this.port = 1035;
@@ -73,6 +93,7 @@ public class MyChatServerTest {
 		assertEquals(port, testConstructor.getPort());
 	}
 
+	//########################### inizio test addtopic ###########
 	@Test
 	public void testAddTopicName() {
 		MyChatServer.addTopic("ciao");
@@ -94,7 +115,10 @@ public class MyChatServerTest {
 		MyChatServer.addTopic("miao");
 		assertEquals(topicList, MyChatServer.getTopicList());
 	}
+
+	//########################### fine test addTopic ###########
 	
+	//########################### inizio test addMessage ###########
 	@Test
 	public void testAddMessageName() {
 		Message m1 = mock(Message.class);
@@ -120,6 +144,84 @@ public class MyChatServerTest {
 		messageList.add(m2);
 		assertEquals(messageList, MyChatServer.getMessageList());
 	}
+
+	//########################### fine test addMessage ###########
+	
+
+	//########################### inizio test checkTopciError ###########
+	@Test
+	public void testCheckTopicErrorEmptyList(){
+		String[] topicList = {"0"};
+		assertEquals(true, MyChatServer.checkTopicError(topicList));
+	}
+	@Test
+	public void testCheckTopicErrorEmptyTopicList(){
+		String[] topicList = null;
+		assertEquals(true, MyChatServer.checkTopicError(topicList));
+	}
+	@Test
+	public void testCheckTopicNotError(){
+		String[] topicList = {"0"};
+		MyChatServer.addTopic("ciao");
+		assertEquals(false, MyChatServer.checkTopicError(topicList));
+	}
+	@Test(expected = IndexOutOfBoundsException.class) 
+	public void testCheckTopicErrorNotEmptyList(){
+		String[] topicList = {"3"};
+		MyChatServer.addTopic("ciao");
+		MyChatServer.addTopic("miao");
+		when(MyChatServer.topicList.get(3)).thenReturn(null);
+		assertEquals(true, MyChatServer.checkTopicError(topicList));
+	}
+
+	//########################### fine test checkTopciError ###########
+	
+	//########################### inizio testo checkMessageError ###########
+	@Test
+	public void testCheckMessageErrorEmptyList(){
+		String[] messageList = {"0"};
+		assertEquals(true, MyChatServer.checkMessageError(messageList));
+	}
+	@Test
+	public void testCheckMessageErrorEmptyTopicList(){
+		String[] messageList = null;
+		assertEquals(true, MyChatServer.checkMessageError(messageList));
+	}
+	@Test
+	public void testCheckMessageNotError(){
+		String[] messageList = {"0"};
+		Message m1 = mock(Message.class);
+		MyChatServer.addMessage(m1);
+		assertEquals(false, MyChatServer.checkMessageError(messageList));
+	}
+	@Test//(expected = IndexOutOfBoundsException.class) 
+	public void testCheckMessageErrorNotEmptyList(){
+		String[] messageList = {"3"};
+		Message m1 = mock(Message.class);
+		Message m2 = mock(Message.class);
+		MyChatServer.addMessage(m1);
+		MyChatServer.addMessage(m2);
+		assertEquals(true, MyChatServer.checkMessageError(messageList));
+	}
+	//########################### fine test checkmessagelist ###############à
+	
+
+	//########################### inizio test addRecord ###########
+	@Test
+	public void testAddRecord() throws Exception{
+		//MyChatServer mcs = mock(MyChatServer.class);
+		String user ="dani";
+		Pair p1 = Mockito.mock(Pair.class);
+		expectNew(Pair.class).andReturn(p1);
+		Map<String,Pair<String,Integer>> register = new HashMap<String,Pair<String,Integer>>();
+		register.put(user, p1);
+		MyChatServer.register.put(user, p1);
+		//when(MyChatServer.register.entrySet()).thenReturn(register.entrySet());
+		//when(p1.equals(p1)).thenReturn(true);
+		//PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
+		PowerMockito.whenNew(Pair.class).withAnyArguments();
+		assertEquals(false, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
+	}
 	
 	@After
 	public void tearDown() throws Exception {
@@ -132,9 +234,5 @@ public class MyChatServerTest {
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 	}
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
 
 }

@@ -11,7 +11,7 @@ public class HttpSubscribe implements IHttpProtocol {
 
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 		String response;
 

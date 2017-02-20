@@ -17,7 +17,7 @@ public class Message {
 		setText(text);
 		setTopicList(topicList);
 		setUserName(userName);
-		setChild(new ArrayList<>());
+		setChild(new ArrayList());
 		setFather(-1);
 	}
 
@@ -26,7 +26,7 @@ public class Message {
 		setText(text);
 		setTopicList(topicList);
 		setUserName(userName);
-		setChild(new ArrayList<>());
+		setChild(new ArrayList());
 		setFather(father);
 	}
 

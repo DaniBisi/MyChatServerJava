@@ -9,7 +9,7 @@ public class Digest {
 
 	public Digest(int k) {
 		this.k = k;
-		this.messageQueque = new ArrayList<>();
+		this.messageQueque = new ArrayList();
 	}
 	
 	public void setK(int k){

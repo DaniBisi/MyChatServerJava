@@ -9,7 +9,7 @@ public class HttpUnregister implements IHttpProtocol {
 
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 
 		if(params != null){

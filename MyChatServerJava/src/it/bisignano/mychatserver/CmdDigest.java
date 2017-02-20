@@ -10,7 +10,7 @@ public class CmdDigest implements IHttpProtocol {
 		this.alreadySubscribed = b;
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler){
 		if (params.length!=1){
 			return "KO\r\n";

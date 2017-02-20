@@ -9,7 +9,7 @@ public class HttpNew implements IHttpProtocol {
 
 	}
 
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 		String response = "KO\r\n";
 		if(this.params.length == 1){

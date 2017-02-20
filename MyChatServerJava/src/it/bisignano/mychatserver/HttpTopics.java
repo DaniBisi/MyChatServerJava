@@ -2,7 +2,7 @@ package it.bisignano.mychatserver;
 
 public class HttpTopics implements IHttpProtocol {
 	
-	@Override
+	//@Override
 	public String execute(ClientHandler clientHandler) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("TOPIC_LIST\r\n");

@@ -16,7 +16,7 @@ public class HttpReply extends HttpMessage  implements IHttpProtocol{
 		String msg = clientHandler.acceptVisit(this);
 		String response;
 		if (!this.errorFound && this.logged) {
-			ArrayList<Integer> topicList = new ArrayList<>();
+			ArrayList<Integer> topicList = new ArrayList();
 			for (String s : this.params) {
 				topicList.add(Integer.parseInt(s));
 			}
