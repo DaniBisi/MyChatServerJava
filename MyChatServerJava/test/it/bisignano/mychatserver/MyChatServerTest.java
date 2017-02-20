@@ -1,13 +1,16 @@
 package it.bisignano.mychatserver;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.easymock.PowerMock.expectNew;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-import static org.mockito.Mockito.*;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -17,43 +20,35 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.experimental.theories.Theories.TheoryAnchor;
 import org.junit.rules.TestName;
 import org.junit.rules.Timeout;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import static org.junit.Assert.assertEquals;
-import static org.powermock.api.easymock.PowerMock.expectNew;
-import static org.powermock.api.easymock.PowerMock.replay;
-import static org.powermock.api.easymock.PowerMock.verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.easymock.annotation.*;
+import org.powermock.api.easymock.PowerMock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(UsesNewToInstantiateClass.class)
+@PrepareForTest({MyChatServer.class})
 public class MyChatServerTest {
+	@Rule
+	public PowerMockRule rule = new PowerMockRule();
 	@Rule
 	public TestName name = new TestName();
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(150);
 	private static boolean setUpIsDone = false;
-	@InjectMocks
 	private MyChatServer myServer;
-	private ChatClient client1;
 	private String address;
 	private int port;
 	private Map<String, String> dictionary;
 	private String msg;
 	private StringBuilder answare;
 	private Logger LOGGER = LogManager.getLogger(MyChatTest.class);
-	@Mock
-	private Pair mockPair;
+	private Pair p1 = PowerMock.createMock(Pair.class);
+	private SubscribedHandler sh= PowerMock.createMock(SubscribedHandler.class);
 	      
 	public MyChatServerTest() {
 		BasicConfigurator.configure();
@@ -81,8 +76,6 @@ public class MyChatServerTest {
 		this.myServer.start();
 		setUpIsDone = true;
 		this.msg = "";
-		this.client1 = new ChatClient("127.0.0.1", this.port);
-		this.client1.connectServer();
 	}
 
 	@Test
@@ -120,8 +113,12 @@ public class MyChatServerTest {
 	
 	//########################### inizio test addMessage ###########
 	@Test
-	public void testAddMessageName() {
+	public void testAddMessageName() throws Exception {
+		System.out.println("ciao");
 		Message m1 = mock(Message.class);
+		PowerMock.expectNew(SubscribedHandler.class,m1,0,MyChatServer.subRegister,MyChatServer.digestReg ).andReturn(sh);
+		PowerMock.replayAll(sh, SubscribedHandler.class);
+		when(sh.sendMessageToSubscribed()).thenReturn(true);
 		MyChatServer.addMessage(m1);
 		assertEquals(m1, MyChatServer.getMessageList().get(0));
 	}
@@ -170,7 +167,6 @@ public class MyChatServerTest {
 		String[] topicList = {"3"};
 		MyChatServer.addTopic("ciao");
 		MyChatServer.addTopic("miao");
-		when(MyChatServer.topicList.get(3)).thenReturn(null);
 		assertEquals(true, MyChatServer.checkTopicError(topicList));
 	}
 
@@ -209,17 +205,11 @@ public class MyChatServerTest {
 	//########################### inizio test addRecord ###########
 	@Test
 	public void testAddRecord() throws Exception{
-		//MyChatServer mcs = mock(MyChatServer.class);
 		String user ="dani";
-		Pair p1 = Mockito.mock(Pair.class);
-		expectNew(Pair.class).andReturn(p1);
 		Map<String,Pair<String,Integer>> register = new HashMap<String,Pair<String,Integer>>();
-		register.put(user, p1);
 		MyChatServer.register.put(user, p1);
-		//when(MyChatServer.register.entrySet()).thenReturn(register.entrySet());
-		//when(p1.equals(p1)).thenReturn(true);
-		//PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
-		PowerMockito.whenNew(Pair.class).withAnyArguments();
+		PowerMock.expectNew(Pair.class, "127.0.0.1", 52).andReturn(p1);
+		PowerMock.replayAll(p1, Pair.class);
 		assertEquals(false, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
 	}
 	
@@ -227,7 +217,6 @@ public class MyChatServerTest {
 	public void tearDown() throws Exception {
 		msg = msg.replaceAll("\r\n", " ");
 		LOGGER.info(msg);
-		this.client1.closeSocket();
 		MyChatServer.topicList = new ArrayList<String>();
 		MyChatServer.messageList = new ArrayList<Message>();
 		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);

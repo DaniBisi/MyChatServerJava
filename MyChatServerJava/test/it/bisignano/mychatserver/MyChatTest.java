@@ -390,7 +390,7 @@ public class MyChatTest {
 	// ###########################
 	@Test
 	public void testunRegister() {
-		MyChatServer.register = new HashMap<>(200);
+		MyChatServer.register = new HashMap(200);
 		boolean c = MyChatServer.unRegister("lollo");
 		assertEquals(false, c);
 	}

@@ -25,7 +25,7 @@ public class SubscribedHandler {
 		}
 	}
 
-	public void sendMessageToSubscribed() {
+	public boolean sendMessageToSubscribed() {
 		boolean timeToSend = false;
 		String messages = "";
 		for (String userName : userSubscribed) {
@@ -53,6 +53,7 @@ public class SubscribedHandler {
 				}
 			}
 		}
+		return timeToSend;
 
 	}
 
