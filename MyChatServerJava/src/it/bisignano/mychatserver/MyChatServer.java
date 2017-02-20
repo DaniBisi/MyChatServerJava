@@ -71,7 +71,7 @@ public class MyChatServer extends Thread {
 	public static Map<String, String> getDictionary() {
 		return dictionary;
 	}
-
+/*
 	public static Map<String, Pair<String, Integer>> getRegister() {
 		return register;
 	}
@@ -83,7 +83,7 @@ public class MyChatServer extends Thread {
 	public static Map<String, Digest> getDigestReg() {
 		return digestReg;
 	}
-
+*/
 	public static synchronized int addTopic(String name) {
 		MyChatServer.topicList.add(name);
 		return MyChatServer.topicList.size() - 1;
@@ -152,38 +152,27 @@ public class MyChatServer extends Thread {
 		SubscribedHandler sHandler;
 		MyChatServer.messageList.add(message);
 		int idMessage = MyChatServer.messageList.size() - 1;
-		try {
 			sHandler = new SubscribedHandler(message, idMessage, MyChatServer.subRegister, MyChatServer.digestReg);
 			sHandler.sendMessageToSubscribed();
-		} catch (Exception e) {
-			LOGGER.error(e);
-		}
+		
 		return idMessage;
 	}
 
 	public static synchronized boolean addRecord(String host, int port, String user) {
 		boolean found = false;
-		try {
-			Pair<String, Integer> a = new Pair(host,port);
-			for (Map.Entry<String, Pair<String, Integer>> entry : MyChatServer.register.entrySet()) {
-				if (entry.getValue().equals(a)) {
-					found = true;
-					break;
-				}
+		Pair<String, Integer> a = new Pair(host, port);
+		for (Map.Entry<String, Pair<String, Integer>> entry : MyChatServer.register.entrySet()) {
+			if (entry.getValue().equals(a)) {
+				found = true;
+				break;
 			}
-			if (!found)
-				MyChatServer.register.put(user, a);
-
-		} catch (Exception e) {
-			LOGGER.error(e);
-			return false;
 		}
+		if (!found)
+			MyChatServer.register.put(user, a);
+
 		return !found;
 	}
-	
-//	public static Pair<String,Integer> pairConstructor(String host, Integer port){
-//		return new Pair<>(host,port);
-//	}
+
 	public static synchronized boolean unRegister(String user) {
 		if (MyChatServer.register.remove(user) == null) {
 			return false;
@@ -194,8 +183,9 @@ public class MyChatServer extends Thread {
 
 	public static boolean checkRegisterError(String userName) {
 		Object a = MyChatServer.register.get(userName);
-		if (a == null)
+		if (a == null){
 			return false;
+		}
 		return true;
 	}
 

@@ -27,11 +27,11 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.rule.PowerMockRule;
-@RunWith(PowerMockRunner.class)
+//@RunWith(PowerMockRunner.class)
 @PrepareForTest({ MyChatServer.class })
 public class MyChatServerTest {
-//	@Rule
-//	public PowerMockRule rule = new PowerMockRule();  //DEVE ESSERE ABILITATO PER LA COVERAGE
+	@Rule
+	public PowerMockRule rule = new PowerMockRule();  //DEVE ESSERE ABILITATO PER LA COVERAGE
 	@Rule
 	public TestName name = new TestName();
 	@Rule
@@ -210,8 +210,6 @@ public class MyChatServerTest {
 	@Test
 	public void testAddRecord() throws Exception {
 		String user = "dani";
-		
-		//Map<String, Pair<String, Integer>> register = new HashMap<String, Pair<String, Integer>>();
 		MyChatServer.register.put(user, p2);
 		PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
 		assertEquals(true, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
@@ -219,13 +217,52 @@ public class MyChatServerTest {
 	@Test
 	public void testAddRecordAlreadyInserted() throws Exception {
 		String user = "dani";
-		
-		//Map<String, Pair<String, Integer>> register = new HashMap<String, Pair<String, Integer>>();
 		MyChatServer.register.put(user, p1);
 		PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
 		assertEquals(false, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
 	}
+	@Test
+	public void testAddRecordRegisterEmpty() throws Exception {
+		String user = "dani";
+		PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
+		assertEquals(true, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
+	}
 
+	// ########################### inizio test addRecord ###########
+
+	
+
+	// ########################### inizio test Unregister ###########
+
+	@Test
+	public void testunRegister(){
+		String user = "dani";
+		MyChatServer.register.put(user, p1);
+		assertEquals(true, MyChatServer.unRegister(user));
+	}
+	@Test
+	public void testunRegisterNotRegistered(){
+		String user = "dani";
+		assertEquals(false, MyChatServer.unRegister(user));
+	}
+	// ########################### fine test Unregister ###########
+
+	// ########################### inizio test checkRegisterError ###########
+
+	@Test
+	public void testCheckRegisterError(){
+		String user = "dani";
+		MyChatServer.register.put(user, p1);
+		assertEquals(true, MyChatServer.checkRegisterError(user));
+	}
+	@Test
+	public void testCheckRegisterErrorNotPresent(){
+		String user = "dani";
+		assertEquals(false, MyChatServer.checkRegisterError(user));
+	}
+	// ########################### fine test checkRegisterError ###########
+	
+	
 	@After
 	public void tearDown() throws Exception {
 		msg = msg.replaceAll("\r\n", " ");
