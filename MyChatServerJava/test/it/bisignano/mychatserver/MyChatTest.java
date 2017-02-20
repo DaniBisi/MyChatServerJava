@@ -62,9 +62,9 @@ public class MyChatTest {
 	public void setUp() {
 		LOGGER.info(name.getMethodName());
 		
-			this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
-			this.myServer.start();
-			setUpIsDone = true;
+		this.myServer = new MyChatServer(this.Dictionary, this.address, this.port);
+		this.myServer.start();
+		setUpIsDone = true;
 		this.msg = "";
 		this.client1 = new ChatClient("127.0.0.1", this.port);
 		this.client1.connectServer();

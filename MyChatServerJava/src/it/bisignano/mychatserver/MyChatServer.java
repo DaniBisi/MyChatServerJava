@@ -35,11 +35,11 @@ public class MyChatServer extends Thread {
 		this.address = address;
 		this.port = port;
 		MyChatServer.dictionary = dictionary;
-		MyChatServer.topicList = new ArrayList<String>();
-		MyChatServer.messageList = new ArrayList<Message>();
-		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
-		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
-		MyChatServer.digestReg = new HashMap<String, Digest>(200);
+		MyChatServer.topicList = new ArrayList<>();
+		MyChatServer.messageList = new ArrayList<>();
+		MyChatServer.register = new HashMap<>(200);
+		MyChatServer.subRegister = new HashMap<>(200);
+		MyChatServer.digestReg = new HashMap<>(200);
 
 		try {
 			this.server = new ServerSocket(this.port, 1000, InetAddress.getByName(this.address));
@@ -148,57 +148,17 @@ public class MyChatServer extends Thread {
 		sHandler.sendMessageToSubscribed();
 		}
 		catch(Exception e){
-			System.out.println(e);
+			LOGGER.error(e);
 		}
 		return idMessage;
 	}
-
-//	private static TreeSet<String> findUserSubscribed(Message message) {
-//		TreeSet<String> userSubscribed = new TreeSet<>();
-//		for (int a : message.getTopicList()) {
-//			userSubscribed.addAll(MyChatServer.subRegister.get(a));
-//		}
-//		return userSubscribed;
-//		
-//	}
-//
-//	public static void sendMessageToSubscribed(Message message, SortedSet<String> userSubscribed, int idMessage) {
-//		boolean timeToSend = false;
-//		String messages = "";		
-//		for (String userName : userSubscribed) {
-//			Pair<String, Integer> entry = MyChatServer.register.get(userName);
-//			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
-//			if (MyChatServer.digestReg.containsKey(userName)) {
-//				Digest userDigest = MyChatServer.digestReg.get(userName);
-//				userDigest.addMessage(idMessage);
-//				if (userDigest.timeToSend()) {
-//					timeToSend = true;
-//					messages = getDigestMessages(userDigest);
-//				}
-//			} else {
-//				timeToSend = true;
-//				messages = "MESSAGE " + idMessage + "\r\n" + "TOPICS " + message.listToString() + "\r\n"
-//						+ message.getText() + "\r\n.\r\n\r\n";
-//			}
-//			if (timeToSend) {
-//				try {
-//					sender.connectServer();
-//					sender.sendMsg(messages);
-//					sender.closeSocket();
-//				} catch (Exception e) {
-//					LOGGER.error(e);
-//				}
-//			}
-//		}
-//
-//	}
 
 	
 
 	public static synchronized boolean addRecord(String host, int port, String user) {
 		boolean found = false;
 		try {
-			Pair<String, Integer> a = new Pair<String, Integer>(host, port);
+			Pair<String, Integer> a = new Pair<>(host, port);
 			for (Map.Entry<String, Pair<String, Integer>> entry : MyChatServer.register.entrySet()) {
 				if (entry.getValue().equals(a)) {
 					found = true;
@@ -235,7 +195,7 @@ public class MyChatServer extends Thread {
 			int idTopic = Integer.parseInt(topicSubscribed);
 			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
 			if (entry == null) {
-				entry = new TreeSet<String>();
+				entry = new TreeSet<>();
 				MyChatServer.subRegister.put(idTopic, entry);
 			}
 			entry.add(userName);
