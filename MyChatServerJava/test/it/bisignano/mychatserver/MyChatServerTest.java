@@ -1,16 +1,13 @@
 package it.bisignano.mychatserver;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.easymock.PowerMock.expectNew;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
-
+import static org.mockito.Mockito.*;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -25,16 +22,16 @@ import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.powermock.api.easymock.PowerMock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.rule.PowerMockRule;
-//@RunWith(PowerMockRunner.class)
+@RunWith(PowerMockRunner.class)
 @PrepareForTest({ MyChatServer.class })
 public class MyChatServerTest {
-	@Rule
-	public PowerMockRule rule = new PowerMockRule();
+//	@Rule
+//	public PowerMockRule rule = new PowerMockRule();  //DEVE ESSERE ABILITATO PER LA COVERAGE
 	@Rule
 	public TestName name = new TestName();
 	@Rule
@@ -46,10 +43,9 @@ public class MyChatServerTest {
 	private String msg;
 	private StringBuilder answare;
 	private Logger LOGGER = LogManager.getLogger(MyChatTest.class);
-	@Mock
-	private Pair p1;
-	@Mock
-	private SubscribedHandler sh;
+	@Mock private Pair p1;
+	@Mock private Pair p2;
+	@Mock private SubscribedHandler sh;
 	@Mock Message m1;
 	@Mock Message m2;
 	@InjectMocks
@@ -81,6 +77,11 @@ public class MyChatServerTest {
 		this.myServer.start();
 		setUpIsDone = true;
 		this.msg = "";
+		m1 = mock(Message.class);
+		m2 = mock(Message.class);
+		sh = mock(SubscribedHandler.class);
+		p1 = mock(Pair.class);
+		p2 = mock(Pair.class);
 		PowerMockito.whenNew(SubscribedHandler.class).withArguments(m1,0,MyChatServer.subRegister,MyChatServer.digestReg).thenReturn(sh);
 		PowerMockito.whenNew(SubscribedHandler.class).withArguments(m2,1,MyChatServer.subRegister,MyChatServer.digestReg).thenReturn(sh);
 		
@@ -205,10 +206,21 @@ public class MyChatServerTest {
 	// ########################### fine test checkmessagelist ###############à
 
 	// ########################### inizio test addRecord ###########
+
 	@Test
 	public void testAddRecord() throws Exception {
 		String user = "dani";
-		Map<String, Pair<String, Integer>> register = new HashMap<String, Pair<String, Integer>>();
+		
+		//Map<String, Pair<String, Integer>> register = new HashMap<String, Pair<String, Integer>>();
+		MyChatServer.register.put(user, p2);
+		PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
+		assertEquals(true, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
+	}
+	@Test
+	public void testAddRecordAlreadyInserted() throws Exception {
+		String user = "dani";
+		
+		//Map<String, Pair<String, Integer>> register = new HashMap<String, Pair<String, Integer>>();
 		MyChatServer.register.put(user, p1);
 		PowerMockito.whenNew(Pair.class).withArguments("127.0.0.1",52).thenReturn(p1);
 		assertEquals(false, MyChatServer.addRecord("127.0.0.1", 52, "dani"));
