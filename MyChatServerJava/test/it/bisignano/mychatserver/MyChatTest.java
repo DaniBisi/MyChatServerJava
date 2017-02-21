@@ -400,7 +400,7 @@ public class MyChatTest {
 		TreeSet<String> entry = new TreeSet<String>();
 		MyChatServer.subRegister.put(0, entry);
 		entry.add("ciao");
-		boolean c = MyChatServer.checkTopicSubscription("lollo", 0);
+		boolean c = MyChatServer.checkTopicSubscription(0, "lollo");
 		assertEquals(false, c);
 	}
 

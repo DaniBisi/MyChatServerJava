@@ -9,7 +9,7 @@ public class HttpTopics implements IHttpProtocol {
 
 		int i = 0;
 		for (String topicName : MyChatServer.topicList) {
-			if(MyChatServer.checkTopicSubscription(clientHandler.getUserName(), i)){
+			if(MyChatServer.checkTopicSubscription(i, clientHandler.getUserName())){
 				sb.append("*");
 			}
 			sb.append(i);

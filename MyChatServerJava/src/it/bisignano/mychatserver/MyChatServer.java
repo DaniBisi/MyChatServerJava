@@ -44,12 +44,8 @@ public class MyChatServer extends Thread {
 		try {
 			this.server = new ServerSocket(this.port, 1000, InetAddress.getByName(this.address));
 		} catch (IOException e) {
-			LOGGER.error(e);
+			LOGGER.error("test");
 		}
-	}
-
-	public ServerSocket getServer() {
-		return server;
 	}
 
 	public String getAddress() {
@@ -71,25 +67,13 @@ public class MyChatServer extends Thread {
 	public static Map<String, String> getDictionary() {
 		return dictionary;
 	}
-/*
-	public static Map<String, Pair<String, Integer>> getRegister() {
-		return register;
-	}
 
-	public static Map<Integer, TreeSet<String>> getSubRegister() {
-		return subRegister;
-	}
-
-	public static Map<String, Digest> getDigestReg() {
-		return digestReg;
-	}
-*/
 	public static synchronized int addTopic(String name) {
 		MyChatServer.topicList.add(name);
 		return MyChatServer.topicList.size() - 1;
 	}
 
-	public static String getUserPass(String username) {
+	protected static String getUserPass(String username) {
 		return dictionary.get(username);
 	}
 
@@ -152,9 +136,9 @@ public class MyChatServer extends Thread {
 		SubscribedHandler sHandler;
 		MyChatServer.messageList.add(message);
 		int idMessage = MyChatServer.messageList.size() - 1;
-			sHandler = new SubscribedHandler(message, idMessage, MyChatServer.subRegister, MyChatServer.digestReg);
-			sHandler.sendMessageToSubscribed();
-		
+		sHandler = new SubscribedHandler(message, idMessage, MyChatServer.subRegister, MyChatServer.digestReg);
+		sHandler.sendMessageToSubscribed();
+
 		return idMessage;
 	}
 
@@ -183,18 +167,18 @@ public class MyChatServer extends Thread {
 
 	public static boolean checkRegisterError(String userName) {
 		Object a = MyChatServer.register.get(userName);
-		if (a == null){
+		if (a == null) {
 			return false;
 		}
 		return true;
 	}
 
-	public static boolean addSubscription(String[] params, String userName) {
-		for (String topicSubscribed : params) {
+	public static boolean addSubscription(String[] topicList, String userName) {
+		for (String topicSubscribed : topicList) {
 			int idTopic = Integer.parseInt(topicSubscribed);
 			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
 			if (entry == null) {
-				entry = new TreeSet();
+				entry = new TreeSet<String>();
 				MyChatServer.subRegister.put(idTopic, entry);
 			}
 			entry.add(userName);
@@ -202,8 +186,8 @@ public class MyChatServer extends Thread {
 		return true;
 	}
 
-	public static boolean rmSubScription(String[] params, String userName) {
-		for (String topicSubscribed : params) {
+	public static boolean rmSubScription(String[] topicList, String userName) {
+		for (String topicSubscribed : topicList) {
 			int idTopic = Integer.parseInt(topicSubscribed);
 			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
 			entry.remove(userName);
@@ -211,7 +195,7 @@ public class MyChatServer extends Thread {
 		return true;
 	}
 
-	public static boolean checkTopicSubscription(String userName, int idTopic) {
+	public static boolean checkTopicSubscription(int idTopic, String userName) {
 		try {
 			TreeSet<String> entry = MyChatServer.subRegister.get(idTopic);
 			if (entry.contains(userName))
@@ -223,22 +207,22 @@ public class MyChatServer extends Thread {
 		return false;
 	}
 
-	public void closeSocket() {
+	public boolean closeSocket() {
+		boolean shutdown = true;
 		try {
 			this.server.close();
 		} catch (IOException e) {
 			LOGGER.error(e);
+			shutdown = false;
 		}
+		return shutdown;
 	}
 
 	public static boolean unSubscribe(String userName) {
 		for (int i = 0; i < MyChatServer.topicList.size(); i++) {
-			try {
-				TreeSet<String> entry = MyChatServer.subRegister.get(i);
-				entry.remove(userName);
-			} catch (Exception e) {
-				LOGGER.error(e);
-			}
+			TreeSet<String> entry = MyChatServer.subRegister.get(i);
+			entry.remove(userName);
+
 		}
 		return true;
 	}

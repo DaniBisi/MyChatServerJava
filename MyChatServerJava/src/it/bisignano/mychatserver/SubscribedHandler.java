@@ -11,7 +11,7 @@ public class SubscribedHandler {
 	private int idMessage;
 	private Message message;
 	private Map<String, Digest> digestReg;
-	private static final Logger LOGGER = LogManager.getLogger(SubscribedHandler.class);
+	private final Logger LOGGER = LogManager.getLogger(SubscribedHandler.class);
 
 	public SubscribedHandler(Message message, int idMessage, Map<Integer, TreeSet<String>> subRegister,Map<String, Digest> digestReg) {
 		this.idMessage = idMessage;
