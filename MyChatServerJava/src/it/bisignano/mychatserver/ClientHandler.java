@@ -12,15 +12,20 @@ import org.apache.log4j.Logger;
 
 public class ClientHandler extends Thread implements Visitable {
 
-	private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
+	private final Logger LOGGER;
 	private Socket client;
 	private InputStream in;
 	private OutputStream out;
 	private int loginStatus;
 	private String userName;
+	private String response;
+	private int lastMethodInvocationLog;
 
 
 	public ClientHandler(Socket client) {
+		this.LOGGER = LogManager.getLogger(ClientHandler.class);
+		lastMethodInvocationLog = 0;
+		BasicConfigurator.resetConfiguration();
 		BasicConfigurator.configure();
 		this.client = client;
 		this.loginStatus = 0;
@@ -28,14 +33,13 @@ public class ClientHandler extends Thread implements Visitable {
 			this.in = this.client.getInputStream();
 			this.out = this.client.getOutputStream();
 		} catch (IOException e) {
+			lastMethodInvocationLog = 1;
 			LOGGER.error(e);
 			LOGGER.info("STREAM FAILURE... " + e.toString());
 		}
 	}
 	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
-		BasicConfigurator.resetConfiguration();
-		BasicConfigurator.configure();
 	}
 
 	public int getLoginStatus() {
@@ -56,33 +60,38 @@ public class ClientHandler extends Thread implements Visitable {
 				char ch = (char) prov2;
 				sb.append(String.valueOf(ch));
 				String prov = "";
-				if (sb.length() > 1){
-					prov = sb.substring(sb.length() - 2, sb.length());
+				int lenght = sb.length();
+				if (lenght > 1){
+					prov = sb.substring(lenght - 2, lenght);
 				}
 				if (prov.compareTo("\r\n") == 0) {
-					String response = execute(sb.toString());
+					this.response = execute(sb.toString());
 					this.out.write(response.getBytes("latin1"));
 					sb.setLength(0); // svuoto lo String builder
 				}
 			}
 		}catch (Exception e) {
+			this.response = "Error Reading..";
 			LOGGER.error(e);
 			LOGGER.info("SOMETHING UNEXPECTED... " + e.toString());
 		}
 	}
 
+	public String getResponse(){
+		return this.response;
+	}
 	private String execute(String msg) {
-		String response = "";
+		this.response = "";
 		String command = msg.replace("\r\n", "");
 		try {
 			IHttpProtocol commandR;
 			commandR = FactoryHttpCommand.getHtmlProtocol(command, this.loginStatus);
-			response = response + commandR.execute(this);
+			this.response = this.response + commandR.execute(this);
 		} catch (Exception e) {
 			LOGGER.error(e + " " + msg);
-			response = response + "KO\r\n";
+			this.response = this.response + "KO\r\n";
 		}
-		return response;
+		return this.response;
 	}
 
 	
@@ -115,10 +124,7 @@ public class ClientHandler extends Thread implements Visitable {
 					break;
 				}
 			}
-		} catch (UnsupportedEncodingException e) {
-			LOGGER.error(e);
-			LOGGER.info("UNSUPPORTED ENCODING... " + e.toString());
-		} catch (IOException e) {
+		}catch (IOException e) {
 
 			LOGGER.error(e);
 			LOGGER.info("INPUT EXCEPTION... " + e.toString());
@@ -144,6 +150,9 @@ public class ClientHandler extends Thread implements Visitable {
 	public void acceptVisit(HttpSubscribe sub) {
 		this.setLoginStatus(sub.getLoginResult());
 		
+	}
+	public int getLastMethodInvocationLog() {
+		return lastMethodInvocationLog;
 	}
 
 }

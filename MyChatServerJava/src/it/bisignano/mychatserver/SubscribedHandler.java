@@ -20,7 +20,11 @@ public class SubscribedHandler {
 		this.userSubscribed = new TreeSet();
 		if (subRegister != null) {
 			for (int a : this.message.getTopicList()) {
+				try{
 				this.userSubscribed.addAll(subRegister.get(a));
+				}catch (Exception e) {
+					LOGGER.error(e);
+				}
 			}
 		}
 	}

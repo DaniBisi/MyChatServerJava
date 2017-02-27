@@ -30,7 +30,7 @@ public class MyChatTest {
 	@Rule
 	public TestName name = new TestName();
 	@Rule
-	public Timeout globalTimeout = Timeout.seconds(3);
+	public Timeout globalTimeout = Timeout.seconds(150);
 	private static boolean setUpIsDone = false;
 	private MyChatServer myServer;
 	private ChatClient client1;
