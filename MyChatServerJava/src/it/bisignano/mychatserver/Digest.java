@@ -1,6 +1,7 @@
 package it.bisignano.mychatserver;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Digest {
 
@@ -29,7 +30,7 @@ public class Digest {
 		return messageQueque.size() >= k;
 	}
 
-	public ArrayList<Integer> getList() {
+	public List<Integer> getList() {
 		return messageQueque;
 	}
 

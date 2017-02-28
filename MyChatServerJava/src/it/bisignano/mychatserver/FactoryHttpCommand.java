@@ -10,7 +10,7 @@ public abstract class FactoryHttpCommand {
 	private FactoryHttpCommand(){
 		throw new IllegalAccessError();
 	}
-	public static IHttpProtocol getHtmlProtocol(String param, int loginStatus){
+	public IHttpProtocol getHtmlProtocol(String param, int loginStatus){
 
 		BasicConfigurator.configure();
 		String paramT = param.trim();

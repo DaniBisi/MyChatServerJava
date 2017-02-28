@@ -4,6 +4,7 @@ public class HttpUser implements IHttpProtocol{
 
 	private String[] params;
 	private String userName;
+	
 	public HttpUser(String[] params) {
 		this.params = params;
 		this.userName = params[0];

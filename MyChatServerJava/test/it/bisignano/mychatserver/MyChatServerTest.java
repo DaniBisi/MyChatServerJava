@@ -40,11 +40,9 @@ public class MyChatServerTest {
 	@Rule
 	public PowerMockRule rule = new PowerMockRule(); // DEVE ESSERE ABILITATO
 														// PER LA COVERAGE
-	@Rule
-	public TestName name = new TestName();
+	
 	@Rule
 	public Timeout globalTimeout = Timeout.seconds(150);
-	private static boolean setUpIsDone = false;
 	private String address;
 	private int port;
 	private Map<String, String> dictionary;
@@ -90,7 +88,6 @@ public class MyChatServerTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		setUpIsDone = true;
 		this.msg = "";
 		m1 = mock(Message.class);
 		m2 = mock(Message.class);

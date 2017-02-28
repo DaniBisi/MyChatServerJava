@@ -34,6 +34,7 @@ public class ClientHandlerTest {
 	 public PowerMockRule rule = new PowerMockRule(); // DEVE ESSERE ABILITATO
 	 												  // PER LA COVERAGE
 	private Socket client;
+	private MyChatData myData;
 	private ClientHandler c1;
 	private InputStream in;
 	private OutputStream out;
@@ -49,11 +50,12 @@ public class ClientHandlerTest {
 	@Before
 	public void setUp() throws Exception {
 		client = mock(Socket.class);
+		myData = mock(MyChatData.class);
 		in = mock(InputStream.class);
 		out = mock(OutputStream.class);
 		when(client.getInputStream()).thenReturn(in);
 		when(client.getOutputStream()).thenReturn(out);
-		c1 = new ClientHandler(client);
+		c1 = new ClientHandler(client,myData);
 	}
 
 	@Test
@@ -65,7 +67,7 @@ public class ClientHandlerTest {
 	public void testConstructorInputStreamFail() throws IOException {
 		//client = PowerMockito.mock(Socket.class);
 		when(client.getInputStream()).thenThrow(new IOException());
-		ClientHandler c2 = new ClientHandler(client);
+		ClientHandler c2 = new ClientHandler(client,myData);
 		assertEquals(1, c2.getLastMethodInvocationLog());
 	}
 
@@ -119,7 +121,7 @@ public class ClientHandlerTest {
 		// //when(sb.append(any(String.class)).
 		// when(sb.length()).thenReturn(1,2);
 		// when(sb.substring(any(int.class),any(int.class))).thenReturn("'\r'","'\r''\n'");
-		ClientHandler spy = PowerMockito.spy(new ClientHandler(client));
+		ClientHandler spy = PowerMockito.spy(new ClientHandler(client,myData));
 		PowerMockito.doReturn("trol\r\n").when(spy, method(ClientHandler.class, "execute", String.class)).withArguments(anyString());
 		spy.run();
 		assertEquals("trol\r\n", spy.getResponse());
@@ -171,7 +173,6 @@ public class ClientHandlerTest {
 		String messageRead = c1.acceptVisit(sub);
 		assertEquals("ciao", messageRead);
 	}
-	
 	
 	@After
 	public void tearDown() throws Exception {

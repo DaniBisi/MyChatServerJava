@@ -141,7 +141,7 @@ public class MyChatTest {
 	}
 
 	@Test
-	public void testUserWrongArgomentNumberPassword() {
+	public void testUserWrongArgumentNumberPassword() {
 		msg = "USER dani\r\nPASS 2 3\r\n";
 		getAnswareFromServer(msg);
 		assertEquals("OK\r\nKO\r\n", answare.toString());

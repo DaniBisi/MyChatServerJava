@@ -3,7 +3,6 @@ package it.bisignano.mychatserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 import org.apache.log4j.BasicConfigurator;
@@ -12,7 +11,7 @@ import org.apache.log4j.Logger;
 
 public class ClientHandler extends Thread implements Visitable {
 
-	private final Logger LOGGER;
+	private final Logger logger;
 	private Socket client;
 	private InputStream in;
 	private OutputStream out;
@@ -20,10 +19,12 @@ public class ClientHandler extends Thread implements Visitable {
 	private String userName;
 	private String response;
 	private int lastMethodInvocationLog;
+	private MyChatData myDataStructure;
 
 
-	public ClientHandler(Socket client) {
-		this.LOGGER = LogManager.getLogger(ClientHandler.class);
+	public ClientHandler(Socket client,MyChatData myDataStructure) {
+		this.logger = LogManager.getLogger(ClientHandler.class);
+		this.myDataStructure = myDataStructure;
 		lastMethodInvocationLog = 0;
 		BasicConfigurator.resetConfiguration();
 		BasicConfigurator.configure();
@@ -34,8 +35,8 @@ public class ClientHandler extends Thread implements Visitable {
 			this.out = this.client.getOutputStream();
 		} catch (IOException e) {
 			lastMethodInvocationLog = 1;
-			LOGGER.error(e);
-			LOGGER.info("STREAM FAILURE... " + e.toString());
+			logger.error(e);
+			logger.info("STREAM FAILURE... " + e.toString());
 		}
 	}
 	private void setLoginStatus(int loginStatus) {
@@ -72,8 +73,8 @@ public class ClientHandler extends Thread implements Visitable {
 			}
 		}catch (Exception e) {
 			this.response = "Error Reading..";
-			LOGGER.error(e);
-			LOGGER.info("SOMETHING UNEXPECTED... " + e.toString());
+			logger.error(e);
+			logger.info("SOMETHING UNEXPECTED... " + e.toString());
 		}
 	}
 
@@ -88,7 +89,7 @@ public class ClientHandler extends Thread implements Visitable {
 			commandR = FactoryHttpCommand.getHtmlProtocol(command, this.loginStatus);
 			this.response = this.response + commandR.execute(this);
 		} catch (Exception e) {
-			LOGGER.error(e + " " + msg);
+			logger.error(e + " " + msg);
 			this.response = this.response + "KO\r\n";
 		}
 		return this.response;
@@ -126,8 +127,8 @@ public class ClientHandler extends Thread implements Visitable {
 			}
 		}catch (IOException e) {
 
-			LOGGER.error(e);
-			LOGGER.info("INPUT EXCEPTION... " + e.toString());
+			logger.error(e);
+			logger.info("INPUT EXCEPTION... " + e.toString());
 		}
 		return sb.toString();
 	}

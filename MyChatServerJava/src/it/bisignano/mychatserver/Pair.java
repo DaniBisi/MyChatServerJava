@@ -1,5 +1,6 @@
 package it.bisignano.mychatserver;
 
+
 public class Pair<L,R> {
 
 	  private final L left;
@@ -21,6 +22,10 @@ public class Pair<L,R> {
 	    Pair pairo = (Pair) o;
 	    return this.left.equals(pairo.getLeft()) && this.right.equals(pairo.getRight());
 	  }
+	  @Override
+	  public int hashCode() {
+	    /* ... */
+		 return 0;
+	  }
 	  
-
-	}
+}

@@ -11,9 +11,15 @@ public class SubscribedHandler {
 	private int idMessage;
 	private Message message;
 	private Map<String, Digest> digestReg;
-	private final Logger LOGGER = LogManager.getLogger(SubscribedHandler.class);
-
-	public SubscribedHandler(Message message, int idMessage, Map<Integer, TreeSet<String>> subRegister,Map<String, Digest> digestReg) {
+	private final Logger logger = LogManager.getLogger(SubscribedHandler.class);
+	private boolean init;
+	public SubscribedHandler(){
+		this.init = false;
+	}
+	
+	public boolean initHandler(Message message, int idMessage, Map<Integer, TreeSet<String>> subRegister,Map<String, Digest> digestReg) {
+		this.init = true;
+		boolean error = false;
 		this.idMessage = idMessage;
 		this.message = message;
 		this.digestReg =digestReg;
@@ -23,10 +29,12 @@ public class SubscribedHandler {
 				try{
 				this.userSubscribed.addAll(subRegister.get(a));
 				}catch (Exception e) {
-					LOGGER.error(e);
+					logger.error(e);
+					error = true;
 				}
 			}
 		}
+		return error;
 	}
 
 	public boolean sendMessageToSubscribed() {
@@ -53,7 +61,7 @@ public class SubscribedHandler {
 					sender.sendMsg(messages);
 					sender.closeSocket();
 				} catch (Exception e) {
-					LOGGER.error(e);
+					logger.error(e);
 				}
 			}
 		}
