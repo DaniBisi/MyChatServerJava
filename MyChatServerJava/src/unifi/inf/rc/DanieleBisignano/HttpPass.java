@@ -7,7 +7,6 @@ public class HttpPass implements HttpProtocol,statusChanger{
 
 	public HttpPass(String[] params) {
 		this.params = params;
-		// TODO Auto-generated constructor stub
 	}
 
 

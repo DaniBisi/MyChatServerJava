@@ -9,11 +9,9 @@ public class HttpUser implements HttpProtocol{
 	public HttpUser(String[] params) {
 		this.params = params;
 		this.userName = String.join(" ", params);
-		// TODO Auto-generated constructor stub
 	}
 
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		String response = "OK\r\n";
 		
 		//if(this.params.length == 1){

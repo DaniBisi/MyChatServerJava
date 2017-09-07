@@ -504,7 +504,7 @@ public class MyChatTest {
 	//#################################### TEST STATIC FUNCTION ###########################
 	@Test
 	public void testunRegister(){
-		MyChatServer.Register=null;
+		MyChatServer.register=null;
 		boolean c = MyChatServer.unRegister("lollo");
 		assertEquals(false, c);
 	}
@@ -592,7 +592,7 @@ public class MyChatTest {
 		MyChatServer.Dictionary = Dictionary;
 		MyChatServer.TopicList = new ArrayList<String>();
 		MyChatServer.MessageList = new ArrayList<Message>();
-		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
+		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		// this.myServer.stop();
 		

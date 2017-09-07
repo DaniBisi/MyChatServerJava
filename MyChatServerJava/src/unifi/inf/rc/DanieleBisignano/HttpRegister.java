@@ -23,7 +23,6 @@ public class HttpRegister implements HttpProtocol,statusChanger {
 	}
 	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		String response = "";
 		if(params == null || params.length != 2 || !validateIPAddress(params[0]) || Integer.parseInt(params[1])<0 || Integer.parseInt(params[1])>65535){
 			throw new IllegalArgumentException();

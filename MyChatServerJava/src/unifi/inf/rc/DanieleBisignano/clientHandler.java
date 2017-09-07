@@ -8,8 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.IllegalFormatException;
+import java.util.Observer;
 
-public class clientHandler extends Thread implements visitable {
+public class clientHandler extends Thread implements visitable, observer {
 
 	private Socket client;
 	private InputStream in;
@@ -18,6 +19,7 @@ public class clientHandler extends Thread implements visitable {
 	private String userName;
 	private int digest;
 	private ArrayList<String> messageQueue;//#probabilmente anche questo andrà nel server.
+	private Room r1;
 
 	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
@@ -35,10 +37,8 @@ public class clientHandler extends Thread implements visitable {
 			this.in = this.client.getInputStream();
 			this.out = this.client.getOutputStream();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// TODO Auto-generated constructor stub
 	}
 
 	public boolean isConnected() {
@@ -47,7 +47,6 @@ public class clientHandler extends Thread implements visitable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		// System.out.println("im waiting for data...");
 		String msg = "";
 		// byte streamIn[] = new byte[2048];
@@ -62,8 +61,6 @@ public class clientHandler extends Thread implements visitable {
 				}
 				if (prov.compareTo("\r\n") == 0) {
 					String Response = "";
-//					String commandS[] = msg.split("\r\n");
-//					String command = msg.split("\r\n")[0];
 					String command = msg.replace("\r\n", "");
 					try {
 						HttpProtocol commandR;
@@ -77,12 +74,17 @@ public class clientHandler extends Thread implements visitable {
 				}
 			}
 		}catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public String acceptVisit(statusChanger cmd){
+		this.setLoginStatus(cmd.getLoginResult());
+		return "";
+		
+	}
+	public String acceptVisit(HttpAvailable cmd){
+		this.setRoom(cmd.getRoom());
 		this.setLoginStatus(cmd.getLoginResult());
 		return "";
 		
@@ -105,6 +107,11 @@ public class clientHandler extends Thread implements visitable {
 //	}
 	
 	
+	private void setRoom(Room room) {
+		this.r1 = room;
+		
+	}
+
 	public String acceptVisit(HttpUser cmd) {
 		this.setLoginStatus(1);
 		this.setUser(cmd.getUserName());
@@ -112,7 +119,6 @@ public class clientHandler extends Thread implements visitable {
 	}
 
 	public String acceptVisit(HttpMessage msg) {
-		// TODO Auto-generated method stub
 		String msgProv = "";
 		try {
 			int prov2;
@@ -128,17 +134,14 @@ public class clientHandler extends Thread implements visitable {
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return msgProv;
 	}
 
 	public String acceptVisit(factoryHttpCommand fact) {
-		// TODO Auto-generated method stub
 		String msgProv = "";
 		try {
 			int prov2;
@@ -154,24 +157,26 @@ public class clientHandler extends Thread implements visitable {
 				}
 			}
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return msgProv;
 	}
 
 	public void setUser(String userName) {
-		// TODO Auto-generated method stub
 		this.userName = userName;
 
 	}
 
 	public String getUserName() {
-		// TODO Auto-generated method stub
 		return this.userName;
+	}
+
+	@Override
+	public void getUpdate() {
+		this.loginStatus = 13;
+		
 	}
 
 

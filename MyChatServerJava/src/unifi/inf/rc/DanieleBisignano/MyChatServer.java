@@ -30,14 +30,16 @@ import java.util.TreeSet;
 public class MyChatServer implements Runnable {
 	private ServerSocket server;
 	private String address;
-	private int port; 
+	private int port;
 	private int backlog;
-	public protected ArrayList<String> TopicList;
-	public protected ArrayList<Message> MessageList;
-	public protected Map<String, String> Dictionary;
-	public protected Map<String, Pair<String, Integer>> Register;
-	public protected Map<Integer, TreeSet<String>> subRegister;
-	public protected Map<String, Digest> digestReg;
+	protected ArrayList<String> TopicList;
+	protected ArrayList<Message> MessageList;
+	protected Map<String, String> Dictionary;
+	protected static Map<String, Pair<String, Integer>> register;
+	private static Room room = null;
+	protected Map<Integer, TreeSet<String>> subRegister;
+	protected Map<String, Digest> digestReg;
+	protected Map<String, Pair<String, Integer>> availableList;
 
 	public MyChatServer(Map<String, String> Dictionary, String address, int port) {
 		this.address = address;
@@ -45,18 +47,13 @@ public class MyChatServer implements Runnable {
 		this.Dictionary = Dictionary;
 		this.TopicList = new ArrayList<String>();
 		this.MessageList = new ArrayList<Message>();
-		this.Register = new HashMap<String, Pair<String, Integer>>(200);
+		this.register = new HashMap<String, Pair<String, Integer>>(200);
 		this.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		this.digestReg = new HashMap<String, Digest>(200);
 
 		try {
-			// this.server= new ServerSocket();
-			// this.server.setReuseAddress(true);
-			// this.server.bind(new InetSocketAddress(address, port));
 			this.server = new ServerSocket(port, 1000, InetAddress.getByName(address));
-			// this.server.setReuseAddress(true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -97,17 +94,16 @@ public class MyChatServer implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		while (true) {
 			try {
 				Socket client = server.accept();
 				// System.out.println("Accepted from " +
 				// client.getInetAddress());
-				//System.out.print(client.getInetAddress() + " " + client.getLocalPort());
+				// System.out.print(client.getInetAddress() + " " +
+				// client.getLocalPort());
 				new clientHandler(client).start();
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				break;
 			}
@@ -116,7 +112,6 @@ public class MyChatServer implements Runnable {
 	}
 
 	public synchronized int addMessage(Message message) {
-		// TODO Auto-generated method stub
 		this.MessageList.add(message);
 		int idMessage = this.MessageList.size() - 1;
 		TreeSet<String> userSubscribed = new TreeSet<String>();
@@ -138,14 +133,14 @@ public class MyChatServer implements Runnable {
 		boolean timeToSend = false;
 		String messages = "";
 		for (String userName : userSubscribed) {
-			Pair<String, Integer> entry = this.Register.get(userName);
+			Pair<String, Integer> entry = this.register.get(userName);
 			System.out.println("provo a connettere a: " + entry.getLeft() + entry.getRight());
 			ChatClient sender = new ChatClient(entry.getLeft(), entry.getRight());
 			if (this.digestReg.containsKey(userName)) {
 				Digest userDigest = this.digestReg.get(userName);
 				userDigest.addMessage(idMessage);
 				if (userDigest.timeToSend()) {
-					
+
 					timeToSend = true;
 					for (int idMessageP : userDigest.getList()) {
 						Message msgP = this.MessageList.get(idMessageP);
@@ -173,27 +168,28 @@ public class MyChatServer implements Runnable {
 
 	}
 
-	public synchronized boolean addRecord(String host, int port, String user) {
+	public synchronized static boolean addRecord(String host, int port, String user) {
 		boolean found = false;
 		try {
 			Pair<String, Integer> a = new Pair<String, Integer>(host, port);
-			for (Map.Entry<String, Pair<String, Integer>> entry : this.Register.entrySet()) {
+			for (Map.Entry<String, Pair<String, Integer>> entry : register.entrySet()) {
 				if (entry.getValue().equals(a)) {
 					found = true;
 					break;
 				}
 			}
-			if (!found){
-				this.Register.remove(user);
-				this.Register.put(user, a);
-			}
-			else{ // controllo se � il suo.
-				Pair<String, Integer> b = this.Register.get(user);
-				if(b.equals(a)){// l'ho trovato ed era il suo. quindi aggiorno
+			if (!found) {
+				register.remove(user);
+				register.put(user, a);
+			} else { // controllo se � il suo.
+				Pair<String, Integer> b = register.get(user);
+				if (b.equals(a)) {// l'ho trovato ed era il suo. quindi aggiorno
 					found = false;
 				}
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			return false;
 		}
 		return !found;
@@ -201,7 +197,7 @@ public class MyChatServer implements Runnable {
 
 	public synchronized boolean unRegister(String user) {
 		try {
-			if (this.Register.remove(user) == null)
+			if (this.register.remove(user) == null)
 				return false;
 			return true;
 		} catch (Exception e) {
@@ -210,15 +206,13 @@ public class MyChatServer implements Runnable {
 	}
 
 	public boolean checkRegisterError(String userName) {
-		// TODO Auto-generated method stub
-		Object a = this.Register.get(userName);
+		Object a = this.register.get(userName);
 		if (a == null)
 			return false;
 		return true;
 	}
 
 	public boolean addSubscription(String[] params, String userName) {
-		// TODO Auto-generated method stub
 		for (String topicSubscribed : params) {
 			int idTopic = Integer.parseInt(topicSubscribed);
 			TreeSet<String> entry = this.subRegister.get(idTopic);
@@ -253,11 +247,9 @@ public class MyChatServer implements Runnable {
 	}
 
 	public void closeSocket() {
-		// TODO Auto-generated method stub
 		try {
 			this.server.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -268,15 +260,12 @@ public class MyChatServer implements Runnable {
 				TreeSet<String> entry = this.subRegister.get(i);
 				entry.remove(userName);
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
 		}
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	public void setDigest(String userName, int k) {
-		// TODO Auto-generated method stub
 		// digestReg.replace(key, value)
 		if (!this.digestReg.containsKey(userName)) {
 			this.digestReg.put(userName, new Digest(k));
@@ -285,6 +274,13 @@ public class MyChatServer implements Runnable {
 			entry.setK(k); // si pu� fare perch� � un campo statico
 		}
 		// for (Map.Entry<String, String> entry : map.entrySet())
+	}
+
+	public synchronized static Room addPlayer(clientHandler clientHandler) {
+		if(MyChatServer.room == null){
+			MyChatServer.room = new Room(clientHandler.getUserName());
+		}
+		return MyChatServer.room;
 	}
 
 }

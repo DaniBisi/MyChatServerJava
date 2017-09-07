@@ -82,7 +82,7 @@ public class MyChatTestFromPython {
 		MyChatServer.Dictionary = Dictionary;
 		MyChatServer.TopicList = new ArrayList<String>();
 		MyChatServer.MessageList = new ArrayList<Message>();
-		MyChatServer.Register = new HashMap<String, Pair<String, Integer>>(200);
+		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		// this.myServer.stop();
 
@@ -537,7 +537,7 @@ public class MyChatTestFromPython {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+21);
 
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+21));
 		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 89\r\n";
 		this.client1.sendMsg(msg);
@@ -566,7 +566,7 @@ public class MyChatTestFromPython {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+22);
 
-		MyChatServer.Register.put("Dani", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("Dani", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+22));
 		msg = "USER Dani\r\nPASS ciao\r\nREGISTER 127.0.0.1 130\r\n"; /////////controlla che crei un altra pair
 		this.client1.sendMsg(msg);
@@ -625,7 +625,7 @@ public class MyChatTestFromPython {
 		// this.MyServer = MyChatServer(this.Dizionario,this.address ,
 		// this.port+24);
 
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		// this.client1.connect((this.address , this.port+24));
 		msg = "USER Dani\r\nPASS ciao\r\nUNREGISTER\r\n";
 		this.client1.sendMsg(msg);
@@ -789,7 +789,7 @@ public class MyChatTestFromPython {
 		// this.port+40);
 
 		// this.client1.connect((this.address , this.port+40));
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		msg = "USER Dani" + '\r' + '\n' + "PASS ciao" + '\r' + '\n' + "NEW CIAO" + '\r' + '\n' + "NEW ciao11" + '\r'
 				+ '\n' + "REGISTER 127.0.0.1 89\r\n" + "SUBSCRIBE 0 1 0\r\n";
 		this.client1.sendMsg(msg);
@@ -866,7 +866,7 @@ public class MyChatTestFromPython {
 		// this.port+39);
 
 		// this.client1.connect((this.address , this.port+39));
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		msg = "USER Dani" + '\r' + '\n' + "PASS ciao" + '\r' + '\n' + "NEW CIAO" + '\r' + '\n' + "NEW ciao11" + '\r'
 				+ '\n' + "REGISTER 127.0.0.1 4127\r\n" + "SUBSCRIBE 0 1 0\r\n" + "MESSAGE 0 1" + '\r' + '\n'
 				+ "MESSAGGIO 2" + '\r' + '\n' + "." + '\r' + '\n' + '\r' + '\n' + "UNSUBSCRIBE 0 1\r\n";
@@ -881,7 +881,7 @@ public class MyChatTestFromPython {
 		// this.port+39);
 
 		// this.client1.connect((this.address , this.port+39));
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		msg = "USER Dani" + '\r' + '\n' + "PASS ciao" + '\r' + '\n' + "NEW CIAO" + '\r' + '\n' + "NEW ciao11" + '\r'
 				+ '\n' + "NEW ciao22" + '\r' + '\n' + "REGISTER 127.0.0.1 4127\r\n" + "SUBSCRIBE 0 2\r\n"
 				+ "MESSAGE 0 1" + '\r' + '\n' + "MESSAGGIO 2" + '\r' + '\n' + "." + '\r' + '\n' + '\r' + '\n'
@@ -918,7 +918,7 @@ public class MyChatTestFromPython {
 		// this.port+39);
 
 		// this.client1.connect((this.address , this.port+39));
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		msg = "USER Dani\r\nPASS ciao\r\nNEW CIAO\r\nNEW ciao11\r\nNEW ciao22\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\nMESSAGE 0 1\r\nMESSAGGIO 2\r\n.\r\n\r\nUNREGISTER\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\n";
 		this.client1.sendMsg(msg);
 		
@@ -931,7 +931,7 @@ public class MyChatTestFromPython {
 		// this.port+39);
 
 		// this.client1.connect((this.address , this.port+39));
-		MyChatServer.Register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
+		MyChatServer.register.put("user1", new Pair<String, Integer>("127.0.0.1", 89));
 		msg = "USER Dani\r\nPASS ciao\r\nNEW CIAO\r\nNEW ciao11\r\nNEW ciao22\r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\nMESSAGE 0 1\r\nMESSAGGIO 2\r\n.\r\n\r\nUNREGISTER \r\nREGISTER 127.0.0.1 4127\r\nSUBSCRIBE 0 2\r\n";
 		this.client1.sendMsg(msg);
 		
