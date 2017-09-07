@@ -15,6 +15,8 @@ abstract public class factoryHttpCommand {
 //		}
 		try{
 		//params[params.length-1] = params[params.length-1].trim();
+			System.out.println(command);
+			System.out.println(params);
 		params = params[1].split(" ");
 		}catch (IndexOutOfBoundsException e){
 			params = null;
@@ -65,6 +67,12 @@ abstract public class factoryHttpCommand {
 		}
 		else if(command.equals("DIGEST") && loginStatus >3){
 			return new cmdDigest(params,(loginStatus >4));
+		}
+		else if(command.equals("AVAILABLE") && loginStatus>1 && params == null){
+			return new HttpAvailable();
+		}
+		else if(command.equals("MOVE") && loginStatus>12 && params.length == 2){
+			return new HttpMove(params);
 		}
 		
 		

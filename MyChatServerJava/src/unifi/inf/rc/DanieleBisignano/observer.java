@@ -1,5 +1,5 @@
 package unifi.inf.rc.DanieleBisignano;
 
 public interface observer {
-	void getUpdate();
+	void getUpdate(String msg, int loginStatus);
 }

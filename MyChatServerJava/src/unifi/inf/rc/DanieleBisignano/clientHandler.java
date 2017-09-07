@@ -18,7 +18,8 @@ public class clientHandler extends Thread implements visitable, observer {
 	private int loginStatus;
 	private String userName;
 	private int digest;
-	private ArrayList<String> messageQueue;//#probabilmente anche questo andrà nel server.
+	private ArrayList<String> messageQueue;// #probabilmente anche questo andrà
+											// nel server.
 	private Room r1;
 
 	private void setLoginStatus(int loginStatus) {
@@ -56,7 +57,7 @@ public class clientHandler extends Thread implements visitable, observer {
 				char ch = (char) prov2;
 				msg = msg + String.valueOf(ch);
 				String prov = "";
-				if (msg.length() > 1){
+				if (msg.length() > 1) {
 					prov = msg.substring(msg.length() - 2, msg.length());
 				}
 				if (prov.compareTo("\r\n") == 0) {
@@ -73,43 +74,27 @@ public class clientHandler extends Thread implements visitable, observer {
 					msg = "";
 				}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public String acceptVisit(statusChanger cmd){
+	public String acceptVisit(statusChanger cmd) {
 		this.setLoginStatus(cmd.getLoginResult());
 		return "";
-		
+
 	}
-	public String acceptVisit(HttpAvailable cmd){
+
+	public String acceptVisit(HttpAvailable cmd) {
 		this.setRoom(cmd.getRoom());
 		this.setLoginStatus(cmd.getLoginResult());
 		return "";
-		
+
 	}
-//
-//	public String acceptVisit(HttpPass cmd) {
-//		this.setLoginStatus(cmd.getLoginResult());
-//		return "";
-//	}
-//
-//	public String acceptVisit(HttpRegister reg) {
-//		//this.setLoginStatus(3);
-//		this.setLoginStatus(reg.getLoginResult());
-//		return null;
-//	}
-//	public void acceptVisit(HttpSubscribe Sub) {
-//		this.setLoginStatus(Sub.getLoginResult());
-//		// TODO Auto-generated method stub
-//		
-//	}
-	
-	
+
 	private void setRoom(Room room) {
 		this.r1 = room;
-		
+
 	}
 
 	public String acceptVisit(HttpUser cmd) {
@@ -173,11 +158,21 @@ public class clientHandler extends Thread implements visitable, observer {
 		return this.userName;
 	}
 
-	@Override
-	public void getUpdate() {
-		this.loginStatus = 13;
-		
+	
+
+	public Room getRoom() {
+		return this.r1;	
 	}
 
+	@Override
+	public void getUpdate(String msg, int loginStatus) {
+		this.loginStatus = loginStatus;
+		try {
+			this.out.write(msg.getBytes("latin1"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 }
