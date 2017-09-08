@@ -4,7 +4,7 @@ public class HttpRanking implements HttpProtocol{
 
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		return MyChatServer.getRanking();
+		return clientHandler.getRanking();
 	}
 	
 }

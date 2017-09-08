@@ -21,6 +21,7 @@ public class clientHandler extends Thread implements visitable, observer {
 	private ArrayList<String> messageQueue;// #probabilmente anche questo andrà
 											// nel server.
 	private Room r1;
+	private Database database;
 
 	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
@@ -31,8 +32,9 @@ public class clientHandler extends Thread implements visitable, observer {
 		return this.loginStatus;
 	}
 
-	public clientHandler(Socket client) {
+	public clientHandler(Socket client, Database database) {
 		this.client = client;
+		this.database = database;
 		this.loginStatus = 0;
 		try {
 			this.in = this.client.getInputStream();
@@ -48,9 +50,7 @@ public class clientHandler extends Thread implements visitable, observer {
 
 	@Override
 	public void run() {
-		// System.out.println("im waiting for data...");
 		String msg = "";
-		// byte streamIn[] = new byte[2048];
 		try {
 			int prov2;
 			while ((prov2 = this.in.read()) != -1) {
@@ -77,6 +77,19 @@ public class clientHandler extends Thread implements visitable, observer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String acceptVisit(HttpPass cmd, String pass) {
+		String responce = "";
+		if (database.getPassword(userName) == null) {
+			this.setLoginStatus(2);
+			responce = "OK\r\n";
+		} else {
+			this.setLoginStatus(1);
+			responce = "KO\r\n";
+		}
+		return responce;
+
 	}
 
 	public String acceptVisit(statusChanger cmd) {
@@ -164,11 +177,11 @@ public class clientHandler extends Thread implements visitable, observer {
 
 	@Override
 	public void getUpdate(String msg, int code) {
-		if (code == 2) {//sconfitta
-			MyChatServer.addDefeat(userName);
-		} else if (code == 11) {//pareggio
+		if (code == 2) {// sconfitta
+			database.addDefeat(userName);
+		} else if (code == 11) {// pareggio
 			this.loginStatus = 2;
-		} else {//mossa normale
+		} else {// mossa normale
 			this.loginStatus = code;
 		}
 		try {
@@ -176,6 +189,19 @@ public class clientHandler extends Thread implements visitable, observer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	public boolean Register(String userName, String password) {
+		return this.database.Signup(userName, password);
+	}
+
+	public String getRanking() {
+		return database.getRanking();
+	}
+
+	public void addVictory(String userNameWinner) {
+		database.addVictory(userNameWinner);
 
 	}
 

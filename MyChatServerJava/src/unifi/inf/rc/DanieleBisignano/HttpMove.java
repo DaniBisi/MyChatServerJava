@@ -24,7 +24,7 @@ public class HttpMove implements HttpProtocol, statusChanger {
 			break;
 		case 1:
 			msg = "YOU WIN\r\n";
-			MyChatServer.addVictory(clientHandler.getUserName());
+			clientHandler.addVictory(clientHandler.getUserName());
 			loginStatus = 2;
 			break;
 		case 2:
