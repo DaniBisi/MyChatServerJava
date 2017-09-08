@@ -158,21 +158,25 @@ public class clientHandler extends Thread implements visitable, observer {
 		return this.userName;
 	}
 
-	
-
 	public Room getRoom() {
-		return this.r1;	
+		return this.r1;
 	}
 
 	@Override
-	public void getUpdate(String msg, int loginStatus) {
-		this.loginStatus = loginStatus;
+	public void getUpdate(String msg, int code) {
+		if (code == 2) {//sconfitta
+			MyChatServer.addDefeat(userName);
+		} else if (code == 11) {//pareggio
+			this.loginStatus = 2;
+		} else {//mossa normale
+			this.loginStatus = code;
+		}
 		try {
 			this.out.write(msg.getBytes("latin1"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

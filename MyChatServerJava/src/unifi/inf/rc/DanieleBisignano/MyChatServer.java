@@ -35,8 +35,10 @@ public class MyChatServer implements Runnable {
 	protected static ArrayList<String> TopicList;
 	protected static ArrayList<Message> MessageList;
 	protected static Map<String, String> Dictionary;
+	protected static Map<String, Integer> Victory;
+	protected static Map<String, Integer> Defeat;
 	protected static Map<String, Pair<String, Integer>> register;
-	private static Room room = null;
+	protected static Room room = null;
 	protected static Map<Integer, TreeSet<String>> subRegister;
 	protected static Map<String, Digest> digestReg;
 	protected Map<String, Pair<String, Integer>> availableList;
@@ -50,6 +52,8 @@ public class MyChatServer implements Runnable {
 		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
 		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
 		MyChatServer.digestReg = new HashMap<String, Digest>(200);
+		MyChatServer.Victory = new HashMap<String, Integer>(200);
+		MyChatServer.Defeat= new HashMap<String, Integer>(200);
 
 		try {
 			this.server = new ServerSocket(port, 1000, InetAddress.getByName(address));
@@ -76,7 +80,29 @@ public class MyChatServer implements Runnable {
 		}
 		return errorFound;
 	}
-
+	
+	public static int getVictory(String userName){
+		return MyChatServer.Victory.get(userName);
+	}
+	public static int getDefeat(String userName){
+		return MyChatServer.Defeat.get(userName);
+	}
+	public static void addVictory(String userName){
+		if(MyChatServer.Victory.containsKey(userName)){
+		int app = MyChatServer.Victory.get(userName).intValue();
+		MyChatServer.Victory.replace(userName, app, app+1);}
+		else{
+			MyChatServer.Victory.put(userName, 1);
+		}
+	}
+	public static void addDefeat(String userName){
+		if(MyChatServer.Defeat.containsKey(userName)){
+		int app = MyChatServer.Defeat.get(userName).intValue();
+		MyChatServer.Defeat.replace(userName, app, app+1);
+		}else{
+			MyChatServer.Defeat.put(userName, 1);
+		}
+	}
 	public static boolean checkMessageError(String params[]) {
 		boolean errorFound = false;
 		for (String string : params) {
@@ -275,9 +301,27 @@ public class MyChatServer implements Runnable {
 		}
 		// for (Map.Entry<String, String> entry : map.entrySet())
 	}
+	
+	
+	public static String getRanking(){
+		String ranking = "Username \t Victory \t Defeat \t\n";
+		for (String userName : Victory.keySet()) {
+			ranking = ranking + userName + ": \t\t" + MyChatServer.Victory.get(userName) + "\t\t";
+			int defeat = 0;
+			if(MyChatServer.Defeat.containsKey(userName)){
+				defeat = MyChatServer.Defeat.get(userName);
+			}
+			ranking = ranking + defeat+"\n";
+		}
+		ranking = ranking + "\r\n";
+		System.out.println(ranking);
+		return ranking;
+		
+	}
 
 	public synchronized static Room addPlayer(clientHandler clientHandler) {
 		Room app;
+		System.out.println("questo è room prima " + room);
 		if (MyChatServer.room == null) {
 			MyChatServer.room = new Room(clientHandler);
 			app = room;
@@ -285,9 +329,19 @@ public class MyChatServer implements Runnable {
 			app = MyChatServer.room;
 			app.addUser(clientHandler);
 			MyChatServer.room = null;
+			System.out.println("questo è room " + room);
 		}
 
 		return app;
+	}
+
+	public synchronized static boolean Signup(String userName, String password) {
+		if(!MyChatServer.Dictionary.containsKey(userName)){
+				MyChatServer.Dictionary.put(userName, password);
+				return true;
+		}
+		return false;
+		
 	}
 
 }

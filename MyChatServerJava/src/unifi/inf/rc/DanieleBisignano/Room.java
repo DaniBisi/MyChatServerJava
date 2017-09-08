@@ -44,7 +44,7 @@ public class Room {
 			
 		}
 		else if(moves == 9){
-			notify(notActivePlayer,"IT'S A DRAW\r\n",2);
+			notify(notActivePlayer,"IT'S A DRAW\r\n",11);
 			return 2;
 		}
 		else{

@@ -17,21 +17,14 @@ abstract public class factoryHttpCommand {
 		// }
 		try {
 			// params[params.length-1] = params[params.length-1].trim();
-			 System.out.println(command);
+			System.out.println(command);
 			params = params[1].split(" ");
-			
+
 		} catch (IndexOutOfBoundsException e) {
 			params = null;
 		}
 		if (command.equals("USER") && loginStatus == 0 /* || loginStatus >1) */ && !params[0].equals("")) { // se
-																											// si
-																											// vuole
-																											// permettere
-																											// un
-																											// altro
-																											// login
-																											// (cambio
-																											// sessione.)
+			// sessione.)
 			return new HttpUser(params);
 		} else if (command.equals("GET") && loginStatus > 1 && params.length == 1) {
 			return new HttpGet(params);
@@ -68,11 +61,12 @@ abstract public class factoryHttpCommand {
 		} else if (command.equals("AVAILABLE") && loginStatus > 1 && params == null) {
 			return new HttpAvailable();
 		} else if (command.equals("MOVE") && loginStatus > 12 && params.length == 2) {
-
 			return new HttpMove(params);
-		}
-
-		else {
+		} else if (command.equals("RANKING") && loginStatus > 1 && params == null) {
+			return new HttpRanking();
+		}else if (command.equals("SIGNUP") && loginStatus == 0 && params.length == 2) {
+			return new HttpSignup(params);
+		} else {
 			throw new IllegalArgumentException();
 		}
 
