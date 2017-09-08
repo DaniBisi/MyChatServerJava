@@ -6,11 +6,11 @@ public class HttpAvailable implements HttpProtocol,statusChanger {
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		loginResult = 12;
-		String msg="OK\n";
+		String msg="OK\r\n";
 		room = MyChatServer.addPlayer(clientHandler);
 		if(room.isFull()){
 			loginResult = 13;
-			msg="MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\n";
+			msg="MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
 		}
 		clientHandler.acceptVisit(this);
 		return msg;

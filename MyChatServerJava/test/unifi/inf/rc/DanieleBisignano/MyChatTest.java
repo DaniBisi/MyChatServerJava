@@ -292,6 +292,101 @@ public class MyChatTest {
 		assertEquals("OK\r\nOK\r\nOK 0\r\nOK 2\r\nOK 0\r\n", msg);
 	}
 
+	
+	@Test
+	public void testAvailableUserWaiting() {
+		ChatClient client2;
+		client2 = new ChatClient(this.address, this.port);
+		client2.connectServer();
+		String msgS = "USER dani\r\nPASS bisi\r\nAVAILABLE\r\n";
+		String msg2 = "USER giulio\r\nPASS grima\r\nAVAILABLE\r\n";
+		client1.sendMsg(msgS);
+		msgS = msgS + client1.receiveMsg();
+		client2.sendMsg(msg2);
+		msg = client2.receiveMsg();
+		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n", msg);
+	}
+	
+	@Test
+	public void testAvailable() {
+		String msgS = "USER dani\r\nPASS bisi\r\nAVAILABLE\r\n";
+		client1.sendMsg(msgS);
+		msg = client1.receiveMsg();
+		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
+	}
+	@Test
+	public void testMove() {
+		ChatClient client2;
+		client2 = new ChatClient(this.address, this.port);
+		client2.connectServer();
+		String msgS = "USER dani\r\nPASS bisi\r\nAVAILABLE\r\n";
+		String msg2 = "USER giulio\r\nPASS grima\r\nAVAILABLE\r\n";
+		client1.sendMsg(msgS);
+		msgS = msgS + client1.receiveMsg();
+		client2.sendMsg(msg2);
+		msg = client2.receiveMsg();
+		client2.sendMsg("MOVE 0 2\r\n");
+		msg = msg + client2.receiveMsg();
+		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\nOK\r\n", msg);
+	}
+	
+	@Test
+	public void testMatchDraw() {
+		ChatClient client2;
+		client2 = new ChatClient(this.address, this.port);
+		client2.connectServer();
+		String msgS = "USER dani\r\nPASS bisi\r\nAVAILABLE\r\n";
+		String msg2 = "USER giulio\r\nPASS grima\r\nAVAILABLE\r\n";
+		client1.sendMsg(msgS);
+		msgS = client1.receiveMsg();
+		client2.sendMsg(msg2);
+		msg = client2.receiveMsg();
+		msgS = client1.receiveMsg(); // riceve la notifica di match iniziato
+		
+		client2.sendMsg("MOVE 0 0\r\n");
+		msg = client2.receiveMsg(); //riceve la risposta dal server "OK"
+		msgS = client1.receiveMsg(); //riceve la notifica della mossa con la scacchiera
+		
+		client1.sendMsg("MOVE 0 1\r\n");
+		msgS = client1.receiveMsg();
+		msg = client2.receiveMsg();
+		
+		client2.sendMsg("MOVE 0 2\r\n");
+		msg = client2.receiveMsg();
+		msgS = client1.receiveMsg();
+		
+		
+		client1.sendMsg("MOVE 1 1\r\n");
+		msgS = client1.receiveMsg();
+		msg = client2.receiveMsg();
+		
+		
+		client2.sendMsg("MOVE 1 0\r\n");
+		msg = client2.receiveMsg();
+		msgS = client1.receiveMsg();
+		
+		
+		client1.sendMsg("MOVE 1 2\r\n");
+		msgS = client1.receiveMsg();
+		msg = client2.receiveMsg();
+		
+		client2.sendMsg("MOVE 2 1\r\n");
+		msg = client2.receiveMsg();
+		msgS = client1.receiveMsg();
+		
+		
+		client1.sendMsg("MOVE 2 0\r\n");
+		msgS = client1.receiveMsg();
+		msg = client2.receiveMsg();
+		
+		
+		client2.sendMsg("MOVE 2 2\r\n");
+		msg = client2.receiveMsg();
+		msgS = client1.receiveMsg();
+		
+		
+		assertEquals("IT'S A DRAW\r\nIT'S A DRAW\r\n", msg+msgS);
+	}
 	@Test
 	public void testUserPasswordNewTopicMessageWrongMessage() {
 		msg = "USER dani\r\nPASS bisi\r\nNEW ciao\r\nMESSAGE 0\r\nciao messaggio di prova\r\n.\r\n\r\nMESSAGE 2\r\nciao messaggio di prova\r\n.\r\n\r\n";

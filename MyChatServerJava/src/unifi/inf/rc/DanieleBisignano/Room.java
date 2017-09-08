@@ -6,8 +6,6 @@ import java.util.Observer;
 
 public class Room {
 	private ArrayList<clientHandler> observers;
-	private String user1;
-	private String user2;
 	private char[][] chessBoard;
 	private int moves;
 
@@ -32,20 +30,13 @@ public class Room {
 			return -1;
 		//FA CACAREEEEEEEEEEEEEEE RIFARE
 		moves +=1;
-		char symbol;
-		int activePlayer;
-		int notActivePlayer;
+		char symbol = 'y';
+		int notActivePlayer = 0;
 		if (user.equals(observers.get(0).getUserName())){
 			symbol = 'x';
-			activePlayer = 0;
 			notActivePlayer = 1;
 			
 		}	
-		else{
-			symbol = 'y';
-			activePlayer = 1;
-			notActivePlayer = 0;
-		}
 		chessBoard[x][y] = symbol;
 		if(checkWinner(symbol,x,y)){
 			notify(notActivePlayer,"YOU LOSE\r\n",2);
@@ -77,25 +68,18 @@ public class Room {
 	}
 	
 	private boolean checkDiag(char symbol) {
-		if( (chessBoard[0][0] == symbol && chessBoard[1][1] == symbol && chessBoard[2][2] == symbol ) || (chessBoard[2][0] == symbol && chessBoard[1][1] == symbol && chessBoard[0][2] == symbol ) )
-		{
-			return true;
-		}
-		return false;
+		return( (chessBoard[0][0] == symbol && chessBoard[1][1] == symbol && chessBoard[2][2] == symbol ) || (chessBoard[2][0] == symbol && chessBoard[1][1] == symbol && chessBoard[0][2] == symbol ) );
+		
 	}
 
 	private boolean checkRow(int x, char symbol) {
-		if(chessBoard[x][0] == symbol && chessBoard[x][1] == symbol && chessBoard[x][2] == symbol ){
-			return true;	
-		}
-		return false;
+		return(chessBoard[x][0] == symbol && chessBoard[x][1] == symbol && chessBoard[x][2] == symbol );
+			
 	}
 
 	private boolean checkColumn(int y,char symbol){
-		if(chessBoard[0][y] == symbol && chessBoard[1][y] == symbol && chessBoard[2][y] == symbol ){
-			return true;	
-		}
-		return false;
+		return(chessBoard[0][y] == symbol && chessBoard[1][y] == symbol && chessBoard[2][y] == symbol );
+	
 	}
 
 	private String serializeChessBoard() {
