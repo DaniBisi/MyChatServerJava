@@ -32,103 +32,22 @@ public class MyChatServer implements Runnable {
 	private static String address;
 	private static int port;
 	private int backlog;
-	protected static ArrayList<String> TopicList;
-	protected static ArrayList<Message> MessageList;
-	protected static Map<String, String> Dictionary;
-	protected static Map<String, Integer> Victory;
-	protected static Map<String, Integer> Defeat;
-	protected static Map<String, Pair<String, Integer>> register;
-	protected static Room room = null;
-	protected static Map<Integer, TreeSet<String>> subRegister;
-	protected static Map<String, Digest> digestReg;
-	protected Map<String, Pair<String, Integer>> availableList;
 	private Database database;
 
 	public MyChatServer(Map<String, String> Dictionary, String address, int port) {
 		this.database = new Database();
-		MyChatServer.address = address;
-		MyChatServer.port = port;
-//		MyChatServer.Dictionary = Dictionary;
-//		MyChatServer.TopicList = new ArrayList<String>();
-//		MyChatServer.MessageList = new ArrayList<Message>();
-//		MyChatServer.register = new HashMap<String, Pair<String, Integer>>(200);
-//		MyChatServer.subRegister = new HashMap<Integer, TreeSet<String>>(200);
-//		MyChatServer.digestReg = new HashMap<String, Digest>(200);
-//		MyChatServer.Victory = new HashMap<String, Integer>(200);
-//		MyChatServer.Defeat= new HashMap<String, Integer>(200);
-
 		try {
 			this.server = new ServerSocket(port, 1000, InetAddress.getByName(address));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-//
-//	public synchronized static int addTopic(String name) {
-//		MyChatServer.TopicList.add(name);
-//		return MyChatServer.TopicList.size() - 1;
-//	}
-//
-//	public static boolean checkTopicError(String params[]) {
-//		boolean errorFound = false;
-//		for (String string : params) {
-//			String topicName = "";
-//			try {
-//				topicName = MyChatServer.TopicList.get(Integer.parseInt(string));
-//			} catch (Exception e) {
-//				errorFound = true;
-//				break;
-//			}
-//		}
-//		return errorFound;
-//	}
-//	
-//	public static int getVictory(String userName){
-//		return MyChatServer.Victory.get(userName);
-//	}
-//	public static int getDefeat(String userName){
-//		return MyChatServer.Defeat.get(userName);
-//	}
-//	public static void addVictory(String userName){
-//		if(MyChatServer.Victory.containsKey(userName)){
-//		int app = MyChatServer.Victory.get(userName).intValue();
-//		MyChatServer.Victory.replace(userName, app, app+1);}
-//		else{
-//			MyChatServer.Victory.put(userName, 1);
-//		}
-//	}
-//	public static void addDefeat(String userName){
-//		if(MyChatServer.Defeat.containsKey(userName)){
-//		int app = MyChatServer.Defeat.get(userName).intValue();
-//		MyChatServer.Defeat.replace(userName, app, app+1);
-//		}else{
-//			MyChatServer.Defeat.put(userName, 1);
-//		}
-//	}
-//	public static boolean checkMessageError(String params[]) {
-//		boolean errorFound = false;
-//		for (String string : params) {
-//			Message message = null;
-//			try {
-//				message = MyChatServer.MessageList.get(Integer.parseInt(string));
-//
-//			} catch (Exception e) {
-//				errorFound = true;
-//				break;
-//			}
-//		}
-//		return errorFound;
-//	}
 
 	@Override
 	public void run() {
 		while (true) {
 			try {
 				Socket client = server.accept();
-				// System.out.println("Accepted from " +
-				// client.getInetAddress());
-				// System.out.print(client.getInetAddress() + " " +
-				// client.getLocalPort());
 				new clientHandler(client,database).start();
 
 			} catch (IOException e) {

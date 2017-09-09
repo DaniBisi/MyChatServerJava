@@ -10,16 +10,13 @@ import java.util.ArrayList;
 import java.util.IllegalFormatException;
 import java.util.Observer;
 
-public class clientHandler extends Thread implements visitable, observer {
+public class clientHandler extends Thread implements observer {
 
 	private Socket client;
 	private InputStream in;
 	private OutputStream out;
 	private int loginStatus;
 	private String userName;
-	private int digest;
-	private ArrayList<String> messageQueue;// #probabilmente anche questo andrà
-											// nel server.
 	private Room r1;
 	private Database database;
 
@@ -99,9 +96,16 @@ public class clientHandler extends Thread implements visitable, observer {
 	}
 
 	public String acceptVisit(HttpAvailable cmd) {
-		this.setRoom(cmd.getRoom());
+
+		this.setRoom(database.addPlayer(this));
 		this.setLoginStatus(cmd.getLoginResult());
-		return "";
+		if (r1.isFull()) {
+			this.setLoginStatus(13);
+			return "MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
+		} else {
+			this.setLoginStatus(12);
+			return "Ok\r\n";
+		}
 
 	}
 
@@ -114,52 +118,6 @@ public class clientHandler extends Thread implements visitable, observer {
 		this.setLoginStatus(1);
 		this.setUser(cmd.getUserName());
 		return "";
-	}
-
-	public String acceptVisit(HttpMessage msg) {
-		String msgProv = "";
-		try {
-			int prov2;
-			while ((prov2 = this.in.read()) != -1) {
-				char ch = (char) prov2;
-				msgProv = msgProv + String.valueOf(ch);
-				String prov = "";
-				if (msgProv.length() > 6)
-					prov = msgProv.substring(msgProv.length() - 7, msgProv.length());
-				if (prov.compareTo("\r\n.\r\n\r\n") == 0) {
-					msgProv = msgProv.substring(0, msgProv.length() - 7);
-					break;
-				}
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return msgProv;
-	}
-
-	public String acceptVisit(factoryHttpCommand fact) {
-		String msgProv = "";
-		try {
-			int prov2;
-			while ((prov2 = this.in.read()) != -1) {
-				char ch = (char) prov2;
-				msgProv = msgProv + String.valueOf(ch);
-				String prov = "";
-				if (msgProv.length() > 7)
-					prov = msgProv.substring(msgProv.length() - 7, msgProv.length());
-				if (prov.compareTo("\r\n.\r\n\r\n") == 0) {
-					msgProv = msgProv.substring(0, msgProv.length() - 7);
-					break;
-				}
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return msgProv;
 	}
 
 	public void setUser(String userName) {
