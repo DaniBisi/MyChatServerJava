@@ -7,8 +7,6 @@ public class HttpAvailable implements HttpProtocol, statusChanger {
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		loginResult = 12;
-		String msg="OK\r\n";
-
 		return clientHandler.acceptVisit(this);
 		
 	}

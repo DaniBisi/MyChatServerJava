@@ -12,6 +12,7 @@ public class HttpPass implements HttpProtocol,statusChanger{
 
 	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
+		System.out.println("param[0] = " + params[0]);
 		String response = clientHandler.acceptVisit(this,params[0]);
 		return response;
 	}

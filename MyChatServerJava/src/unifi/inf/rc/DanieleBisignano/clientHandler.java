@@ -50,7 +50,7 @@ public class clientHandler extends Thread implements observer {
 		String msg = "";
 		try {
 			int prov2;
-			while ((prov2 = this.in.read()) != -1) {
+			while (loginStatus >= 0 && (prov2 = this.in.read()) != -1) {
 				char ch = (char) prov2;
 				msg = msg + String.valueOf(ch);
 				String prov = "";
@@ -71,6 +71,7 @@ public class clientHandler extends Thread implements observer {
 					msg = "";
 				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -78,11 +79,13 @@ public class clientHandler extends Thread implements observer {
 
 	public String acceptVisit(HttpPass cmd, String pass) {
 		String responce = "";
-		if (database.getPassword(userName) == null) {
+		String userPass = database.getPassword(userName);
+		System.out.println("userpass = "+ userPass + "pass = "+ pass);
+		if (userPass != null && userPass.equals(pass)) {
 			this.setLoginStatus(2);
 			responce = "OK\r\n";
 		} else {
-			this.setLoginStatus(1);
+			this.setLoginStatus(0);
 			responce = "KO\r\n";
 		}
 		return responce;
@@ -104,7 +107,7 @@ public class clientHandler extends Thread implements observer {
 			return "MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
 		} else {
 			this.setLoginStatus(12);
-			return "Ok\r\n";
+			return "OK\r\n";
 		}
 
 	}

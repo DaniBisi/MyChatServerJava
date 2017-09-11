@@ -36,7 +36,10 @@ abstract public class factoryHttpCommand {
 			return new HttpRanking();
 		}else if (command.equals("SIGNUP") && loginStatus == 0 && params.length == 2) {
 			return new HttpSignup(params);
-		} else {
+		}else if(command.equals("EXIT")){
+			return new HttpExit();
+		}
+		else {
 			throw new IllegalArgumentException();
 		}
 

@@ -68,7 +68,13 @@ public class TrisTest {
 		this.client2 = new ChatClient(this.address, this.port);
 		this.client2.connectServer();
 	}
-
+	@Test
+	public void testExit(){
+		msg = "EXIT\r\n";
+		client1.sendMsg(msg);
+		msg = client1.receiveMsg();
+		assertEquals("GOODBYE\r\n", msg);
+	}
 	@Test
 	public void testSignup(){
 		msg = "SIGNUP daniele bisi\r\n";
@@ -78,14 +84,14 @@ public class TrisTest {
 	}
 	@Test
 	public void testSignupAndLogin(){
-		msg = "SIGNUP daniele bisi\r\nUSER daniele\r\nPASS bisi\r\n";
+		msg = "SIGNUP lucia lol\r\nUSER lucia\r\nPASS lol\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
 	}
 	@Test
 	public void testSignupAlreadyDone(){
-		msg = "SIGNUP daniele bisi\r\nSIGNUP daniele ciao\r\n";
+		msg = "SIGNUP chiara boh\r\nSIGNUP chiara ciao\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\nKO\r\n", msg);
@@ -152,7 +158,7 @@ public class TrisTest {
 
 	@Test
 	public void testUserWrongPassword() {	
-		msg = "USER dani\r\nPASS CIAO\r\nPASS bisi\r\n";
+		msg = "USER dani\r\nPASS CIAO1\r\nPASS bisi\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\nKO\r\nKO\r\n", msg);
@@ -186,8 +192,6 @@ public class TrisTest {
 		msg = client1.receiveMsg();
 		assertEquals("OK\r\n", msg);
 	}
-
-
 	
 	@Test
 	public void testAvailableUserWaiting() {
@@ -206,7 +210,11 @@ public class TrisTest {
 		String msgS = "USER dani\r\nPASS bisi\r\nAVAILABLE\r\n";
 		client1.sendMsg(msgS);
 		msg = client1.receiveMsg();
+		client2.sendMsg("USER giulio\r\nPASS grima\r\nAVAILABLE\r\n");//libero la stanza
+		String msg2 = client2.receiveMsg();
+		System.out.println(msg2);
 		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
+		
 	}
 	@Test
 	public void testMove() {
@@ -361,12 +369,11 @@ public class TrisTest {
 		msg = client2.receiveMsg();
 		
 		client2.sendMsg("MOVE 2 0\r\n");
+		System.out.println("ultima mossa");
 		msg = client2.receiveMsg();
 		msgS = client1.receiveMsg();
 		
-
-		assertEquals(1, 1);
-		assertEquals(1, 1);
+		assertEquals("YOU WIN\r\nYOU LOSE\r\n", msg+msgS);
 	}
 	
 	@Test
@@ -453,7 +460,7 @@ public class TrisTest {
 
 		client1.sendMsg("RANKING\r\n");
 		msg = client1.receiveMsg();
-		assertEquals("boh", msg);
+		assertEquals(true, msg.contains("giulio") && msg.contains("dani"));
 	}
 	@After
 	public void tearDown() {

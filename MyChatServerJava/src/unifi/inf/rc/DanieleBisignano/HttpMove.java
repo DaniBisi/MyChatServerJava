@@ -13,6 +13,8 @@ public class HttpMove implements HttpProtocol, statusChanger {
 		Room r1 = clientHandler.getRoom();
 		String msg = "";
 		int response = r1.move(Integer.parseInt(params[0]), Integer.parseInt(params[1]), clientHandler.getUserName());
+		System.out.println("qwuesto è resonce: " + response);
+		System.out.println("sta giocando: " +clientHandler.getUserName());
 		switch (response) {
 		case -1:
 			msg = "Illegal move, retry\r\n";
@@ -24,6 +26,7 @@ public class HttpMove implements HttpProtocol, statusChanger {
 			break;
 		case 1:
 			msg = "YOU WIN\r\n";
+			System.out.println("ha vinto qualcuno");
 			clientHandler.addVictory(clientHandler.getUserName());
 			loginStatus = 2;
 			break;

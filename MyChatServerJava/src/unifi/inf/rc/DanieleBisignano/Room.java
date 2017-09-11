@@ -59,7 +59,9 @@ public class Room {
 	}
 
 	private boolean checkWinner(char symbol,int x,int y) {
+		System.out.println("controllo chi ha vinto");
 		boolean result = checkColumn(y, symbol) || checkRow(x, symbol);
+		System.out.println("result: " + result);
 		if((x+y)%2 == 0 && !result){
 			result = checkDiag(symbol);
 			
@@ -78,6 +80,7 @@ public class Room {
 	}
 
 	private boolean checkColumn(int y,char symbol){
+		System.out.println("controllo le colonne:" + y + " symbolo: " + symbol);
 		return(chessBoard[0][y] == symbol && chessBoard[1][y] == symbol && chessBoard[2][y] == symbol );
 	
 	}

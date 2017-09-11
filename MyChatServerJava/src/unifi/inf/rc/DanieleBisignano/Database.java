@@ -1,5 +1,7 @@
 package unifi.inf.rc.DanieleBisignano;
 
+import java.io.StringReader;
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,12 +10,19 @@ public class Database {
 	private static Map<String, String> Dictionary;
 	private HashMap<String, Integer> Victory;
 	private HashMap<String, Integer> Defeat;
-	private Room room = null;
+	private Room room;
 
+	public Database(Map<String, String> dict){
+		this.Dictionary =  dict;
+		this.Victory = new HashMap<String, Integer>(200);
+		this.Defeat = new HashMap<String, Integer>(200);
+		this.room = null;
+	}
 	public Database() {
 		this.Dictionary = new HashMap<String, String>(200);
 		this.Victory = new HashMap<String, Integer>(200);
 		this.Defeat = new HashMap<String, Integer>(200);
+		this.room = null;
 	}
 
 	public int getVictory(String userName) {
@@ -43,9 +52,9 @@ public class Database {
 	}
 
 	public String getRanking() {
-		String ranking = "Username \t Victory \t Defeat \t\n";
+		String ranking = "Username\tVictory\tDefeat\n";
 		for (String userName : Victory.keySet()) {
-			ranking = ranking + userName + ": \t\t" + Victory.get(userName) + "\t\t";
+			ranking = ranking + userName + ":\t" + Victory.get(userName) + "\t";
 			int defeat = 0;
 			if (Defeat.containsKey(userName)) {
 				defeat = Defeat.get(userName);
@@ -59,10 +68,13 @@ public class Database {
 	}
 
 	public String getPassword(String userName) {
-		if (Dictionary.containsKey(userName))
+		if (Dictionary.containsKey(userName)){
+			System.out.println("questo è la password" + Dictionary.get(userName));
 			return Dictionary.get(userName);
-		else
+		}
+		else{
 			return null;
+		}
 	}
 
 	public synchronized Room addPlayer(clientHandler clientHandler) {
