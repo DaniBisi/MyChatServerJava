@@ -100,14 +100,7 @@ public class TrisTest {
 		assertEquals("OK\r\nKO\r\n", msg);
 	}
 
-	@Test
-	public void testMessageIllegalArgument() {
-		msg = "GET 1 2\r\n";
-		client1.sendMsg(msg);
-		msg = client1.receiveMsg(1);
-		assertEquals("KO\r\n", msg);
-	}
-
+	
 	@Test
 	public void testIllegalMessage() {
 		msg = "UNKNOWNMESSAGE\r\n";
@@ -181,27 +174,11 @@ public class TrisTest {
 	}
 
 	@Test
-	public void testUserWrongArgomentNumberPassword() {
+	public void testUserWrongArgumentNumberPassword() {
 		msg = "USER dani\r\nPASS 2 3\r\n";
 		client1.sendMsg(msg);
 		msg = client1.receiveMsg(2);
 		assertEquals("OK\r\nKO\r\n", msg);
-	}
-
-	@Test
-	public void testWrongUserWrongArgomentNumberPassword() {
-		msg = "USER pippo\r\nPASS 2 3\r\n\r\n";
-		client1.sendMsg(msg);
-		msg = client1.receiveMsg(3);
-		assertEquals("OK\r\nKO\r\nKO\r\n", msg);
-	}
-
-	@Test
-	public void testUserUncorrect() {
-		msg = "USER danielino\r\n";
-		client1.sendMsg(msg);
-		msg = client1.receiveMsg(1);
-		assertEquals("OK\r\n", msg);
 	}
 
 	@Test
@@ -214,7 +191,6 @@ public class TrisTest {
 		client2.sendMsg(msg2);
 		msg = client2.receiveMsg(3);
 		msgS = msgS + client1.receiveMsg(1);// riceve la risposta
-		System.out.println(msgS);
 		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n", msg);
 	}
 
@@ -228,7 +204,6 @@ public class TrisTest {
 																		// stanza
 		String msg2 = client2.receiveMsg(3);
 		client1.receiveMsg(1);
-		System.out.println(msg2);
 		assertEquals("OK\r\nOK\r\nOK\r\n", msg);
 
 	}
@@ -378,7 +353,6 @@ public class TrisTest {
 		msg = client2.receiveMsg(1);
 
 		client2.sendMsg("MOVE 2 0\r\n");
-		System.out.println("ultima mossa");
 		msg = client2.receiveMsg(1);
 		msgS = client1.receiveMsg(1);
 
@@ -465,8 +439,7 @@ public class TrisTest {
 
 		client1.sendMsg("RANKING\r\n");
 		msg = client1.receiveMsg(1);
-		System.out.println(msgS);
-		assertEquals(true, msg.contains("giulio") && msg.contains("dani"));
+		assertEquals(true, msg.contains("giulio:") && msg.contains("dani:"));
 	}
 
 	@After
@@ -474,7 +447,6 @@ public class TrisTest {
 		msg = msg.replaceAll("\r\n", " ");
 		this.client1.closeSocket();
 		this.client2.closeSocket();
-
 	}
 
 }

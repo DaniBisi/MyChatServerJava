@@ -12,14 +12,12 @@ public class HttpPass implements HttpProtocol,statusChanger{
 
 	//@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		System.out.println("param[0] = " + params[0]);
 		
 		
 		String responce = "";
 		String userName = clientHandler.getUserName();
 		Database database = clientHandler.getDatabase();
 		String userPass = database.getPassword(userName);
-		//System.out.println("userpass = "+ userPass + "pass = "+ pass);
 		if (userPass != null && params[0].equals(userPass)) {
 			loginResult = 2;
 			responce = "OK\r\n";

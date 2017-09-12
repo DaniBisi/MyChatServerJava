@@ -62,14 +62,12 @@ public class Database {
 			ranking = ranking + defeat + "\n";
 		}
 		ranking = ranking + "\r\n";
-		System.out.println(ranking);
 		return ranking;
 
 	}
 
 	public String getPassword(String userName) {
 		if (Dictionary.containsKey(userName)){
-			System.out.println("questo è la password" + Dictionary.get(userName));
 			return Dictionary.get(userName);
 		}
 		else{
@@ -86,7 +84,6 @@ public class Database {
 			app = room;
 			app.addUser(clientHandler);
 			room = null;
-			System.out.println("questo è room " + room);
 		}
 
 		return app;

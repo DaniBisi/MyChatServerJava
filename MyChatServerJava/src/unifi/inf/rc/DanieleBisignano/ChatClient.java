@@ -66,7 +66,6 @@ public class ChatClient {
 			int cRCount = (msg.length() - msg.replaceAll("\r\n","").length())/2;			
 			if(cRCount == n && i!= n-1){
 				i = n;
-				System.out.println("msg:" + msg);
 			}
 				}
 		} catch (Exception e) {

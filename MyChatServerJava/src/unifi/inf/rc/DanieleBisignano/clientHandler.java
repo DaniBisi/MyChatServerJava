@@ -119,6 +119,7 @@ public class clientHandler extends Thread implements observer {
 	public void getUpdate(String msg, int code) {
 		if (code == 2) {// sconfitta
 			database.addDefeat(userName);
+			this.loginStatus = 2;
 		} else if (code == 11) {// pareggio
 			this.loginStatus = 2;
 		} else {// mossa normale
