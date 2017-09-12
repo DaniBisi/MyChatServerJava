@@ -191,7 +191,7 @@ public class TrisTest {
 		client2.sendMsg(msg2);
 		msg = client2.receiveMsg(3);
 		msgS = msgS + client1.receiveMsg(1);// riceve la risposta
-		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n", msg);
+		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\"\r\n", msg);
 	}
 
 	@Test
@@ -219,7 +219,7 @@ public class TrisTest {
 		msg = client2.receiveMsg(3);
 		client2.sendMsg("MOVE 0 2\r\n");
 		msg = msg + client2.receiveMsg(1);
-		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\nOK\r\n", msg);
+		assertEquals("OK\r\nOK\r\nMATCH FOUND: command available: \"MOVE x,y\"\r\nOK\r\n", msg);
 	}
 
 	@Test

@@ -48,7 +48,7 @@ public class Room {
 			return 2;
 		}
 		else{
-			notify(notActivePlayer,"IT'S YOUR TURN\n" + "Command available: \"MOVE x,y\" , \"CONCEDE\" \n"+serializeChessBoard(),13);	
+			notify(notActivePlayer,"IT'S YOUR TURN\n" + "Command available: \"MOVE x,y\"\n"+serializeChessBoard(),13);	
 		}
 		return 0;
 
@@ -96,7 +96,7 @@ public class Room {
 
 	public void addUser(clientHandler clientHandler) {
 		this.observers.add(clientHandler);
-		notify(0,"Match Found! It's opponent turn. Command available: \"CONCEDE\"\r\n",12);
+		notify(0,"Match Found! It's opponent turn, wait.\r\n",12);
 		
 	}
 }

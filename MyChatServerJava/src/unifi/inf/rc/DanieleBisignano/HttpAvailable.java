@@ -13,7 +13,7 @@ public class HttpAvailable implements HttpProtocol, statusChanger {
 		String response = "";
 		if (room.isFull()) {
 			this.loginResult = 13;
-			response = "MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
+			response = "MATCH FOUND: command available: \"MOVE x,y\"\r\n";
 		} else {
 			this.loginResult = 12;
 			response = "OK\r\n";
