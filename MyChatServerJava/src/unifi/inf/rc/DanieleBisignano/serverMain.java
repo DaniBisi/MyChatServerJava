@@ -17,7 +17,7 @@ public class serverMain {
 		Dictionary.put("giulio", "grima");
 		Dictionary.put("marco", "bura");
 		Dictionary.put("lore", "mari");
-		MyChatServer server = new MyChatServer(Dictionary, address, port);
+		MyTrisServer server = new MyTrisServer(Dictionary, address, port);
 		server.run();
 	}
 

@@ -22,7 +22,6 @@ public class clientHandler extends Thread implements observer {
 
 	private void setLoginStatus(int loginStatus) {
 		this.loginStatus = loginStatus;
-		// System.out.println("Loginstatus:" + this.loginStatus);
 	}
 
 	public int getLoginStatus() {
@@ -71,26 +70,14 @@ public class clientHandler extends Thread implements observer {
 					msg = "";
 				}
 			}
-
+			client.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
 	}
 
-	public String acceptVisit(HttpPass cmd, String pass) {
-		String responce = "";
-		String userPass = database.getPassword(userName);
-		System.out.println("userpass = "+ userPass + "pass = "+ pass);
-		if (userPass != null && userPass.equals(pass)) {
-			this.setLoginStatus(2);
-			responce = "OK\r\n";
-		} else {
-			this.setLoginStatus(0);
-			responce = "KO\r\n";
-		}
-		return responce;
-
-	}
 
 	public String acceptVisit(statusChanger cmd) {
 		this.setLoginStatus(cmd.getLoginResult());
@@ -98,18 +85,10 @@ public class clientHandler extends Thread implements observer {
 
 	}
 
-	public String acceptVisit(HttpAvailable cmd) {
-
-		this.setRoom(database.addPlayer(this));
+	public void acceptVisit(HttpAvailable cmd) {
+		this.setRoom(cmd.getRoom());
 		this.setLoginStatus(cmd.getLoginResult());
-		if (r1.isFull()) {
-			this.setLoginStatus(13);
-			return "MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
-		} else {
-			this.setLoginStatus(12);
-			return "OK\r\n";
-		}
-
+	
 	}
 
 	private void setRoom(Room room) {
@@ -153,17 +132,14 @@ public class clientHandler extends Thread implements observer {
 
 	}
 
-	public boolean Register(String userName, String password) {
-		return this.database.Signup(userName, password);
-	}
-
 	public String getRanking() {
 		return database.getRanking();
 	}
 
-	public void addVictory(String userNameWinner) {
-		database.addVictory(userNameWinner);
-
+	
+	
+	public Database getDatabase(){
+		return this.database;
 	}
 
 }

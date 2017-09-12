@@ -9,7 +9,8 @@ public class HttpSignup implements HttpProtocol {
 
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
-		if(clientHandler.Register(params[0],params[1])){
+		Database db = clientHandler.getDatabase();
+		if(db.Signup(params[0],params[1])){
 		return "OK\r\n";
 		}
 		else throw new IllegalArgumentException();

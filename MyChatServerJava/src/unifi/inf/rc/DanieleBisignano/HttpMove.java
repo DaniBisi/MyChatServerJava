@@ -11,10 +11,10 @@ public class HttpMove implements HttpProtocol, statusChanger {
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		Room r1 = clientHandler.getRoom();
+		Database db = clientHandler.getDatabase();
+		String userName = clientHandler.getUserName();
 		String msg = "";
-		int response = r1.move(Integer.parseInt(params[0]), Integer.parseInt(params[1]), clientHandler.getUserName());
-		System.out.println("qwuesto è resonce: " + response);
-		System.out.println("sta giocando: " +clientHandler.getUserName());
+		int response = r1.move(Integer.parseInt(params[0]), Integer.parseInt(params[1]), userName);
 		switch (response) {
 		case -1:
 			msg = "Illegal move, retry\r\n";
@@ -26,8 +26,7 @@ public class HttpMove implements HttpProtocol, statusChanger {
 			break;
 		case 1:
 			msg = "YOU WIN\r\n";
-			System.out.println("ha vinto qualcuno");
-			clientHandler.addVictory(clientHandler.getUserName());
+			db.addVictory(userName);
 			loginStatus = 2;
 			break;
 		case 2:

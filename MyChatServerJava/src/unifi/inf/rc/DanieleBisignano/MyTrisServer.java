@@ -27,14 +27,14 @@ import java.util.TreeSet;
  *
  */
 
-public class MyChatServer implements Runnable {
+public class MyTrisServer implements Runnable {
 	private ServerSocket server;
 	private static String address;
 	private static int port;
 	private int backlog;
 	private Database database;
 
-	public MyChatServer(Map<String, String> Dictionary, String address, int port) {
+	public MyTrisServer(Map<String, String> Dictionary, String address, int port) {
 		this.database = new Database(Dictionary);
 		try {
 			this.server = new ServerSocket(port, 1000, InetAddress.getByName(address));

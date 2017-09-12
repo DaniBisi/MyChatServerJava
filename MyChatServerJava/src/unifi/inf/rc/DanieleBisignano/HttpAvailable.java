@@ -7,8 +7,20 @@ public class HttpAvailable implements HttpProtocol, statusChanger {
 	@Override
 	public String execute(clientHandler clientHandler) throws IllegalArgumentException {
 		loginResult = 12;
-		return clientHandler.acceptVisit(this);
-		
+		Database db = clientHandler.getDatabase();
+		String userName = clientHandler.getUserName();
+		this.room = db.addPlayer(clientHandler);
+		String response = "";
+		if (room.isFull()) {
+			this.loginResult = 13;
+			response = "MATCH FOUND: command available: \"MOVE x,y\" , \"CONCEDE\"\r\n";
+		} else {
+			this.loginResult = 12;
+			response = "OK\r\n";
+		}
+
+		clientHandler.acceptVisit(this);
+		return response;
 	}
 
 	@Override

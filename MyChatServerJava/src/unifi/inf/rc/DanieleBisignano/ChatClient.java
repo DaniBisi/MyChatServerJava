@@ -53,49 +53,23 @@ public class ChatClient {
 
 	}
 
-	public String receiveMsg() {
+	
 
-		try {
-			Thread.sleep(200);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
+	public String receiveMsg(int n) {	
 		String msg = "";
 		byte streamIn[] = new byte[2048];
 		try {
-
+			for (int i = 0; i < n; i++) {
 			int lenghtProv = this.in.read(streamIn); // uscirà quando ci sarà un
 														// errore di stream
-
-			msg = msg + (new String(streamIn, StandardCharsets.UTF_8)).substring(0, lenghtProv);
-
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return msg;
-
-	}
-
-	public String receiveMsg(int a) {
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		String msg = "";
-		byte streamIn[] = new byte[2048];
-		try {
-
-			int lenghtProv = this.in.read(streamIn); // uscirà quando ci sarà un
-														// errore di stream
-			msg = msg + (new String(streamIn, StandardCharsets.UTF_8)).substring(0, lenghtProv);
-
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+			msg = msg + (new String(streamIn, StandardCharsets.UTF_8)).substring(0, lenghtProv);		
+			int cRCount = (msg.length() - msg.replaceAll("\r\n","").length())/2;			
+			if(cRCount == n && i!= n-1){
+				i = n;
+				System.out.println("msg:" + msg);
+			}
+				}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
